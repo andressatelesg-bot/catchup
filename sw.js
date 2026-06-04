@@ -1,61 +1,29 @@
-// Catchup — Service Worker
-// Incrementar CACHE_VERSION a cada deploy para forçar atualização
-const CACHE_VERSION = 'catchup-v1';
-const CACHE_FILES = [
-  '/',
-  '/index.html',
-  '/manifest.json'
-];
+const CACHE = 'catchup-v2';
+const FILES = ['/', '/index.html', '/manifest.json'];
 
-// Instalar: cachear arquivos essenciais
-self.addEventListener('install', function(e) {
+self.addEventListener('install', e => {
+  e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES)).then(() => self.skipWaiting()));
+});
+
+self.addEventListener('activate', e => {
   e.waitUntil(
-    caches.open(CACHE_VERSION).then(function(cache) {
-      return cache.addAll(CACHE_FILES);
-    }).then(function() {
-      return self.skipWaiting(); // ativar imediatamente
-    })
+    caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k))))
+      .then(() => self.clients.claim())
   );
 });
 
-// Ativar: limpar caches antigos
-self.addEventListener('activate', function(e) {
-  e.waitUntil(
-    caches.keys().then(function(keys) {
-      return Promise.all(
-        keys.filter(function(key) {
-          return key !== CACHE_VERSION;
-        }).map(function(key) {
-          return caches.delete(key);
-        })
-      );
-    }).then(function() {
-      return self.clients.claim(); // assumir controle imediato
-    })
-  );
-});
-
-// Fetch: cache-first com fallback para rede
-self.addEventListener('fetch', function(e) {
-  // Só interceptar GETs do mesmo domínio
+self.addEventListener('fetch', e => {
   if(e.request.method !== 'GET') return;
-
   e.respondWith(
-    caches.match(e.request).then(function(cached) {
-      if(cached) return cached;
-      return fetch(e.request).then(function(response) {
-        // Cachear respostas válidas
-        if(response && response.status === 200) {
-          var clone = response.clone();
-          caches.open(CACHE_VERSION).then(function(cache) {
-            cache.put(e.request, clone);
-          });
+    caches.match(e.request).then(cached => {
+      const net = fetch(e.request).then(res => {
+        if(res && res.status === 200){
+          const clone = res.clone();
+          caches.open(CACHE).then(c => c.put(e.request, clone));
         }
-        return response;
-      }).catch(function() {
-        // Offline e não tem cache: retornar index.html
-        return caches.match('/index.html');
-      });
+        return res;
+      }).catch(() => caches.match('/index.html'));
+      return cached || net;
     })
   );
 });
