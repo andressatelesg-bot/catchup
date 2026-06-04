@@ -1,7 +1,7 @@
 {
   "name": "Catchup",
   "short_name": "Catchup",
-  "description": "Controle financeiro pessoal",
+  "description": "app de finanças",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
