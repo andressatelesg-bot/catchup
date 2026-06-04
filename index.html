@@ -1657,29 +1657,8 @@ function startFirebaseSync(){
   });
 }
 
-// ── Override da função save() para sincronizar ──
-var _origSave = null;
-function patchSaveForFirebase(){
-  _origSave = window.save;
-  window.save = function(){
-    // Salvar local primeiro
-    if(_origSave) _origSave();
-    // Depois enviar para Firestore
-    if(fbUser && !fbSyncing){
-      fbSyncing = true;
-      var data = localStorage.getItem(KEY);
-      fbDb.collection('users').doc(fbUser.uid).set({
-        data: data,
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-      }).then(function(){
-        fbSyncing = false;
-      }).catch(function(err){
-        fbSyncing = false;
-        console.log('Sync erro:', err);
-      });
-    }
-  };
-}
+// save() já inclui Firebase sync diretamente
+function patchSaveForFirebase(){/* integrado na save() */}
 
 // Adicionar botão de logout no header
 function addLogoutButton(){
@@ -1841,7 +1820,18 @@ const DEF={
 };
 
 let S=(()=>{try{const d=JSON.parse(localStorage.getItem(KEY));return d||JSON.parse(JSON.stringify(DEF));}catch(e){return JSON.parse(JSON.stringify(DEF));}})();
-const save=()=>localStorage.setItem(KEY,JSON.stringify(S));
+const save=()=>{
+  localStorage.setItem(KEY,JSON.stringify(S));
+  // Sync Firebase em background
+  if(typeof fbUser!=='undefined' && fbUser && typeof fbDb!=='undefined' && fbDb){
+    try{
+      fbDb.collection('users').doc(fbUser.uid).set({
+        data:JSON.stringify(S),
+        updatedAt:firebase.firestore.FieldValue.serverTimestamp()
+      });
+    }catch(e){}
+  }
+};
 // migrate
 if(!S.reservasmes)S.reservasmes=[{id:1,nome:'RV: Casa',valor:50,pago:false,pedro:false}];
 if(!S.metas||!S.metas.cat)S.metas={cat:{Alimentação:1300,Transporte:250,Variados:400},sem:{'Sem. 1':500,'Sem. 2':500,'Sem. 3':500,'Sem. 4':500,'Sem. 5':330}};
