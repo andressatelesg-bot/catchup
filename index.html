@@ -752,6 +752,10 @@ body{font-family:"Outfit",sans-serif;color:var(--ink);font-size:15px;line-height
           <div style="font-size:10px;font-weight:600;color:#0D9488;text-transform:uppercase;letter-spacing:.07em;margin-bottom:3px;opacity:.75">Moradia Pedro</div>
           <div style="font-size:17px;font-weight:700;color:#111110" id="pedro-mor2-val">—</div>
         </div>
+        <div style="background:#E6FAF8;border-radius:var(--r-sm);padding:13px 15px;box-shadow:0 1px 3px rgba(0,0,0,.05)">
+          <div style="font-size:10px;font-weight:600;color:#D97706;text-transform:uppercase;letter-spacing:.07em;margin-bottom:3px;opacity:.75">Reservas do mês</div>
+          <div style="font-size:17px;font-weight:700;color:#111110" id="pedro-rm-val">—</div>
+        </div>
       </div>
       <!-- LISTAS -->
       <div style="font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--ink2);margin-bottom:10px">Moradia dividida</div>
@@ -821,6 +825,14 @@ body{font-family:"Outfit",sans-serif;color:var(--ink);font-size:15px;line-height
       <div style="background:#ECFEFF;border-radius:var(--r-sm);padding:13px 15px;box-shadow:0 1px 3px rgba(0,0,0,.05),0 3px 10px rgba(0,0,0,.06)">
         <div style="font-size:10px;font-weight:600;color:#0891B2;text-transform:uppercase;letter-spacing:.07em;margin-bottom:3px;opacity:.75">Itens</div>
         <div style="font-size:17px;font-weight:700;color:#111110" id="rm-count">—</div>
+      </div>
+      <div style="background:#ECFEFF;border-radius:var(--r-sm);padding:13px 15px;box-shadow:0 1px 3px rgba(0,0,0,.05),0 3px 10px rgba(0,0,0,.06)">
+        <div style="font-size:10px;font-weight:600;color:#0891B2;text-transform:uppercase;letter-spacing:.07em;margin-bottom:3px;opacity:.75">Meu valor</div>
+        <div style="font-size:17px;font-weight:700;color:#111110" id="rm-eu">—</div>
+      </div>
+      <div style="background:#ECFEFF;border-radius:var(--r-sm);padding:13px 15px;box-shadow:0 1px 3px rgba(0,0,0,.05),0 3px 10px rgba(0,0,0,.06)">
+        <div style="font-size:10px;font-weight:600;color:#0D9488;text-transform:uppercase;letter-spacing:.07em;margin-bottom:3px;opacity:.75">Pedro</div>
+        <div style="font-size:17px;font-weight:700;color:#111110" id="rm-pedro">—</div>
       </div>
     </div>
     <div style="display:flex;align-items:center;justify-content:space-between">
@@ -2514,8 +2526,24 @@ const cRec=()=>S.receita.reduce((a,r)=>a+r.valor,0);
 const cMor=()=>{const t=S.moradia.reduce((a,i)=>a+i.valor,0);return{tot:t,each:t/2,ped:S.moradia.filter(i=>i.pedro).reduce((a,i)=>a+i.valor/2,0)};};
 const cPes=()=>S.pessoal.reduce((a,i)=>a+i.valor,0);
 const cRM=()=>(S.reservasmes||[]).reduce((a,i)=>a+i.valor,0);
+function cRMEu(){
+  // meu valor: proprio + metade do pedro_div
+  return (S.reservasmes||[]).reduce(function(a,i){
+    if(i.div==='proprio') return a+i.valor;
+    if(i.div==='pedro_div') return a+i.valor/2;
+    return a; // pedro_ind = Pedro paga tudo
+  },0);
+}
+function cRMPedro(){
+  // valor do Pedro: metade do pedro_div + pedro_ind inteiro
+  return (S.reservasmes||[]).reduce(function(a,i){
+    if(i.div==='pedro_div') return a+i.valor/2;
+    if(i.div==='pedro_ind') return a+i.valor;
+    return a;
+  },0);
+}
 function cCart(b){const it=S.cartao[b];const p=it.filter(i=>i.div==='proprio').reduce((a,i)=>a+i.valor,0);const d=it.filter(i=>i.div==='pedro_div').reduce((a,i)=>a+i.valor,0);const n=it.filter(i=>i.div==='pedro_ind').reduce((a,i)=>a+i.valor,0);return{tot:p+d+n,div:d,ind:n,eu:p+d/2};}
-function cSaldo(){const san=cCart('santander'),car=cCart('carrefour');return cRec()-cMor().each-cPes()-cRM()-san.eu-car.eu;}
+function cSaldo(){const san=cCart('santander'),car=cCart('carrefour');return cRec()-cMor().each-cPes()-cRMEu()-san.eu-car.eu;}
 const cGS=sem=>S.lancamentos.filter(l=>(l.mes||'2026-05')===curKey()&&(sem==='all'||l.sem===sem)).reduce((a,l)=>a+l.val,0);
 const cGC=(cat,sem)=>S.lancamentos.filter(l=>(l.mes||'2026-05')===curKey()&&l.cat===cat&&(sem==='all'||l.sem===sem)).reduce((a,l)=>a+l.val,0);
 
@@ -2548,7 +2576,7 @@ function renderAll(){
 
 // ── MES HOME ──
 function renderMesHome(){
-  const rec=cRec(),mor=cMor(),pes=cPes(),rm=cRM();
+  const rec=cRec(),mor=cMor(),pes=cPes(),rm=cRMEu();
   const san=cCart('santander'),car=cCart('carrefour'),cartLiq=san.eu+car.eu,saldo=cSaldo();
   const sv=id=>document.getElementById(id);
   const st=(id,v)=>{const e=sv(id);if(e)e.textContent=v;};
@@ -3122,8 +3150,12 @@ function renderRMSub(){
     </div>`;
   }).join('');
   const tot=cRM();
+  const eu=cRMEu();
+  const ped=cRMPedro();
   const t=document.getElementById('rm-total');if(t)t.textContent=fmt(tot);
   const rc=document.getElementById('rm-count');if(rc)rc.textContent=(S.reservasmes||[]).length+' item'+(S.reservasmes&&S.reservasmes.length!==1?'s':'');
+  const re=document.getElementById('rm-eu');if(re)re.textContent=fmt(eu);
+  const rp=document.getElementById('rm-pedro');if(rp)rp.textContent=fmt(ped);
   const rmArr2=S.reservasmes||[];
   const rmPago2=rmArr2.filter(i=>i.pago).length;
   renderSubChip('rm-chip-wrap',rmPago2,rmArr2.length,'#0891B2','rm');
@@ -5035,7 +5067,7 @@ function renderPedroHome(){
   if(!getStatus()){
     // mês não iniciado — zerar tudo e mostrar empty state
     ['pedro-total','pedro-mor-val','pedro-mor2-val','pedro-cart-val',
-     'pedro-san-val','pedro-car-val','pedro-ind-val','pedro-mor-ped-val'].forEach(id=>sv(id,'—'));
+     'pedro-san-val','pedro-car-val','pedro-ind-val','pedro-mor-ped-val','pedro-rm-val'].forEach(id=>sv(id,'—'));
     const lock='<div class="empty"><div style="width:40px;height:40px;border-radius:50%;background:var(--bg2);display:flex;align-items:center;justify-content:center;margin:0 auto 12px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--ink3)" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><div class="empty-t">Inicie o mês para ver os dados do Pedro</div></div>';
     ['pedro-mor-list','pedro-san','pedro-car','pedro-ind'].forEach(id=>{
       const el=document.getElementById(id);if(el)el.innerHTML=lock;
@@ -5044,9 +5076,11 @@ function renderPedroHome(){
   }
   const san=cCart('santander'),car=cCart('carrefour');
   const morPed=cMor().ped;
+  const rmPed=cRMPedro();
   const indTotal=(san.ind||0)+(car.ind||0);
-  const total=morPed+san.div/2+car.div/2+indTotal;
+  const total=morPed+san.div/2+car.div/2+indTotal+rmPed;
   sv('pedro-total',fmt(total));
+  sv('pedro-rm-val',fmt(rmPed));
   sv('pedro-mor-val',fmt(morPed));
   sv('pedro-mor2-val',fmt(morPed));
   sv('pedro-cart-val',fmt(san.div/2+car.div/2+indTotal));
