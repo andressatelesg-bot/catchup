@@ -321,23 +321,65 @@ body{font-family:"Outfit",sans-serif;color:var(--ink);font-size:15px;line-height
 .stat-box-lbl{font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px}
 .stat-box-val{font-family:"Outfit",sans-serif;font-size:20px;font-weight:700;letter-spacing:-.5px}
 </style>
-  <link rel="manifest" href="manifest.json">
-  <link rel="apple-touch-icon" href="icon-192.png">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="Catchup">
-  <meta name="mobile-web-app-capable" content="yes">
-  <script>
-    if('serviceWorker' in navigator){
-      window.addEventListener('load', function(){
-        navigator.serviceWorker.register('sw.js')
-          .then(function(reg){ console.log('SW registrado'); })
-          .catch(function(err){ console.log('SW erro:', err); });
-      });
-    }
-  </script>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
 </head>
 <body>
+<!-- TELA DE LOGIN -->
+<div id="login-screen" style="position:fixed;inset:0;background:#F7F6F3;z-index:99999;display:flex;flex-direction:column;font-family:Outfit,sans-serif">
+  <!-- Header area com gradiente sutil -->
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 28px 0">
+    <!-- Logo mark -->
+    <div style="width:64px;height:64px;border-radius:18px;background:#111110;display:flex;align-items:center;justify-content:center;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.15)">
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+    </div>
+    <div style="font-size:30px;font-weight:800;letter-spacing:-.6px;color:#111110;margin-bottom:6px">catchup</div>
+    <div style="font-size:14px;color:#9A9896;letter-spacing:.01em">controle financeiro pessoal</div>
+  </div>
+
+  <!-- Card de login -->
+  <div style="background:white;border-radius:28px 28px 0 0;padding:32px 28px 40px;box-shadow:0 -4px 40px rgba(0,0,0,.06)">
+
+    <!-- Erro -->
+    <div id="login-error" style="display:none;background:#FEF2F2;color:#DC2626;padding:12px 16px;border-radius:12px;font-size:13px;font-weight:500;margin-bottom:16px;text-align:center"></div>
+
+    <!-- Google (principal) -->
+    <button onclick="loginGoogle()" style="width:100%;padding:15px;border-radius:14px;background:#F7F6F3;color:#111110;border:none;font-family:Outfit,sans-serif;font-size:15px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:16px;transition:.15s" onmouseover="this.style.background='#EEEDEA'" onmouseout="this.style.background='#F7F6F3'">
+      <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+      Continuar com Google
+    </button>
+
+    <!-- Divisor -->
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+      <div style="flex:1;height:1px;background:#F0EFED"></div>
+      <span style="font-size:12px;color:#C4C2BF;font-weight:500">ou use seu e-mail</span>
+      <div style="flex:1;height:1px;background:#F0EFED"></div>
+    </div>
+
+    <!-- Email/senha -->
+    <div id="login-form">
+      <input id="login-email" type="email" placeholder="E-mail" autocomplete="email"
+        style="width:100%;padding:14px 16px;font-size:15px;font-family:Outfit,sans-serif;border:1.5px solid #EEEDEA;border-radius:12px;outline:none;background:#FAFAF8;box-sizing:border-box;margin-bottom:10px;color:#111110"
+        onfocus="this.style.borderColor='#111110'" onblur="this.style.borderColor='#EEEDEA'">
+      <input id="login-pass" type="password" placeholder="Senha" autocomplete="current-password"
+        style="width:100%;padding:14px 16px;font-size:15px;font-family:Outfit,sans-serif;border:1.5px solid #EEEDEA;border-radius:12px;outline:none;background:#FAFAF8;box-sizing:border-box;margin-bottom:16px;color:#111110"
+        onfocus="this.style.borderColor='#111110'" onblur="this.style.borderColor='#EEEDEA'"
+        onkeydown="if(event.key==='Enter')loginEmail()">
+      <button onclick="loginEmail()" style="width:100%;padding:15px;border-radius:14px;background:#111110;color:white;border:none;font-family:Outfit,sans-serif;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:10px;letter-spacing:-.1px">Entrar</button>
+      <button onclick="loginEmail(true)" style="width:100%;padding:14px;border-radius:14px;background:none;color:#6A6864;border:none;font-family:Outfit,sans-serif;font-size:14px;font-weight:500;cursor:pointer">Criar conta com e-mail</button>
+    </div>
+
+    <!-- Loading -->
+    <div id="login-loading" style="display:none;text-align:center;margin-top:8px;color:#9A9896;font-size:13px;font-weight:500">
+      <span style="display:inline-block;animation:spin 1s linear infinite">⟳</span> Entrando…
+    </div>
+  </div>
+</div>
+
 
 <!-- ══ PAGES ══ -->
 <div class="page active" id="p-home">
@@ -1474,6 +1516,176 @@ function showToast(msg){
   clearTimeout(t._tmr);t._tmr=setTimeout(function(){t.classList.remove('show');},2000);
 }
 function scrollToEl(sel){setTimeout(function(){var e=document.querySelector(sel);if(e)e.scrollIntoView({behavior:'smooth',block:'center'});},100);}
+
+
+// ═══════════════════════════════════════════
+// FIREBASE: Auth + Sync
+// ═══════════════════════════════════════════
+let fbUser = null;
+let fbSyncing = false;
+let fbUnsub = null;
+
+// Inicializar Firebase (SDK já carregado via <script> no <head>)
+const firebaseConfig = {
+  apiKey: "AIzaSyD5pcjxEqCoAIXtucNOFVOb7LjosIKYhuE",
+  authDomain: "catchup-81522.firebaseapp.com",
+  projectId: "catchup-81522",
+  storageBucket: "catchup-81522.firebasestorage.app",
+  messagingSenderId: "501302355022",
+  appId: "1:501302355022:web:50ca586c2c6a2cd2b84f1f"
+};
+if(!firebase.apps.length){ firebase.initializeApp(firebaseConfig); }
+const fbAuth = firebase.auth();
+const fbDb   = firebase.firestore();
+
+// ── Auth ──
+function loginEmail(criar) {
+  var email = document.getElementById('login-email').value.trim();
+  var pass  = document.getElementById('login-pass').value;
+  if(!email || !pass){ showLoginError('Preencha e-mail e senha.'); return; }
+  showLoginLoading(true);
+  var fn = criar ? fbAuth.createUserWithEmailAndPassword(email, pass)
+                 : fbAuth.signInWithEmailAndPassword(email, pass);
+  fn.catch(function(err){
+    showLoginLoading(false);
+    showLoginError(loginErrMsg(err.code));
+  });
+}
+
+function loginGoogle() {
+  showLoginLoading(true);
+  var provider = new firebase.auth.GoogleAuthProvider();
+  fbAuth.signInWithPopup(provider).catch(function(err){
+    showLoginLoading(false);
+    showLoginError(loginErrMsg(err.code));
+  });
+}
+
+function logout() {
+  if(fbUnsub){ fbUnsub(); fbUnsub=null; }
+  fbAuth.signOut();
+}
+
+function showLoginError(msg){
+  var el=document.getElementById('login-error');
+  if(el){el.textContent=msg;el.style.display='block';}
+}
+function showLoginLoading(v){
+  var el=document.getElementById('login-loading');
+  if(el)el.style.display=v?'block':'none';
+  var btn=document.querySelector('#login-form button');
+  if(btn)btn.disabled=v;
+}
+function loginErrMsg(code){
+  var msgs={
+    'auth/user-not-found':'E-mail não cadastrado.',
+    'auth/wrong-password':'Senha incorreta.',
+    'auth/email-already-in-use':'E-mail já cadastrado. Faça login.',
+    'auth/weak-password':'Senha muito fraca (mínimo 6 caracteres).',
+    'auth/invalid-email':'E-mail inválido.',
+    'auth/too-many-requests':'Muitas tentativas. Tente mais tarde.',
+    'auth/popup-closed-by-user':'Login cancelado.',
+  };
+  return msgs[code] || 'Erro ao entrar. Tente novamente.';
+}
+
+// ── Auth state change ──
+fbAuth.onAuthStateChanged(function(user){
+  fbUser = user;
+  var loginScreen = document.getElementById('login-screen');
+  if(user){
+    // Esconder tela de login
+    if(loginScreen) loginScreen.style.display='none';
+    // Iniciar sync
+    startFirebaseSync();
+  } else {
+    // Mostrar tela de login
+    if(loginScreen) loginScreen.style.display='flex';
+    showLoginLoading(false);
+    // Parar listener
+    if(fbUnsub){ fbUnsub(); fbUnsub=null; }
+  }
+});
+
+// ── Sync Firestore ──
+function startFirebaseSync(){
+  if(!fbUser) return;
+  var docRef = fbDb.collection('users').doc(fbUser.uid);
+
+  // Listener em tempo real — atualiza quando outro dispositivo salva
+  fbUnsub = docRef.onSnapshot(function(snap){
+    if(!snap.exists) {
+      // Primeira vez: enviar dados locais para o Firestore
+      var local = localStorage.getItem(KEY);
+      if(local){
+        try {
+          var parsed = JSON.parse(local);
+          docRef.set({data: local, updatedAt: firebase.firestore.FieldValue.serverTimestamp()});
+        } catch(e){}
+      }
+      return;
+    }
+    // Dados remotos existem — comparar timestamp
+    var remote = snap.data();
+    if(!remote || !remote.data) return;
+    // Usar dados remotos (mais recentes pelo servidor)
+    try {
+      var remoteData = JSON.parse(remote.data);
+      var localData  = JSON.parse(localStorage.getItem(KEY)||'{}');
+      // Só atualizar se remoto for diferente do local atual
+      if(remote.data !== localStorage.getItem(KEY)){
+        localStorage.setItem(KEY, remote.data);
+        // Recarregar app com novos dados
+        if(typeof loadData === 'function') loadData();
+        if(typeof renderAll === 'function') renderAll();
+      }
+    } catch(e){}
+  }, function(err){
+    console.log('Firestore listener erro:', err);
+  });
+}
+
+// ── Override da função save() para sincronizar ──
+var _origSave = null;
+function patchSaveForFirebase(){
+  _origSave = window.save;
+  window.save = function(){
+    // Salvar local primeiro
+    if(_origSave) _origSave();
+    // Depois enviar para Firestore
+    if(fbUser && !fbSyncing){
+      fbSyncing = true;
+      var data = localStorage.getItem(KEY);
+      fbDb.collection('users').doc(fbUser.uid).set({
+        data: data,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      }).then(function(){
+        fbSyncing = false;
+      }).catch(function(err){
+        fbSyncing = false;
+        console.log('Sync erro:', err);
+      });
+    }
+  };
+}
+
+// Adicionar botão de logout no header
+function addLogoutButton(){
+  var gear = document.querySelector('.gear-btn');
+  if(!gear) return;
+  var btn = document.createElement('button');
+  btn.onclick = function(){ if(confirm('Sair da conta?')) logout(); };
+  btn.title = 'Sair';
+  btn.style.cssText = 'border:none;background:none;cursor:pointer;padding:4px;color:var(--ink3);display:flex;align-items:center';
+  btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>';
+  gear.parentNode.insertBefore(btn, gear.nextSibling);
+}
+
+// Inicializar após o DOM estar pronto
+document.addEventListener('DOMContentLoaded', function(){
+  patchSaveForFirebase();
+  addLogoutButton();
+});
 
 const KEY='catchup_v1';
 const MNS=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
