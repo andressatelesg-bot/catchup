@@ -178,6 +178,8 @@ body{font-family:"Outfit",sans-serif;color:var(--ink);font-size:15px;line-height
 .meta-inp::-webkit-outer-spin-button,.meta-inp::-webkit-inner-spin-button{-webkit-appearance:none}
 .meta-inp:focus{border-color:var(--accent)}
 /* LANC */
+.lanc-drag-over{border-top:2px solid var(--ink)!important;margin-top:-2px}
+.lanc-dragging{opacity:.4;transform:scale(.98)}
 .lanc{display:flex;align-items:center;gap:14px;padding:16px 22px;border-bottom:1px solid var(--line);cursor:pointer;transition:.12s}
 .lanc:last-child{border-bottom:none}
 .lanc:active{background:var(--bg2)}
@@ -634,7 +636,10 @@ body{font-family:"Outfit",sans-serif;color:var(--ink);font-size:15px;line-height
           <!-- botão filtro avançado + total -->
           <div style="display:flex;align-items:center;justify-content:space-between;padding:0 16px 8px">
             <span id="lanc-total-lbl" style="font-size:13px;font-weight:600;color:var(--ink2)"></span>
-            <button onclick="toggleLancFiltros()" id="lanc-filter-btn" style="display:flex;align-items:center;justify-content:center;border:none;background:var(--bg2);color:var(--ink2);cursor:pointer;width:30px;height:30px;border-radius:50%;flex-shrink:0"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg></button>
+            <div style="display:flex;gap:6px">
+              <button onclick="toggleLancSelectMode()" id="lanc-select-btn" style="display:flex;align-items:center;justify-content:center;border:none;background:var(--bg2);color:var(--ink2);cursor:pointer;width:30px;height:30px;border-radius:50%;flex-shrink:0"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></button>
+              <button onclick="deletarLancSelecionados()" id="lanc-del-sel-btn" style="display:none;align-items:center;justify-content:center;border:none;background:rgba(220,38,38,.12);color:var(--danger);cursor:pointer;width:30px;height:30px;border-radius:50%;flex-shrink:0"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></button>
+              <button onclick="toggleLancFiltros()" id="lanc-filter-btn" style="display:flex;align-items:center;justify-content:center;border:none;background:var(--bg2);color:var(--ink2);cursor:pointer;width:30px;height:30px;border-radius:50%;flex-shrink:0"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg></button>
           </div>
           <!-- painel filtros avançados -->
           <div id="lanc-filtros-panel" style="display:none;margin:0 16px 10px;background:var(--bg2);border-radius:var(--r-sm);padding:12px 14px">
@@ -937,8 +942,12 @@ body{font-family:"Outfit",sans-serif;color:var(--ink);font-size:15px;line-height
       <div id="ct-view-san" style="display:none">
         <div style="padding:14px 18px 0;border-bottom:1px solid var(--line)">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-            <div><div style="font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px">Total Santander</div><div style="font-size:17px;font-weight:700;color:#111110" id="cart-san-tot-view">—</div></div>
-            <button onclick="addCartItemTop('santander')" class="sub-act" style="flex-shrink:0">+</button>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;flex:1">
+              <div><div style="font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px">Total</div><div style="font-size:17px;font-weight:700;color:#111110" id="cart-san-tot-view">—</div></div>
+              <div><div style="font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px">Meu valor</div><div style="font-size:17px;font-weight:700;color:#111110" id="cart-san-eu">—</div></div>
+              <div><div style="font-size:10px;font-weight:600;color:#0D9488;text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px">Pedro</div><div style="font-size:17px;font-weight:700;color:#111110" id="cart-san-pedro">—</div></div>
+            </div>
+            <button onclick="addCartItemTop('santander')" class="sub-act" style="flex-shrink:0;margin-left:8px">+</button>
           </div>
           <div style="display:flex;gap:6px;padding-bottom:14px;overflow-x:auto" id="san-div-pills">
             <button class="cart-fpill on" onclick="setCartFiltro('san','all',this)">Todos</button>
@@ -958,8 +967,12 @@ body{font-family:"Outfit",sans-serif;color:var(--ink);font-size:15px;line-height
       <div id="ct-view-car" style="display:none">
         <div style="padding:14px 18px 0;border-bottom:1px solid var(--line)">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-            <div><div style="font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px">Total Carrefour</div><div style="font-size:17px;font-weight:700;color:#111110" id="cart-car-tot-view">—</div></div>
-            <button onclick="addCartItemTop('carrefour')" class="sub-act" style="flex-shrink:0">+</button>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;flex:1">
+              <div><div style="font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px">Total</div><div style="font-size:17px;font-weight:700;color:#111110" id="cart-car-tot-view">—</div></div>
+              <div><div style="font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px">Meu valor</div><div style="font-size:17px;font-weight:700;color:#111110" id="cart-car-eu">—</div></div>
+              <div><div style="font-size:10px;font-weight:600;color:#0D9488;text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px">Pedro</div><div style="font-size:17px;font-weight:700;color:#111110" id="cart-car-pedro">—</div></div>
+            </div>
+            <button onclick="addCartItemTop('carrefour')" class="sub-act" style="flex-shrink:0;margin-left:8px">+</button>
           </div>
           <div style="display:flex;gap:6px;padding-bottom:14px;overflow-x:auto" id="car-div-pills">
             <button class="cart-fpill on" onclick="setCartFiltro('car','all',this)">Todos</button>
@@ -985,8 +998,24 @@ body{font-family:"Outfit",sans-serif;color:var(--ink);font-size:15px;line-height
 <!-- CONFIG SUBPAGE -->
 <div class="subpage" id="sub-config">
   <div class="sub-hd"><div class="sub-hd-inner"><button class="back-btn" onclick="goBack()">‹ Voltar</button><span class="sub-title">Configurações</span><div style="width:34px"></div></div></div>
+  <!-- Sync banner -->
+  <div style="margin:12px 16px 0;background:#F0FDF4;border-radius:var(--r-sm);padding:12px 16px;display:flex;align-items:center;gap:12px">
+    <div style="flex:1">
+      <div style="font-size:13px;font-weight:600;color:#166534">Sincronização</div>
+      <div style="font-size:12px;color:#166534;opacity:.7;margin-top:2px" id="sync-status-lbl">Dados salvos localmente e na nuvem</div>
+    </div>
+    <button onclick="forceSyncNow()" style="display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:99px;border:none;background:#16A34A;color:white;font-family:Outfit,sans-serif;font-size:13px;font-weight:600;cursor:pointer" id="sync-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg> Sincronizar</button>
+  </div>
   <div style="padding:14px 16px">
     <div class="card" style="margin:0;overflow:hidden">
+      <!-- Botão Sincronizar -->
+      <div style="padding:0 0 12px">
+        <button onclick="forceSyncFirebase()" style="width:100%;padding:14px;border-radius:var(--r-sm);background:#111110;color:white;border:none;font-family:Outfit,sans-serif;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+          Sincronizar agora
+        </button>
+        <div id="sync-status" style="text-align:center;font-size:12px;color:var(--ink3);margin-top:6px;min-height:16px"></div>
+      </div>
       <div onclick="goSub('sub-config-cart')" style="display:flex;align-items:center;gap:14px;padding:15px 18px;cursor:pointer;border-bottom:1px solid var(--line)"><div style="width:36px;height:36px;border-radius:var(--r-sm);background:#FDF2F8;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#BE185D" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div><div style="flex:1"><div style="font-size:14px;font-weight:600">Categorias do cartão</div><div style="font-size:12px;color:var(--ink3);margin-top:2px">Gerencie as categorias dos gastos</div></div><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink3)" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
       <div onclick="goSub('sub-config-sem')" style="display:flex;align-items:center;gap:14px;padding:15px 18px;cursor:pointer;border-bottom:1px solid var(--line)"><div style="width:36px;height:36px;border-radius:var(--r-sm);background:#F0FDF4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div style="flex:1"><div style="font-size:14px;font-weight:600">Categorias semanais</div><div style="font-size:12px;color:var(--ink3);margin-top:2px">Categorias e subcategorias de lançamentos</div></div><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink3)" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
       <div onclick="goSub('sub-config-res')" style="display:flex;align-items:center;gap:14px;padding:15px 18px;cursor:pointer;border-bottom:1px solid var(--line)"><div style="width:36px;height:36px;border-radius:var(--r-sm);background:#FFFBEB;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><div style="flex:1"><div style="font-size:14px;font-weight:600">Categorias de reservas</div><div style="font-size:12px;color:var(--ink3);margin-top:2px">Categorias de entrada e saída das caixinhas</div></div><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink3)" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
@@ -1190,7 +1219,7 @@ body{font-family:"Outfit",sans-serif;color:var(--ink);font-size:15px;line-height
         <div class="chip" onclick="pChip(this,'lss')">Sem. 5</div>
       </div>
     </div>
-    <div class="fg"><label class="flbl">Valor (R$)</label><input class="finput" id="ls-val" type="number" inputmode="decimal" placeholder="0,00"></div>
+    <div class="fg"><label class="flbl">Valor (R$)</label><input class="finput" id="ls-val" type="number" inputmode="decimal" placeholder="0,00" onkeydown="if(event.key==='Enter'){event.preventDefault();salvarLanc();}"></div>
     <div class="fg"><label class="flbl">Descrição <span style="font-weight:400;color:var(--ink3)">(opcional)</span></label><input class="finput" id="ls-desc" type="text" placeholder="O que foi?"></div>
   </div>
 
@@ -1275,6 +1304,30 @@ body{font-family:"Outfit",sans-serif;color:var(--ink);font-size:15px;line-height
     </div>
   </div>
 
+  <div class="fg" id="lanc-attach-area">
+    <label class="flbl">Anexo <span style="font-weight:400;color:var(--ink3)">(imagem ou PDF)</span></label>
+    <div style="display:flex;gap:8px;align-items:center;margin-top:6px">
+      <button type="button" onclick="document.getElementById('lanc-file-input').click()" style="display:flex;align-items:center;gap:6px;padding:10px 14px;border-radius:var(--r-sm);border:1.5px dashed var(--bg3);background:none;font-family:Outfit,sans-serif;font-size:13px;color:var(--ink2);cursor:pointer"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg> Selecionar arquivo</button>
+      <span id="lanc-file-name" style="font-size:12px;color:var(--ink3);flex:1"></span>
+    </div>
+    <input type="file" id="lanc-file-input" accept="image/*,.pdf" style="display:none" onchange="lancAnexoSelected(this)">
+    <div id="lanc-preview" style="margin-top:8px;display:none">
+      <img id="lanc-preview-img" style="max-width:100%;max-height:120px;border-radius:8px;object-fit:contain" src="">
+    </div>
+  </div>
+  <!-- Import imagem/PDF -->
+  <div style="margin-bottom:12px">
+    <div style="font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px">Importar de imagem ou PDF</div>
+    <label style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;border-radius:var(--r-sm);border:1.5px dashed var(--bg3);background:var(--bg2);cursor:pointer;font-family:Outfit,sans-serif;font-size:13px;font-weight:600;color:var(--ink2);box-sizing:border-box">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+      Selecionar imagem ou PDF
+      <input type="file" accept="image/*,application/pdf" style="display:none" onchange="importLancFile(this)">
+    </label>
+    <div id="import-lanc-preview" style="display:none;margin-top:8px;padding:10px 12px;border-radius:var(--r-sm);background:#F0FDF4;border:1px solid #BBF7D0;font-size:13px;color:#15803D"></div>
+    <div id="import-lanc-loading" style="display:none;text-align:center;padding:10px;font-size:13px;color:var(--ink3)">
+      <span style="animation:spin 1s linear infinite;display:inline-block">⟳</span> Analisando…
+    </div>
+  </div>
   <button class="btn btn-primary" onclick="salvarLanc()">Salvar</button>
   <button class="btn btn-ghost" onclick="closeSheet('sh-lanc')">Cancelar</button>
 </div></div>
@@ -1307,7 +1360,7 @@ body{font-family:"Outfit",sans-serif;color:var(--ink);font-size:15px;line-height
     <input type="hidden" id="sh-rm-cat">
   </div>
   <div class="fg"><label class="flbl">Descrição <span style="font-weight:400;color:var(--ink3)">(opcional)</span></label><input class="finput" id="sh-rm-desc" type="text" placeholder="Opcional"></div>
-  <div class="fg"><label class="flbl">Valor (R$)</label><input class="finput" id="sh-rm-val" type="number" inputmode="decimal" placeholder="0,00"></div>
+  <div class="fg"><label class="flbl">Valor (R$)</label><input class="finput" id="sh-rm-val" type="number" inputmode="decimal" placeholder="0,00" onkeydown="if(event.key==='Enter'){event.preventDefault();salvarShRm();}"></div>
   <div class="fg"><label class="flbl">Parcelas <span style="font-weight:400;color:var(--ink3)">(opcional)</span></label><input class="finput" id="sh-rm-parc" type="text" placeholder="ex: 1x12"></div>
   <div class="fg"><label class="flbl">Divisão</label>
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
@@ -1446,7 +1499,7 @@ body{font-family:"Outfit",sans-serif;color:var(--ink);font-size:15px;line-height
     </div>
   </div>
   <div class="fg"><label class="flbl">Descrição</label><input class="finput" id="re-desc" type="text" placeholder="Opcional"></div>
-  <div class="fg"><label class="flbl">Valor (R$)</label><input class="finput" id="re-val" type="number" inputmode="decimal" placeholder="0,00"></div>
+  <div class="fg"><label class="flbl">Valor (R$)</label><input class="finput" id="re-val" type="number" inputmode="decimal" placeholder="0,00" onkeydown="if(event.key==='Enter'){event.preventDefault();salvarResEdit();}"></div>
   <div class="fg"><label class="flbl">Categoria</label>
     <button type="button" onclick="openResEditCatPicker()" class="finput" style="padding:11px 14px;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;width:100%;text-align:left;font-family:Outfit,sans-serif;box-sizing:border-box">
       <span id="re-cat-display" style="color:var(--ink3)">Selecionar…</span>
@@ -1685,6 +1738,32 @@ function addLogoutButton(){
 }
 
 // Inicializar após o DOM estar pronto
+document.addEventListener('keydown', function(e){
+  if(e.key !== 'Enter') return;
+  var active = document.activeElement;
+  if(!active) return;
+  var tag = active.tagName.toLowerCase();
+  if(tag !== 'input' && tag !== 'textarea') return;
+  // Não processar se já tem onkeydown específico
+  if(active.getAttribute('onkeydown')) return;
+  // Encontrar o sheet pai
+  var sheet = active.closest('.overlay.open');
+  if(!sheet) return;
+  var id = sheet.id;
+  // Mapear sheet → função de salvar
+  var saveMap = {
+    'sh-lanc': function(){ salvarLanc(); },
+    'sh-rm':   function(){ salvarShRm(); },
+    'sh-el':   function(){ salvarEL(); },
+    'sh-res-edit': function(){ salvarResEdit(); },
+    'sh-add-res':  function(){ criarRes(); },
+  };
+  if(saveMap[id]){
+    e.preventDefault();
+    saveMap[id]();
+  }
+});
+
 document.addEventListener('DOMContentLoaded', function(){
   patchSaveForFirebase();
   addLogoutButton();
@@ -1756,7 +1835,7 @@ function cartCatList(){return S.cats.cartao.map(c=>typeof c==='string'?c:(c&&c.n
 function cartCatColor(nome){const idx=S.cats.cartao.findIndex(c=>catNome(c)===nome);if(idx<0)return PALS[0];return catCor(S.cats.cartao[idx],idx);}
 
 const DEF={
-  month:{m:5,y:2026},
+  month:{m:6,y:2026},
   receita:[{id:1,nome:'Salário',valor:6000},{id:2,nome:'Adobe',valor:95}],
   moradia:[
     {id:1,nome:'Aluguel + Condomínio',valor:2340.27,pago:true,pedro:true},
@@ -1844,6 +1923,12 @@ const save=()=>{
     }catch(e){}
   }
 };
+// migração Mai→Jun: se dados ainda estão em Maio/2026, mover para Junho
+if(S.month&&S.month.m===5&&S.month.y===2026){
+  S.month={m:6,y:2026};
+  if(S.reservas)S.reservas.forEach(function(r){if(r.movs)r.movs.forEach(function(m){if(m.mes==='Mai/26')m.mes='Jun/26';});});
+  save();
+}
 // migrate
 if(!S.reservasmes)S.reservasmes=[{id:1,nome:'RV: Casa',valor:50,pago:false,pedro:false}];
 if(!S.metas||!S.metas.cat)S.metas={cat:{Alimentação:1300,Transporte:250,Variados:400},sem:{'Sem. 1':500,'Sem. 2':500,'Sem. 3':500,'Sem. 4':500,'Sem. 5':330}};
@@ -2401,6 +2486,105 @@ function configAddCaixinha(){
   _configCaixinhaEdit=newId;
   save();renderConfigCaixinhas();
 }
+function forceSyncNow(){
+  var btn=document.getElementById('sync-btn');
+  var lbl=document.getElementById('sync-status-lbl');
+  if(btn){btn.disabled=true;btn.style.opacity='0.6';}
+  if(lbl)lbl.textContent='Sincronizando…';
+  // 1. Forçar upload para Firebase
+  if(typeof fbUser!=='undefined' && fbUser && typeof fbDb!=='undefined' && fbDb){
+    fbDb.collection('users').doc(fbUser.uid).set({
+      data:JSON.stringify(S),
+      updatedAt:firebase.firestore.FieldValue.serverTimestamp()
+    }).then(function(){
+      if(lbl)lbl.textContent='Sincronizado com a nuvem ✓';
+      if(btn){btn.disabled=false;btn.style.opacity='1';}
+      showToast('Dados sincronizados!');
+    }).catch(function(err){
+      if(lbl)lbl.textContent='Erro ao sincronizar. Tente novamente.';
+      if(btn){btn.disabled=false;btn.style.opacity='1';}
+    });
+  } else {
+    // Sem Firebase — apenas salvar local
+    save();
+    if(lbl)lbl.textContent='Salvo localmente (sem login)';
+    if(btn){btn.disabled=false;btn.style.opacity='1';}
+    showToast('Salvo localmente!');
+  }
+}
+// ── IMPORT LANÇAMENTO POR IMAGEM/PDF ──
+function importLancFile(input){
+  var file = input.files[0];
+  if(!file) return;
+  var loading = document.getElementById('import-lanc-loading');
+  var preview = document.getElementById('import-lanc-preview');
+  if(loading) loading.style.display='block';
+  if(preview) preview.style.display='none';
+  var reader = new FileReader();
+  reader.onload = function(e){
+    var base64 = e.target.result.split(',')[1];
+    var mediaType = file.type;
+    // Chamar Claude API para extrair dados
+    fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:500,
+        messages:[{
+          role:'user',
+          content:[
+            {type: mediaType==='application/pdf'?'document':'image',
+             source:{type:'base64',media_type:mediaType,data:base64}},
+            {type:'text',text:'Analise este comprovante/nota fiscal e extraia: valor total (número), descrição do gasto, categoria sugerida (Alimentação, Transporte, Variados, Farmácia, Casa, Pets, Pessoal, Saúde, Eletrônicos, Roupas). Responda APENAS em JSON: {"valor":0.00,"descricao":"...","categoria":"..."}'}
+          ]
+        }]
+      })
+    }).then(function(r){return r.json();})
+    .then(function(data){
+      if(loading)loading.style.display='none';
+      var text = (data.content&&data.content[0]&&data.content[0].text)||'{}';
+      try{
+        var clean = text.replace(/```json|```/g,'').trim();
+        var parsed = JSON.parse(clean);
+        // Preencher o form
+        if(parsed.valor){var vEl=document.getElementById('ls-val');if(vEl)vEl.value=parsed.valor;}
+        if(parsed.descricao){var dEl=document.getElementById('ls-desc');if(dEl)dEl.value=parsed.descricao;}
+        if(parsed.categoria){var cEl=document.getElementById('ls-cat');if(cEl)cEl.value=parsed.categoria;}
+        if(preview){
+          preview.style.display='block';
+          preview.innerHTML='✓ Extraído: <strong>R$ '+(parsed.valor||'?')+'</strong> — '+(parsed.descricao||'')+(parsed.categoria?' ('+parsed.categoria+')':'');
+        }
+      }catch(ex){
+        if(preview){preview.style.display='block';preview.style.background='#FEF2F2';preview.style.borderColor='#FECACA';preview.style.color='#DC2626';preview.innerHTML='Não foi possível extrair os dados automaticamente. Preencha manualmente.';}
+      }
+    }).catch(function(){
+      if(loading)loading.style.display='none';
+      if(preview){preview.style.display='block';preview.style.background='#FEF2F2';preview.style.borderColor='#FECACA';preview.style.color='#DC2626';preview.innerHTML='Erro ao analisar. Preencha manualmente.';}
+    });
+  };
+  reader.readAsDataURL(file);
+}
+function forceSyncFirebase(){
+  var st=document.getElementById('sync-status');
+  if(st)st.textContent='Sincronizando…';
+  if(typeof fbUser==='undefined'||!fbUser){
+    if(st)st.textContent='Não conectado ao Firebase.';
+    return;
+  }
+  // Forçar upload dos dados locais
+  var data=localStorage.getItem(KEY);
+  fbDb.collection('users').doc(fbUser.uid).set({
+    data:data,
+    updatedAt:firebase.firestore.FieldValue.serverTimestamp()
+  }).then(function(){
+    if(st){st.textContent='✓ Sincronizado com sucesso!';st.style.color='var(--ok)';
+      setTimeout(function(){st.textContent='';st.style.color='var(--ink3)';},3000);}
+    showToast('Dados sincronizados ✓');
+  }).catch(function(err){
+    if(st){st.textContent='Erro: '+err.message;st.style.color='var(--danger)';}
+  });
+}
 function goToResConfig(){
   // fechar todos os sheets e subpages abertas
   closeCatSheet();
@@ -2610,7 +2794,7 @@ function renderMesHome(){
   st('sc-rm-val',fmt(rm));
   // cartão: total de itens (cartão não tem "pago", mostra contagem)
   const cartTot=S.cartao.santander.length+S.cartao.carrefour.length;
-  const cma=document.getElementById('sc-cart-meta');if(cma)cma.textContent=`${cartTot} itens`;
+  const cma=document.getElementById('sc-cart-meta');if(cma){var _sPg=S.cartaoPago&&S.cartaoPago.santander;var _cPg=S.cartaoPago&&S.cartaoPago.carrefour;cma.textContent=(_sPg&&_cPg)?'San ✓ · Car ✓':(_sPg?'San ✓ · Car pendente':(_cPg?'San pendente · Car ✓':'San · Car pendentes'));}
   st('sc-cart-val',fmt(cartLiq));
   const splitEl=document.getElementById('sc-cart-split');
   if(splitEl){
@@ -3342,7 +3526,11 @@ function renderCartoesSub(){
   sv('cart-san-total',fmt(san.tot));
   sv('cart-car-total',fmt(car.tot));
   sv('cart-san-tot-view',fmt(san.tot));
+  sv('cart-san-eu',fmt(san.eu));
+  sv('cart-san-pedro',fmt(san.div/2+san.ind));
   sv('cart-car-tot-view',fmt(car.tot));
+  sv('cart-car-eu',fmt(car.eu));
+  sv('cart-car-pedro',fmt(car.div/2+car.ind));
   // cart chip: paid status
   const cartPago=Object.values(S.cartaoPago||{}).filter(Boolean).length;
   const cartTotBancos=2;
@@ -4197,6 +4385,71 @@ function toggleLancFiltroSub(el){
 function renderFpills(){/* pills removidas — usar toggleLancFiltros */}
 function setFiltro(f){curFiltro=f;renderFpills();renderLancList();}
 function setFiltroSem(s){curFiltroSem=s;renderFpills();renderLancList();}
+
+// ── DRAG & DROP LANÇAMENTOS ──
+let _dragIdx = null;
+function lancDragStart(el, idx){
+  _dragIdx = idx;
+  el.style.opacity = '0.5';
+}
+function lancDragOver(e, idx){
+  e.preventDefault();
+  if(_dragIdx===null || _dragIdx===idx) return;
+  // Reordenar
+  var fl = getLancFiltered();
+  var all = S.lancamentos;
+  var fromId = fl[_dragIdx]?.id;
+  var toId   = fl[idx]?.id;
+  if(!fromId || !toId) return;
+  var fi = all.findIndex(l=>l.id===fromId);
+  var ti = all.findIndex(l=>l.id===toId);
+  if(fi<0||ti<0) return;
+  var item = all.splice(fi,1)[0];
+  all.splice(ti,0,item);
+  _dragIdx = idx;
+  save();renderLancList();
+}
+function lancDragEnd(el){
+  _dragIdx=null;
+  el.style.opacity='1';
+}
+function getLancFiltered(){
+  var fl = (S.lancamentos||[]).slice().reverse();
+  if(typeof curFiltroSem!=='undefined' && curFiltroSem!=='all') fl=fl.filter(l=>l.sem===curFiltroSem);
+  if(typeof curFiltro!=='undefined' && curFiltro!=='all') fl=fl.filter(l=>l.cat===curFiltro);
+  if(typeof _lancFiltroSems!=='undefined' && _lancFiltroSems&&_lancFiltroSems.size) fl=fl.filter(l=>_lancFiltroSems.has(l.sem));
+  if(typeof _lancFiltroCats!=='undefined' && _lancFiltroCats&&_lancFiltroCats.size) fl=fl.filter(l=>_lancFiltroCats.has(l.cat));
+  if(typeof _lancFiltroSubs!=='undefined' && _lancFiltroSubs&&_lancFiltroSubs.size) fl=fl.filter(l=>_lancFiltroSubs.has(l.sub));
+  return fl;
+}
+
+// ── MULTISSELEÇÃO LANÇAMENTOS ──
+let _lancSelected = new Set();
+let _lancSelectMode = false;
+function toggleLancSelectMode(){
+  _lancSelectMode = !_lancSelectMode;
+  _lancSelected.clear();
+  renderLancList();
+  var btn = document.getElementById('lanc-select-btn');
+  if(btn){
+    btn.style.background = _lancSelectMode ? 'rgba(220,38,38,.12)' : 'var(--bg2)';
+    btn.style.color = _lancSelectMode ? 'var(--danger)' : 'var(--ink2)';
+  }
+}
+function lancToggleSel(id){
+  if(_lancSelected.has(id)) _lancSelected.delete(id);
+  else _lancSelected.add(id);
+  renderLancList();
+}
+function deletarLancSelecionados(){
+  if(!_lancSelected.size) return;
+  if(!confirm('Remover '+_lancSelected.size+' lançamento(s)?')) return;
+  S.lancamentos = S.lancamentos.filter(l=>!_lancSelected.has(l.id));
+  _lancSelected.clear();
+  _lancSelectMode = false;
+  save();renderSemHome();
+}
+
 function renderLancList(){
   const el=document.getElementById('lanc-list-main');if(!el)return;
   let fl=S.lancamentos;
@@ -4210,20 +4463,68 @@ function renderLancList(){
   const lTotal=fl.reduce((a,l)=>a+l.val,0);
   const ltEl=document.getElementById('lanc-total-lbl');
   if(ltEl)ltEl.textContent=fl.length?fl.length+' lançamento'+(fl.length>1?'s':'')+' · R$ '+lTotal.toFixed(2):'';
+  var delSelBtn=document.getElementById('lanc-del-sel-btn');
+  if(delSelBtn)delSelBtn.style.display=(_lancSelectMode&&_lancSelected.size>0)?'flex':'none';
   if(!fl.length){el.innerHTML=`<div class="empty"><div class="empty-e">📝</div><div class="empty-t">Nenhum lançamento</div></div>`;return;}
   el.innerHTML=fl.map(l=>{
     if(l._editing){
       return renderLancInlineEdit(l);
     }
-    return '<div class="lanc" style="cursor:pointer" onclick="toggleLancEdit('+l.id+')">'+
+    var isSel = _lancSelected.has(l.id);
+    var selStyle = isSel ? 'background:rgba(220,38,38,.06);' : '';
+    if(_lancSelectMode){
+      return '<div class="lanc" style="cursor:pointer;'+selStyle+'" onclick="lancToggleSel('+l.id+')">'+
+        '<div style="width:28px;height:28px;border-radius:50%;border:1.5px solid '+( isSel?'var(--danger)':'var(--bg3)')+';background:'+(isSel?'var(--danger)':'none')+';display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-right:2px">'+
+          (isSel?'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>':'')+
+        '</div>'+
+        '<div class="lanc-info"><div class="lanc-name">'+l.desc+'</div><div class="lanc-meta">'+l.sem+' · '+l.cat+(l.sub?' · '+l.sub:'')+'</div></div>'+
+        '<div class="lanc-val">-'+fmt(l.val)+'</div>'+
+      '</div>';
+    }
+    return '<div class="lanc" draggable="true" data-idx="'+i+'" style="cursor:grab" '+
+      'onclick="toggleLancEdit('+l.id+')" '+
+      'ondragstart="lancDragStart(this,'+i+')" '+
+      'ondragover="lancDragOver(event,'+i+')" '+
+      'ondragend="lancDragEnd(this)">'+
       '<div class="lanc-icon">'+ic(l.cat)+'</div>'+
-      '<div class="lanc-info"><div class="lanc-name">'+l.desc+'</div><div class="lanc-meta">'+l.sem+' · '+l.cat+(l.sub?' · '+l.sub:'')+'</div></div>'+
+      '<div class="lanc-info"><div class="lanc-name">'+l.desc+(l.anexo?' <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--ink3)" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>':'')+'</div><div class="lanc-meta">'+l.sem+' · '+l.cat+(l.sub?' · '+l.sub:'')+'</div></div>'+
       '<div class="lanc-val">-'+fmt(l.val)+'</div>'+
     '</div>';
   }).join('');
 }
 
 // LANC EDIT
+// ── DRAG TO REORDER LANÇAMENTOS ──
+var _lancDragId = null;
+function lancDragStart(e, id){
+  _lancDragId = id;
+  e.currentTarget.classList.add('lanc-dragging');
+  e.dataTransfer.effectAllowed='move';
+}
+function lancDragOver(e){
+  e.preventDefault();
+  e.dataTransfer.dropEffect='move';
+  // Highlight
+  document.querySelectorAll('.lanc').forEach(function(el){el.classList.remove('lanc-drag-over');});
+  e.currentTarget.classList.add('lanc-drag-over');
+}
+function lancDrop(e, targetId){
+  e.preventDefault();
+  if(!_lancDragId || _lancDragId === targetId) return;
+  var arr = S.lancamentos;
+  var fromIdx = arr.findIndex(function(l){return l.id===_lancDragId;});
+  var toIdx   = arr.findIndex(function(l){return l.id===targetId;});
+  if(fromIdx<0||toIdx<0)return;
+  var item = arr.splice(fromIdx,1)[0];
+  arr.splice(toIdx,0,item);
+  save();renderLancList();
+}
+function lancDragEnd(e){
+  _lancDragId=null;
+  document.querySelectorAll('.lanc').forEach(function(el){
+    el.classList.remove('lanc-dragging','lanc-drag-over');
+  });
+}
 function renderLancInlineEdit(l){
   // Gerar seletor de categoria
   var cats=Object.keys(S.cats.semana||{});
@@ -5200,6 +5501,33 @@ function setLT(t,el){
   document.getElementById('lf-sem').style.display=t==='sem'?'block':'none';
   document.getElementById('lf-mes').style.display=t==='mes'?'block':'none';
 }
+// ── ANEXOS ──
+var _lancAnexo = null; // base64 do arquivo
+
+function lancAnexoSelected(input){
+  var file = input.files[0];
+  if(!file){_lancAnexo=null;return;}
+  var nameEl=document.getElementById('lanc-file-name');
+  if(nameEl) nameEl.textContent=file.name;
+  var reader=new FileReader();
+  reader.onload=function(e){
+    _lancAnexo={name:file.name,type:file.type,data:e.target.result};
+    // preview se for imagem
+    var prev=document.getElementById('lanc-preview');
+    var img=document.getElementById('lanc-preview-img');
+    if(file.type.startsWith('image/') && prev && img){
+      img.src=e.target.result;
+      prev.style.display='block';
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+function openAnexo(data){
+  var w=window.open();
+  if(w) w.document.write('<img src="'+data+'" style="max-width:100%">');
+}
+
 function salvarLanc(){
   if(ltipo==='sem'){
     const val=parseFloat(document.getElementById('ls-val').value)||0;
@@ -5208,7 +5536,8 @@ function salvarLanc(){
     const descEl=document.getElementById('ls-desc');const desc=(descEl&&descEl.value.trim())||cat;
     const semEl=document.querySelector('#ls-sem .chip.on'),sem=semEl?.textContent||'Sem. 1';
     if(!val||!cat){alert('Informe categoria e valor.');return;}
-    S.lancamentos.push({id:nxId(S.lancamentos),desc,cat,sub,sem,val,mes:curKey()});
+    S.lancamentos.push({id:nxId(S.lancamentos),desc,cat,sub,sem,val,mes:curKey(),anexo:_lancAnexo||null});
+    _lancAnexo=null;
   }else{
     const onde=document.querySelector('#lm-onde .chip.on')?.textContent||'Moradia';
     if(onde==='Reservas'){
@@ -5456,26 +5785,66 @@ function toggleVoice(){
       recog.onresult=e=>{
         const t=e.results[0][0].transcript;
         res.style.display='block';
-        const vm=t.match(/(\d+(?:[,.]\d+)?)/);
-        const val=vm?parseFloat(vm[1].replace(',','.')):0;
-        const sm=t.match(/semana\s*(\d)/i);
-        const sem=sm?'Sem. '+sm[1]:'Sem. 2';
-        const cat=Object.keys(S.cats.semana).find(k=>t.toLowerCase().includes(k.toLowerCase()))||Object.keys(S.cats.semana)[0]||'Variados';
-        const desc=t.replace(/gastei|reais|r\$/gi,'').replace(/\d+[,.]?\d*/g,'').replace(/semana \d/gi,'').replace(new RegExp(cat,'gi'),'').replace(/\s+/g,' ').trim()||'Gasto';
-        // guardar em variável — evita interpolação de strings no onclick
-        _vozDraft={desc,cat,sem,val};
-        res.innerHTML=
-          '<div style="margin-bottom:10px;font-size:12px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em">Interpretado</div>'+
+        st.textContent='Interpretando…';
+        // Usar Claude para interpretar o transcript com contexto das categorias
+        const cats=Object.keys(S.cats.semana||{});
+        const catsComSubs=cats.map(k=>{
+          const subs=(S.cats.semana[k]||[]);
+          return k+(subs.length?' ('+subs.join(', ')+')':'');
+        }).join(', ');
+        fetch('https://api.anthropic.com/v1/messages',{
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({
+            model:'claude-sonnet-4-20250514',
+            max_tokens:200,
+            messages:[{role:'user',content:
+              'Interprete este lançamento financeiro falado em português: "'+t+'"\n\n'+
+              'Categorias disponíveis: '+catsComSubs+'\n\n'+
+              'Retorne APENAS JSON válido: {"valor":0.00,"descricao":"...","categoria":"...","subcategoria":"...","semana":"Sem. 2"}\n'+
+              'Se não identificar semana, use "Sem. 2". Se não identificar subcategoria, use "". Descrição deve ser concisa (2-4 palavras).'
+            }]
+          })
+        }).then(r=>r.json()).then(data=>{
+          const text=(data.content&&data.content[0]&&data.content[0].text)||'{}';
+          let parsed={};
+          try{parsed=JSON.parse(text.replace(/```json|```/g,'').trim());}catch(ex){}
+          const val=parsed.valor||0;
+          const cat=parsed.categoria||cats[0]||'Variados';
+          const sub=parsed.subcategoria||'';
+          const sem=parsed.semana||'Sem. 2';
+          const desc=parsed.descricao||t;
+            _vozDraft={desc,cat,sub,sem,val};
+          res.innerHTML=
+            '<div style="margin-bottom:10px;font-size:12px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em">Interpretado</div>'+
           '<div style="display:flex;flex-direction:column;gap:6px;margin-bottom:12px">'+
             '<div style="display:flex;justify-content:space-between"><span style="color:var(--ink3);font-size:13px">Descrição</span><span style="font-weight:600;font-size:13px">'+desc+'</span></div>'+
             '<div style="display:flex;justify-content:space-between"><span style="color:var(--ink3);font-size:13px">Valor</span><span style="font-weight:600;font-size:13px;color:var(--danger)">'+fmt(val)+'</span></div>'+
             '<div style="display:flex;justify-content:space-between"><span style="color:var(--ink3);font-size:13px">Categoria</span><span style="font-weight:600;font-size:13px">'+cat+'</span></div>'+
+            (sub?'<div style="display:flex;justify-content:space-between"><span style="color:var(--ink3);font-size:13px">Subcategoria</span><span style="font-weight:600;font-size:13px">'+sub+'</span></div>':'')+
             '<div style="display:flex;justify-content:space-between"><span style="color:var(--ink3);font-size:13px">Semana</span><span style="font-weight:600;font-size:13px">'+sem+'</span></div>'+
           '</div>'+
           '<button onclick="confirmarVoz()" style="width:100%;padding:12px;border-radius:var(--r-sm);background:var(--ink);color:white;border:none;font-family:Outfit,sans-serif;font-size:14px;font-weight:600;cursor:pointer">Confirmar</button>';
-        st.textContent='Toque para gravar';
-        st.style.color='';
-        resetVoice();
+          st.textContent='Toque para gravar';
+          st.style.color='';
+          resetVoice();
+        }).catch(function(){
+          // Fallback: interpretação local se API falhar
+          const tl=t.toLowerCase();
+          const val=(t.match(/(\d+(?:[,.]\d+)?)/)||[])[1];
+          const valN=val?parseFloat(val.replace(',','.')):0;
+          const sm=t.match(/semana\s*(\d)/i);
+          const sem=sm?'Sem. '+sm[1]:'Sem. 2';
+          const cat=cats.find(k=>tl.includes(k.toLowerCase()))||cats[0]||'Variados';
+          const subs=(S.cats.semana[cat]||[]);
+          const sub=subs.find(s=>tl.includes(s.toLowerCase()))||'';
+          let desc=t.replace(/gastei|reais|r\$|paguei|comprei/gi,'').replace(/\d+[,.]?\d*/g,'').replace(/semana \d/gi,'').replace(new RegExp(cat,'gi'),'').replace(/\s+/g,' ').trim()||cat;
+          _vozDraft={desc,cat,sub,sem,val:valN};
+          st.textContent='Toque para gravar';st.style.color='';resetVoice();
+          res.innerHTML='<div style="color:var(--ink3);font-size:12px;margin-bottom:8px">Interpretação local (offline):</div>'+
+            '<strong>'+desc+'</strong> — '+fmt(valN)+' ('+cat+(sub?' > '+sub:'')+') '+sem+
+            '<br><br><button onclick="confirmarVoz()" style="width:100%;padding:12px;border-radius:var(--r-sm);background:var(--ink);color:white;border:none;font-family:Outfit,sans-serif;font-size:14px;font-weight:600;cursor:pointer">Confirmar</button>';
+        });
       };
       recog.onerror=e=>{
         const msgs={'not-allowed':'Permissão de microfone negada. Autorize nas configurações.','no-speech':'Nenhuma fala detectada. Tente novamente.','network':'Erro de rede.'};
@@ -5501,7 +5870,7 @@ function toggleVoice(){
 }
 function confirmarVoz(){
   if(!_vozDraft.desc)return;
-  S.lancamentos.push({id:nxId(S.lancamentos),desc:_vozDraft.desc,cat:_vozDraft.cat,sub:'',sem:_vozDraft.sem,val:_vozDraft.val,mes:curKey()});
+  S.lancamentos.push({id:nxId(S.lancamentos),desc:_vozDraft.desc,cat:_vozDraft.cat,sub:_vozDraft.sub||'',sem:_vozDraft.sem,val:_vozDraft.val,mes:curKey()});
   save();closeSheet('sh-voz');renderAll();
   _vozDraft={};
 }
@@ -5761,13 +6130,107 @@ function applyMonthPicker(){
   save();closeMonthPicker();renderAll();renderCycleBtn();
 }
 
-// Override chMonth to enforce min April 2026
-const _origChMonth=chMonth;
-// Set initial month to Abril 2026 if no month data exists
-if(!S.monthData&&(!S.monthStatus||Object.keys(S.monthStatus).length===0)){
-  S.month={m:4,y:2026};
-  save();
+// Mês inicial = Junho 2026, não permite voltar antes disso
+const _origChMonth = chMonth;
+window.chMonth = function(dir){
+  var cur = S.month;
+  var newM = cur.m + dir, newY = cur.y;
+  if(newM > 12){newM=1;newY++;}
+  if(newM < 1){newM=12;newY--;}
+  // Bloquear antes de Jun/2026
+  if(newY < 2026 || (newY===2026 && newM < 6)) return;
+  S.month={m:newM,y:newY};
+  save();updateMlbl();renderAll();
+};
+// Garantir mês inicial = Junho 2026
+if(!S.month || S.month.m < 6 || (S.month.m===6 && S.month.y<2026)){
+  S.month={m:6,y:2026};save();
 }
+
+// ═══════════════════════════════════════════
+// ENTER como confirmação de formulário
+// ═══════════════════════════════════════════
+document.addEventListener('keydown', function(e){
+  if(e.key !== 'Enter' || e.shiftKey) return;
+  // Não interceptar se estiver num textarea
+  if(e.target && e.target.tagName === 'TEXTAREA') return;
+
+  // Identificar qual sheet/contexto está aberto
+  var sheets = ['sh-lanc','sh-el','sh-rm','sh-res-edit','sh-el'];
+  for(var i=0; i<sheets.length; i++){
+    var sh = document.getElementById(sheets[i]);
+    if(sh && sh.classList.contains('open')){
+      e.preventDefault();
+      switch(sheets[i]){
+        case 'sh-lanc':  salvarLanc(); break;
+        case 'sh-el':    salvarEL(); break;
+        case 'sh-rm':    salvarShRm(); break;
+        case 'sh-res-edit': salvarResEdit(); break;
+      }
+      return;
+    }
+  }
+
+  // Forms inline de edição — Enter no input confirma
+  var active = document.activeElement;
+  if(!active) return;
+
+  // Lançamento inline semanal
+  var lancRow = active.closest('[data-edit-id]');
+  if(lancRow){
+    var lid = parseInt(lancRow.dataset.editId);
+    if(!isNaN(lid)){
+      e.preventDefault();
+      confirmLancInline(lid);
+      return;
+    }
+  }
+
+  // Moradia inline
+  var morRow = active.closest('[data-edit-id]');
+  if(morRow && document.getElementById('sub-moradia')?.classList.contains('open')){
+    var mid = parseInt(morRow.dataset.editId);
+    if(!isNaN(mid)){e.preventDefault(); confirmMor(mid); return;}
+  }
+
+  // Pessoal inline
+  if(morRow && document.getElementById('sub-pessoal')?.classList.contains('open')){
+    var pid = parseInt(morRow.dataset.editId);
+    if(!isNaN(pid)){e.preventDefault(); confirmPes(pid); return;}
+  }
+
+  // Cartão inline
+  if(morRow && document.getElementById('sub-cartoes')?.classList.contains('open')){
+    var cid = parseInt(morRow.dataset.editId);
+    var banco = document.querySelector('#ct-view-san:not([style*="none"])') ? 'santander' : 'carrefour';
+    if(!isNaN(cid)){e.preventDefault(); confirmCart(banco, cid); return;}
+  }
+
+  // Caixinha inline (reservas subpage)
+  var resRow = active.closest('[data-edit-id]');
+  if(resRow && document.getElementById('sub-reserva-det')?.classList.contains('open')){
+    var rid2 = parseInt(resRow.dataset.editId);
+    if(!isNaN(rid2)){
+      // Encontrar o botão Confirmar dentro desse row
+      var confirmBtn = resRow.querySelector('button[data-rid]');
+      if(confirmBtn){e.preventDefault(); confirmResDetMovBtn(confirmBtn); return;}
+    }
+  }
+
+  // Login — Enter no campo de senha faz login
+  if(active.id === 'login-pass' || active.id === 'login-email'){
+    e.preventDefault();
+    loginEmail();
+    return;
+  }
+
+  // Configs — campos de adicionar categoria com Enter
+  if(active.id && active.id.startsWith('config-')){
+    var btn = active.nextElementSibling;
+    if(btn && btn.tagName === 'BUTTON'){e.preventDefault(); btn.click(); return;}
+  }
+});
+
 
 renderAll();
 renderCycleBtn();
