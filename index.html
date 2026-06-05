@@ -1702,21 +1702,29 @@ function startFirebaseSync(){
       }
       return;
     }
-    // Dados remotos existem — comparar timestamp
+    // Dados remotos existem
     var remote = snap.data();
     if(!remote || !remote.data) return;
-    // Usar dados remotos (mais recentes pelo servidor)
     try {
-      var remoteData = JSON.parse(remote.data);
-      var localData  = JSON.parse(localStorage.getItem(KEY)||'{}');
-      // Só atualizar se remoto for diferente do local atual
-      if(remote.data !== localStorage.getItem(KEY)){
-        localStorage.setItem(KEY, remote.data);
-        // Recarregar app com novos dados
-        if(typeof loadData === 'function') loadData();
-        if(typeof renderAll === 'function') renderAll();
+      // Só atualizar se remoto for diferente do local
+      var localRaw = localStorage.getItem(KEY)||'{}';
+      if(remote.data !== localRaw){
+        // Verificar se remoto tem mais dados (não sobrescrever com vazio)
+        var remoteObj = JSON.parse(remote.data);
+        var localObj  = JSON.parse(localRaw);
+        // Usar remoto só se tiver receita ou moradia (dados reais)
+        var remoteHasData = remoteObj.receita||remoteObj.moradia||remoteObj.reservas;
+        var localHasData  = localObj.receita||localObj.moradia||localObj.reservas;
+        if(remoteHasData || !localHasData){
+          localStorage.setItem(KEY, remote.data);
+          if(typeof S !== 'undefined'){
+            try{ var parsed=JSON.parse(remote.data); Object.assign(S,parsed); }catch(ex){}
+          }
+          if(typeof renderAll === 'function') renderAll();
+          if(typeof renderCycleBtn === 'function') renderCycleBtn();
+        }
       }
-    } catch(e){}
+    } catch(e){ console.log('Sync parse erro:',e); }
   }, function(err){
     console.log('Firestore listener erro:', err);
   });
@@ -6142,8 +6150,8 @@ window.chMonth = function(dir){
   S.month={m:newM,y:newY};
   save();updateMlbl();renderAll();
 };
-// Garantir mês inicial = Junho 2026
-if(!S.month || S.month.m < 6 || (S.month.m===6 && S.month.y<2026)){
+// Garantir mínimo = Junho 2026 (só se menor que junho/2026)
+if(!S.month || S.month.y < 2026 || (S.month.y===2026 && S.month.m < 6)){
   S.month={m:6,y:2026};save();
 }
 
