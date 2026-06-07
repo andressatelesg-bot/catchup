@@ -1008,13 +1008,27 @@ body{font-family:"Outfit",sans-serif;color:var(--ink);font-size:15px;line-height
   </div>
   <div style="padding:14px 16px">
     <div class="card" style="margin:0;overflow:hidden">
-      <!-- Botão Sincronizar -->
-      <div style="padding:0 0 12px">
-        <button onclick="forceSyncFirebase()" style="width:100%;padding:14px;border-radius:var(--r-sm);background:#111110;color:white;border:none;font-family:Outfit,sans-serif;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">
+      <!-- Sincronização e backup -->
+      <div style="padding:0 0 12px;display:flex;flex-direction:column;gap:8px">
+        <button onclick="forceSyncFirebase()" style="width:100%;padding:13px;border-radius:var(--r-sm);background:#111110;color:white;border:none;font-family:Outfit,sans-serif;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
           Sincronizar agora
         </button>
-        <div id="sync-status" style="text-align:center;font-size:12px;color:var(--ink3);margin-top:6px;min-height:16px"></div>
+        <div id="sync-status" style="text-align:center;font-size:12px;color:var(--ink3);min-height:16px"></div>
+        <div style="display:flex;gap:8px">
+          <button onclick="exportarDados()" style="flex:1;padding:12px;border-radius:var(--r-sm);background:var(--bg2);color:var(--ink);border:1.5px solid var(--bg3);font-family:Outfit,sans-serif;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Exportar dados
+          </button>
+          <button onclick="toggleImportSection()" style="flex:1;padding:12px;border-radius:var(--r-sm);background:var(--bg2);color:var(--ink);border:1.5px solid var(--bg3);font-family:Outfit,sans-serif;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Importar dados
+          </button>
+        </div>
+        <div id="import-section" style="display:none">
+          <textarea id="import-textarea" placeholder="Cole aqui os dados exportados do outro dispositivo…" style="width:100%;height:80px;padding:10px 12px;border-radius:var(--r-sm);border:1.5px solid var(--bg3);font-family:Outfit,sans-serif;font-size:12px;resize:none;box-sizing:border-box;background:var(--bg2);color:var(--ink)"></textarea>
+          <button onclick="importarDados()" style="width:100%;padding:12px;border-radius:var(--r-sm);background:var(--ink);color:white;border:none;font-family:Outfit,sans-serif;font-size:14px;font-weight:600;cursor:pointer;margin-top:6px">Confirmar importação</button>
+        </div>
       </div>
       <div onclick="goSub('sub-config-cart')" style="display:flex;align-items:center;gap:14px;padding:15px 18px;cursor:pointer;border-bottom:1px solid var(--line)"><div style="width:36px;height:36px;border-radius:var(--r-sm);background:#FDF2F8;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#BE185D" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div><div style="flex:1"><div style="font-size:14px;font-weight:600">Categorias do cartão</div><div style="font-size:12px;color:var(--ink3);margin-top:2px">Gerencie as categorias dos gastos</div></div><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink3)" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
       <div onclick="goSub('sub-config-sem')" style="display:flex;align-items:center;gap:14px;padding:15px 18px;cursor:pointer;border-bottom:1px solid var(--line)"><div style="width:36px;height:36px;border-radius:var(--r-sm);background:#F0FDF4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div style="flex:1"><div style="font-size:14px;font-weight:600">Categorias semanais</div><div style="font-size:12px;color:var(--ink3);margin-top:2px">Categorias e subcategorias de lançamentos</div></div><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink3)" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
@@ -1702,29 +1716,21 @@ function startFirebaseSync(){
       }
       return;
     }
-    // Dados remotos existem
+    // Dados remotos existem — comparar timestamp
     var remote = snap.data();
     if(!remote || !remote.data) return;
+    // Usar dados remotos (mais recentes pelo servidor)
     try {
-      // Só atualizar se remoto for diferente do local
-      var localRaw = localStorage.getItem(KEY)||'{}';
-      if(remote.data !== localRaw){
-        // Verificar se remoto tem mais dados (não sobrescrever com vazio)
-        var remoteObj = JSON.parse(remote.data);
-        var localObj  = JSON.parse(localRaw);
-        // Usar remoto só se tiver receita ou moradia (dados reais)
-        var remoteHasData = remoteObj.receita||remoteObj.moradia||remoteObj.reservas;
-        var localHasData  = localObj.receita||localObj.moradia||localObj.reservas;
-        if(remoteHasData || !localHasData){
-          localStorage.setItem(KEY, remote.data);
-          if(typeof S !== 'undefined'){
-            try{ var parsed=JSON.parse(remote.data); Object.assign(S,parsed); }catch(ex){}
-          }
-          if(typeof renderAll === 'function') renderAll();
-          if(typeof renderCycleBtn === 'function') renderCycleBtn();
-        }
+      var remoteData = JSON.parse(remote.data);
+      var localData  = JSON.parse(localStorage.getItem(KEY)||'{}');
+      // Só atualizar se remoto for diferente do local atual
+      if(remote.data !== localStorage.getItem(KEY)){
+        localStorage.setItem(KEY, remote.data);
+        // Recarregar app com novos dados
+        if(typeof loadData === 'function') loadData();
+        if(typeof renderAll === 'function') renderAll();
       }
-    } catch(e){ console.log('Sync parse erro:',e); }
+    } catch(e){}
   }, function(err){
     console.log('Firestore listener erro:', err);
   });
@@ -2572,6 +2578,46 @@ function importLancFile(input){
     });
   };
   reader.readAsDataURL(file);
+}
+// ── EXPORTAR / IMPORTAR DADOS ──
+function exportarDados(){
+  var data = localStorage.getItem(KEY)||'{}';
+  // Copiar para clipboard
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(data).then(function(){
+      showToast('Dados copiados! Cole no outro dispositivo.');
+    });
+  } else {
+    // Fallback: mostrar em textarea
+    var ta = document.getElementById('export-textarea');
+    if(ta){ ta.value=data; ta.style.display='block'; ta.select(); document.execCommand('copy'); showToast('Dados copiados!'); }
+  }
+}
+function importarDados(){
+  var ta = document.getElementById('import-textarea');
+  if(!ta||!ta.value.trim()){ alert('Cole os dados no campo de texto primeiro.'); return; }
+  try{
+    var parsed = JSON.parse(ta.value.trim());
+    localStorage.setItem(KEY, JSON.stringify(parsed));
+    // Enviar para Firebase também
+    if(typeof fbUser!=='undefined'&&fbUser&&typeof fbDb!=='undefined'&&fbDb){
+      fbDb.collection('users').doc(fbUser.uid).set({
+        data: JSON.stringify(parsed),
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    }
+    Object.assign(S, parsed);
+    ta.value='';
+    document.getElementById('import-section').style.display='none';
+    renderAll();renderCycleBtn();
+    showToast('Dados importados com sucesso!');
+  } catch(e){
+    alert('Dados inválidos. Verifique se copiou corretamente.');
+  }
+}
+function toggleImportSection(){
+  var s=document.getElementById('import-section');
+  if(s) s.style.display=s.style.display==='none'?'block':'none';
 }
 function forceSyncFirebase(){
   var st=document.getElementById('sync-status');
@@ -6150,8 +6196,8 @@ window.chMonth = function(dir){
   S.month={m:newM,y:newY};
   save();updateMlbl();renderAll();
 };
-// Garantir mínimo = Junho 2026 (só se menor que junho/2026)
-if(!S.month || S.month.y < 2026 || (S.month.y===2026 && S.month.m < 6)){
+// Garantir mês inicial = Junho 2026
+if(!S.month || S.month.m < 6 || (S.month.m===6 && S.month.y<2026)){
   S.month={m:6,y:2026};save();
 }
 
