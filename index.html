@@ -26,6 +26,7 @@ body{font-family:"Outfit",sans-serif;color:var(--ink);font-size:15px;line-height
 ::-webkit-scrollbar{display:none}
 .page{position:absolute;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;display:none;padding-bottom:calc(80px + var(--safe-b))}
 .page.active{display:block}
+#ht-home,#ht-mes,#ht-semana,#ht-reservas,#ht-pedro{min-height:100%;width:100%;box-sizing:border-box}
 .subpage{position:absolute;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;display:none;background:var(--bg);padding-bottom:calc(80px + var(--safe-b));z-index:50}
 .subpage.open{display:block;animation:slideIn .24s cubic-bezier(.4,0,.2,1)}
 @keyframes slideIn{from{transform:translateX(100%)}to{transform:translateX(0)}}
