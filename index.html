@@ -1798,9 +1798,13 @@ function startFirebaseSync(){
       // Só atualizar se remoto for diferente do local atual
       if(remote.data !== localStorage.getItem(KEY)){
         localStorage.setItem(KEY, remote.data);
-        // Recarregar app com novos dados
-        if(typeof loadData === 'function') loadData();
-        if(typeof renderAll === 'function') renderAll();
+        // Recarregar S com dados do Firebase e re-renderizar
+        try {
+          var newS = JSON.parse(remote.data);
+          Object.keys(newS).forEach(function(k){ S[k]=newS[k]; });
+          if(typeof renderAll === 'function') renderAll();
+          if(typeof renderCycleBtn === 'function') renderCycleBtn();
+        } catch(e){ console.log('Erro ao aplicar dados Firebase:',e); }
       }
     } catch(e){}
   }, function(err){
