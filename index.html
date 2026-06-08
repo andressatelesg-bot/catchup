@@ -1714,7 +1714,23 @@ function startFirebaseSync(){
         localStorage.setItem(KEY, remote.data);
         // Recarregar S com dados remotos
         try{var ns=JSON.parse(remote.data);['month','monthStatus','monthData','receita','moradia','pessoal','reservasmes','cartao','cartaoPago','lancamentos','reservas','cats','metas'].forEach(function(k){if(ns[k]!==undefined)S[k]=ns[k];});}catch(e){}
-        if(typeof renderAll==='function')renderAll();
+        // Merge seguro: só sobrescreve se o dado remoto não estiver vazio
+      if(ns.reservas&&ns.reservas.length>0)S.reservas=ns.reservas;
+      if(ns.lancamentos)S.lancamentos=ns.lancamentos;
+      if(ns.moradia&&ns.moradia.length>0)S.moradia=ns.moradia;
+      if(ns.pessoal&&ns.pessoal.length>0)S.pessoal=ns.pessoal;
+      if(ns.receita&&ns.receita.length>0)S.receita=ns.receita;
+      if(ns.reservasmes)S.reservasmes=ns.reservasmes;
+      if(ns.cartao){if(ns.cartao.santander&&ns.cartao.santander.length>0)S.cartao.santander=ns.cartao.santander;if(ns.cartao.carrefour&&ns.cartao.carrefour.length>0)S.cartao.carrefour=ns.cartao.carrefour;}
+      if(ns.month)S.month=ns.month;
+      if(ns.monthStatus)Object.assign(S.monthStatus,ns.monthStatus);
+      if(ns.cats)S.cats=ns.cats;
+      // Garantir integridade
+      if(!S.reservas||!S.reservas.length)S.reservas=DEF.reservas?JSON.parse(JSON.stringify(DEF.reservas)):[];
+      S.reservas.forEach(function(r){if(!r.movs)r.movs=[];});
+      if(!S.cartao)S.cartao={santander:[],carrefour:[]};
+      localStorage.setItem(KEY,JSON.stringify(S));
+      if(typeof renderAll==='function')renderAll();
       }
     } catch(e){}
   }, function(err){
@@ -1846,6 +1862,12 @@ const DEF={
     {id:5,nome:'Limpeza',valor:95.25,pago:false,pedro:true},
     {id:6,nome:'Farmácia reserva',valor:50,pago:false,pedro:false},
   ],
+  reservas:[
+    {id:1,nome:'Casa',emoji:'🏠',saldo:0,movs:[]},
+    {id:2,nome:'Gatos',emoji:'🐾',saldo:0,movs:[]},
+    {id:3,nome:'Emergência',emoji:'🛡️',saldo:0,movs:[]},
+    {id:4,nome:'Viagem',emoji:'✈️',saldo:0,movs:[]},
+  ],
   reservasmes:[
     {id:1,nome:'RV: Casa (1x4)',valor:50,pago:false,pedro:false},
     {id:2,nome:'RV: Gatos (4x5)',valor:200,pago:false,pedro:false},
@@ -1912,12 +1934,23 @@ const DEF={
 };
 
 let S=(()=>{try{const d=JSON.parse(localStorage.getItem(KEY));return d||JSON.parse(JSON.stringify(DEF));}catch(e){return JSON.parse(JSON.stringify(DEF));}})();
-// Guards
+// Guards — garantir campos essenciais sempre existem
 if(!S.monthStatus)S.monthStatus={};
 if(!S.monthStatus['2026-06'])S.monthStatus['2026-06']='open';
 if(!S.month||!S.month.m)S.month={m:6,y:2026};
 if(!S.reservas)S.reservas=[];
 if(!S.lancamentos)S.lancamentos=[];
+if(!S.moradia)S.moradia=[];
+if(!S.pessoal)S.pessoal=[];
+if(!S.receita)S.receita=[];
+if(!S.reservasmes)S.reservasmes=[];
+if(!S.cartao)S.cartao={santander:[],carrefour:[]};
+if(!S.cartao.santander)S.cartao.santander=[];
+if(!S.cartao.carrefour)S.cartao.carrefour=[];
+if(!S.cats)S.cats={semana:{Alimentação:['Mercado','Padaria','iFood'],Transporte:['Uber','Ônibus'],Variados:['Farmácia','Beleza']},reservaEnt:['Aporte mensal'],reservaSai:['Saque']};
+if(!S.cats.semana)S.cats.semana={Alimentação:[],Transporte:[],Variados:[]};
+// Garantir reservas têm movs
+S.reservas.forEach(function(r){if(!r.movs)r.movs=[];});
 
 const save=()=>{
   localStorage.setItem(KEY,JSON.stringify(S));
