@@ -1020,11 +1020,6 @@ body{font-family:"Outfit",sans-serif;color:var(--ink);font-size:15px;line-height
       <div onclick="goSub('sub-config-sem')" style="display:flex;align-items:center;gap:14px;padding:15px 18px;cursor:pointer;border-bottom:1px solid var(--line)"><div style="width:36px;height:36px;border-radius:var(--r-sm);background:#F0FDF4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div style="flex:1"><div style="font-size:14px;font-weight:600">Categorias semanais</div><div style="font-size:12px;color:var(--ink3);margin-top:2px">Categorias e subcategorias de lançamentos</div></div><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink3)" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
       <div onclick="goSub('sub-config-res')" style="display:flex;align-items:center;gap:14px;padding:15px 18px;cursor:pointer;border-bottom:1px solid var(--line)"><div style="width:36px;height:36px;border-radius:var(--r-sm);background:#FFFBEB;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><div style="flex:1"><div style="font-size:14px;font-weight:600">Categorias de reservas</div><div style="font-size:12px;color:var(--ink3);margin-top:2px">Categorias de entrada e saída das caixinhas</div></div><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink3)" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
       <div onclick="goSub('sub-config-caixinhas')" style="display:flex;align-items:center;gap:14px;padding:15px 18px;cursor:pointer"><div style="width:36px;height:36px;border-radius:var(--r-sm);background:#FFFBEB;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg></div><div style="flex:1"><div style="font-size:14px;font-weight:600">Caixinhas</div><div style="font-size:12px;color:var(--ink3);margin-top:2px">Criar, editar e organizar suas caixinhas</div></div><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink3)" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
-      <div onclick="forceSyncFirebase()" style="display:flex;align-items:center;gap:14px;padding:15px 18px;cursor:pointer">
-        <div style="width:36px;height:36px;border-radius:var(--r-sm);background:#EFF6FF;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></div>
-        <div style="flex:1"><div style="font-size:14px;font-weight:600">Sincronizar dados</div><div style="font-size:12px;color:var(--ink3);margin-top:2px">Forçar sync entre web e celular</div></div>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink3)" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
-      </div>
     </div>
   </div>
 </div>
@@ -1177,95 +1172,14 @@ body{font-family:"Outfit",sans-serif;color:var(--ink);font-size:15px;line-height
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
 </button>
 
-<!-- SHEET: LANÇAMENTO INTELIGENTE IA -->
-<div class="overlay" id="sh-ia"><div class="sheet" style="max-height:92vh;overflow-y:auto">
-  <div class="sh-hd" style="display:flex;align-items:center">
-    <div class="sh-handle" style="position:absolute;top:8px;left:50%;transform:translateX(-50%)"></div>
-    <div class="sh-title" style="flex:1">Lançamento IA ✨</div>
-    <button onclick="closeSheet('sh-ia')" style="border:none;background:var(--bg2);border-radius:50%;width:30px;height:30px;cursor:pointer;color:var(--ink2);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-right:4px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
-  </div>
-
-  <!-- Área de imagem/PDF -->
-  <div style="padding:0 20px">
-    <div id="ia-drop-zone" onclick="document.getElementById('ia-file-input').click()"
-      style="border:2px dashed #DDD8D0;border-radius:14px;padding:24px 16px;text-align:center;cursor:pointer;background:#FAFAF8;transition:.2s;margin-bottom:12px"
-      ondragover="event.preventDefault();this.style.borderColor='#7C3AED'"
-      ondragleave="this.style.borderColor='#DDD8D0'"
-      ondrop="iaHandleDrop(event)">
-      <div id="ia-drop-content">
-        <div style="font-size:28px;margin-bottom:8px">📎</div>
-        <div style="font-size:14px;font-weight:600;color:var(--ink2)">Foto ou PDF</div>
-        <div style="font-size:12px;color:var(--ink3);margin-top:4px">Toque para selecionar ou arraste aqui</div>
-      </div>
-      <div id="ia-preview" style="display:none"></div>
-    </div>
-    <input type="file" id="ia-file-input" accept="image/*,application/pdf" style="display:none" onchange="iaHandleFile(this.files[0])">
-  </div>
-
-  <!-- Voz -->
-  <div style="padding:0 20px 12px">
-    <div style="font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px">Descreva em voz ou texto</div>
-    <div style="display:flex;gap:8px;align-items:flex-start">
-      <textarea id="ia-texto" placeholder="Ex: 'iFood semana 2 alimentação R$ 45, também tem uma farmácia R$ 28 variados'" 
-        style="flex:1;padding:12px 14px;border:1.5px solid var(--bg3);border-radius:12px;font-family:Outfit,sans-serif;font-size:14px;color:var(--ink);background:#FAFAF8;resize:none;height:80px;outline:none"
-        onfocus="this.style.borderColor='#111110'" onblur="this.style.borderColor='var(--bg3)'"></textarea>
-      <button id="ia-mic-btn" onclick="iaToggleMic()" 
-        style="width:44px;height:44px;border-radius:50%;border:none;background:var(--bg2);color:var(--ink2);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.2s">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-      </button>
-    </div>
-  </div>
-
-  <!-- Semana -->
-  <div style="padding:0 20px 16px">
-    <div style="font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px">Semana</div>
-    <div style="display:flex;gap:6px;flex-wrap:wrap">
-      <button class="ia-sem-btn on" data-sem="Sem. 1" onclick="iaSetSem(this)" style="padding:7px 14px;border-radius:99px;font-size:12px;font-weight:600;border:1.5px solid var(--ink);background:var(--ink);color:white;cursor:pointer;font-family:Outfit,sans-serif">Sem. 1</button>
-      <button class="ia-sem-btn" data-sem="Sem. 2" onclick="iaSetSem(this)" style="padding:7px 14px;border-radius:99px;font-size:12px;font-weight:600;border:1.5px solid var(--bg3);background:none;color:var(--ink2);cursor:pointer;font-family:Outfit,sans-serif">Sem. 2</button>
-      <button class="ia-sem-btn" data-sem="Sem. 3" onclick="iaSetSem(this)" style="padding:7px 14px;border-radius:99px;font-size:12px;font-weight:600;border:1.5px solid var(--bg3);background:none;color:var(--ink2);cursor:pointer;font-family:Outfit,sans-serif">Sem. 3</button>
-      <button class="ia-sem-btn" data-sem="Sem. 4" onclick="iaSetSem(this)" style="padding:7px 14px;border-radius:99px;font-size:12px;font-weight:600;border:1.5px solid var(--bg3);background:none;color:var(--ink2);cursor:pointer;font-family:Outfit,sans-serif">Sem. 4</button>
-      <button class="ia-sem-btn" data-sem="Sem. 5" onclick="iaSetSem(this)" style="padding:7px 14px;border-radius:99px;font-size:12px;font-weight:600;border:1.5px solid var(--bg3);background:none;color:var(--ink2);cursor:pointer;font-family:Outfit,sans-serif">Sem. 5</button>
-    </div>
-  </div>
-
-  <!-- Processar -->
-  <div style="padding:0 20px 8px">
-    <button onclick="iaProcessar()" id="ia-processar-btn"
-      style="width:100%;padding:14px;border-radius:14px;background:linear-gradient(135deg,#7C3AED,#5B21B6);color:white;border:none;font-family:Outfit,sans-serif;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-      Analisar com IA
-    </button>
-  </div>
-
-  <!-- Loading -->
-  <div id="ia-loading" style="display:none;padding:16px 20px;text-align:center">
-    <div style="font-size:13px;color:var(--ink3);font-weight:500">✨ Analisando…</div>
-    <div style="height:3px;background:var(--bg2);border-radius:99px;margin-top:10px;overflow:hidden">
-      <div id="ia-progress" style="height:100%;background:linear-gradient(90deg,#7C3AED,#9061F9);border-radius:99px;width:0%;transition:width .3s"></div>
-    </div>
-  </div>
-
-  <!-- Resultado -->
-  <div id="ia-resultado" style="display:none;padding:0 20px 16px">
-    <div style="font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px">Lançamentos identificados</div>
-    <div id="ia-resultado-lista"></div>
-    <button onclick="iaConfirmarTodos()" 
-      style="width:100%;padding:13px;border-radius:14px;background:var(--ink);color:white;border:none;font-family:Outfit,sans-serif;font-size:15px;font-weight:700;cursor:pointer;margin-top:10px">
-      Confirmar todos
-    </button>
-  </div>
-</div></div>
-
-
 <!-- SHEETS -->
 <div class="overlay" id="sh-lanc"><div class="sheet">
   <div class="sh-hd" style="display:flex;align-items:center"><div class="sh-handle" style="position:absolute;top:8px;left:50%;transform:translateX(-50%)"></div><div class="sh-title" style="flex:1">Lançar gasto</div><button onclick="closeSheet('sh-lanc')" style="border:none;background:var(--bg2);border-radius:50%;width:30px;height:30px;cursor:pointer;color:var(--ink2);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-right:4px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
 
   <!-- tipo -->
-  <div class="type-grid" style="grid-template-columns:1fr 1fr 1fr">
-    <div class="type-card on" onclick="setLT('sem',this)"><div class="tc-icon"></div><div class="tc-name">Semanal</div><div class="tc-desc">Alimentação…</div></div>
-    <div class="type-card" onclick="setLT('mes',this)"><div class="tc-icon"></div><div class="tc-name">Mensal</div><div class="tc-desc">Moradia, cartão…</div></div>
-    <div class="type-card" onclick="setLT('ia',this)" style="border-color:rgba(124,58,237,.3);background:linear-gradient(135deg,#FAF5FF,#EDE9FE)"><div class="tc-icon">✨</div><div class="tc-name" style="color:#7C3AED">IA</div><div class="tc-desc" style="color:#9061F9">Foto ou voz</div></div>
+  <div class="type-grid">
+    <div class="type-card on" onclick="setLT('sem',this)"><div class="tc-icon"></div><div class="tc-name">Gasto semanal</div><div class="tc-desc">Alimentação, transporte…</div></div>
+    <div class="type-card" onclick="setLT('mes',this)"><div class="tc-icon"></div><div class="tc-name">Conta do mês</div><div class="tc-desc">Moradia, cartão…</div></div>
   </div>
 
   <!-- voz + pdf -->
@@ -1635,7 +1549,6 @@ body{font-family:"Outfit",sans-serif;color:var(--ink);font-size:15px;line-height
 
 <script>
 
-
 // ═══════════════════════════════════════════
 // UX CORE: sheets, modais, feedback
 // ═══════════════════════════════════════════
@@ -1799,18 +1712,9 @@ function startFirebaseSync(){
       // Só atualizar se remoto for diferente do local atual
       if(remote.data !== localStorage.getItem(KEY)){
         localStorage.setItem(KEY, remote.data);
-        // Recarregar S com dados do Firebase e re-renderizar
-        try {
-          var newS = JSON.parse(remote.data);
-          if(newS && typeof newS === 'object'){
-            // Merge seguro — só copiar campos conhecidos
-            var fields=['month','monthStatus','monthData','receita','moradia','pessoal',
-              'reservasmes','cartao','cartaoPago','lancamentos','reservas','cats','metas'];
-            fields.forEach(function(k){if(newS[k]!==undefined)S[k]=newS[k];});
-            if(typeof renderAll === 'function') renderAll();
-            if(typeof renderCycleBtn === 'function') renderCycleBtn();
-          }
-        } catch(e){ console.log('Erro ao aplicar dados Firebase:',e); }
+        // Recarregar S com dados remotos
+        try{var ns=JSON.parse(remote.data);['month','monthStatus','monthData','receita','moradia','pessoal','reservasmes','cartao','cartaoPago','lancamentos','reservas','cats','metas'].forEach(function(k){if(ns[k]!==undefined)S[k]=ns[k];});}catch(e){}
+        if(typeof renderAll==='function')renderAll();
       }
     } catch(e){}
   }, function(err){
@@ -2008,13 +1912,12 @@ const DEF={
 };
 
 let S=(()=>{try{const d=JSON.parse(localStorage.getItem(KEY));return d||JSON.parse(JSON.stringify(DEF));}catch(e){return JSON.parse(JSON.stringify(DEF));}})();
-// Garantir campos essenciais em S
+// Guards
 if(!S.monthStatus)S.monthStatus={};
 if(!S.monthStatus['2026-06'])S.monthStatus['2026-06']='open';
-if(!S.month||S.month.m<6)S.month={m:6,y:2026};
+if(!S.month||!S.month.m)S.month={m:6,y:2026};
 if(!S.reservas)S.reservas=[];
 if(!S.lancamentos)S.lancamentos=[];
-if(!S.cats)S.cats={semana:{Alimentação:['Mercado','Padaria','iFood'],Transporte:['Uber','Ônibus'],Variados:['Farmácia','Beleza']},reservaEnt:[],reservaSai:[]};
 
 const save=()=>{
   localStorage.setItem(KEY,JSON.stringify(S));
@@ -2029,12 +1932,8 @@ const save=()=>{
   }
 };
 // migração Mai→Jun: se dados ainda estão em Maio/2026, mover para Junho
-// Garantir que o mês atual é Junho 2026
-S.month={m:6,y:2026};
-// Garantir monthStatus existe e tem Junho aberto
-if(!S.monthStatus)S.monthStatus={};
-if(!S.monthStatus['2026-06'])S.monthStatus['2026-06']='open';
-{
+if(S.month&&S.month.m===5&&S.month.y===2026){
+  S.month={m:6,y:2026};
   if(S.reservas)S.reservas.forEach(function(r){if(r.movs)r.movs.forEach(function(m){if(m.mes==='Mai/26')m.mes='Jun/26';});});
   save();
 }
@@ -2694,16 +2593,6 @@ function forceSyncFirebase(){
     if(st){st.textContent='Erro: '+err.message;st.style.color='var(--danger)';}
   });
 }
-function forceSyncFirebase(){
-  if(typeof fbUser==='undefined'||!fbUser){showToast('Faça login para sincronizar');return;}
-  if(typeof fbDb==='undefined'||!fbDb){showToast('Firebase não conectado');return;}
-  showToast('Sincronizando…');
-  var data=localStorage.getItem(KEY);
-  fbDb.collection('users').doc(fbUser.uid).set({
-    data:data,updatedAt:firebase.firestore.FieldValue.serverTimestamp()
-  }).then(function(){showToast('Sincronizado! ✓');
-  }).catch(function(){showToast('Erro ao sincronizar');});
-}
 function goToResConfig(){
   // fechar todos os sheets e subpages abertas
   closeCatSheet();
@@ -2799,17 +2688,17 @@ function configSaveMetas(){
 
 // Keep only May 2026 lancamentos — all others are zeroed
 S.lancamentos=S.lancamentos
-  .map(l=>l.mes?l:{...l,mes:'2026-06'})
-  .filter(l=>l.mes==='2026-06');
+  .map(l=>l.mes?l:{...l,mes:'2026-05'})
+  .filter(l=>l.mes==='2026-05');
 // Clear monthStatus for all months except May 2026 (only May should be open by default)
 if(!S.monthStatus)S.monthStatus={};
 // Ensure only May 2026 has 'open' status; others untouched (null = not started)
-if(!S.monthStatus['2026-06']){
-  S.monthStatus['2026-06']='open';
+if(!S.monthStatus['2026-05']){
+  S.monthStatus['2026-05']='open';
 }
 // Remove any 'open' status from months that are not May (future months shouldn't be auto-opened)
 Object.keys(S.monthStatus).forEach(k=>{
-  if(k!=='2026-06'&&S.monthStatus[k]==='open'){
+  if(k!=='2026-05'&&S.monthStatus[k]==='open'){
     delete S.monthStatus[k];
   }
 });
@@ -2847,8 +2736,8 @@ function cRMPedro(){
 }
 function cCart(b){const it=S.cartao[b];const p=it.filter(i=>i.div==='proprio').reduce((a,i)=>a+i.valor,0);const d=it.filter(i=>i.div==='pedro_div').reduce((a,i)=>a+i.valor,0);const n=it.filter(i=>i.div==='pedro_ind').reduce((a,i)=>a+i.valor,0);return{tot:p+d+n,div:d,ind:n,eu:p+d/2};}
 function cSaldo(){const san=cCart('santander'),car=cCart('carrefour');return cRec()-cMor().each-cPes()-cRMEu()-san.eu-car.eu;}
-const cGS=sem=>S.lancamentos.filter(l=>(l.mes||'2026-06')===curKey()&&(sem==='all'||l.sem===sem)).reduce((a,l)=>a+l.val,0);
-const cGC=(cat,sem)=>S.lancamentos.filter(l=>(l.mes||'2026-06')===curKey()&&l.cat===cat&&(sem==='all'||l.sem===sem)).reduce((a,l)=>a+l.val,0);
+const cGS=sem=>S.lancamentos.filter(l=>(l.mes||'2026-05')===curKey()&&(sem==='all'||l.sem===sem)).reduce((a,l)=>a+l.val,0);
+const cGC=(cat,sem)=>S.lancamentos.filter(l=>(l.mes||'2026-05')===curKey()&&l.cat===cat&&(sem==='all'||l.sem===sem)).reduce((a,l)=>a+l.val,0);
 
 // ── HOME TABS ──
 function goPage(page){
@@ -2865,23 +2754,11 @@ function goPage(page){
   renderTab(page);
 }
 function renderTab(tab){
-  try{
-    if(tab==='home')renderHomeNav();
-    else if(tab==='mes')renderMesHome();
-    else if(tab==='semana')renderSemHome();
-    else if(tab==='reservas')renderResHome();
-    else if(tab==='pedro')renderPedroHome();
-  }catch(e){
-    console.error('renderTab erro em '+tab+':', e);
-    // Tentar re-inicializar S se estiver corrompido
-    try{
-      if(!S.reservas)S.reservas=[];
-      if(!S.cartao)S.cartao={santander:[],carrefour:[]};
-      if(!S.month)S.month={m:6,y:2026};
-      if(!S.monthStatus)S.monthStatus={};
-      renderTab(tab);
-    }catch(e2){console.error('renderTab fallback erro:', e2);}
-  }
+  if(tab==='home')renderHomeNav();
+  else if(tab==='mes')renderMesHome();
+  else if(tab==='semana')renderSemHome();
+  else if(tab==='reservas')renderResHome();
+  else if(tab==='pedro')renderPedroHome();
 }
 function renderAll(){
   updateMlbl();
@@ -2901,10 +2778,8 @@ function renderMesHome(){
   const hc=sv('h-chips');
   if(hc){
     const allItems=[...S.moradia,...S.pessoal,...(S.reservasmes||[])];
-    const _sPg=S.cartaoPago&&S.cartaoPago.santander?1:0;
-    const _cPg=S.cartaoPago&&S.cartaoPago.carrefour?1:0;
-    const pago=allItems.filter(i=>i.pago).length+_sPg+_cPg;
-    const total=allItems.length+2; // +2 para santander e carrefour
+    const pago=allItems.filter(i=>i.pago).length;
+    const total=allItems.length;
     const allPaid=pago===total&&total>0;
     const bg=allPaid?'rgba(30,114,69,.15)':'rgba(194,65,12,.08)';
     const col=allPaid?'#1E7245':'#C2410C';
@@ -2927,9 +2802,7 @@ function renderMesHome(){
   st('sc-rm-val',fmt(rm));
   // cartão: total de itens (cartão não tem "pago", mostra contagem)
   const cartTot=S.cartao.santander.length+S.cartao.carrefour.length;
-  const cma=document.getElementById('sc-cart-meta');if(cma){var _sPg=S.cartaoPago&&S.cartaoPago.santander;var _cPg=S.cartaoPago&&S.cartaoPago.carrefour;var _sanTxt=_sPg?'<span style="color:#1E7245;font-weight:600">San ✓</span>':'<span>San</span>';
-    var _carTxt=_cPg?'<span style="color:#1E7245;font-weight:600">Car ✓</span>':'<span>Car</span>';
-    cma.innerHTML=_sanTxt+' · '+_carTxt;}
+  const cma=document.getElementById('sc-cart-meta');if(cma){var _sPg=S.cartaoPago&&S.cartaoPago.santander;var _cPg=S.cartaoPago&&S.cartaoPago.carrefour;cma.textContent=(_sPg&&_cPg)?'San ✓ · Car ✓':(_sPg?'San ✓ · Car pendente':(_cPg?'San pendente · Car ✓':'San · Car pendentes'));}
   st('sc-cart-val',fmt(cartLiq));
   const splitEl=document.getElementById('sc-cart-split');
   if(splitEl){
@@ -4660,68 +4533,6 @@ function lancDragEnd(e){
     el.classList.remove('lanc-dragging','lanc-drag-over');
   });
 }
-// ── DRAG TO REORDER LANÇAMENTOS ──
-let _dragSrcIdx=null;
-function lancDragStart(el,e){
-  _dragSrcIdx=parseInt(el.dataset.idx);
-  e.dataTransfer.effectAllowed='move';
-  el.style.opacity='.5';
-}
-function lancDragOver(el,e){
-  e.preventDefault();e.dataTransfer.dropEffect='move';
-  el.style.background='var(--bg2)';
-}
-function lancDragLeave(el){el.style.background='';}
-function lancDragDrop(el,e){
-  e.preventDefault();el.style.background='';
-  const toIdx=parseInt(el.dataset.idx);
-  if(_dragSrcIdx===null||_dragSrcIdx===toIdx)return;
-  const fl=getFilteredLancs();
-  const fromItem=fl[_dragSrcIdx];
-  const toItem=fl[toIdx];
-  const fromGlobal=S.lancamentos.indexOf(fromItem);
-  const toGlobal=S.lancamentos.indexOf(toItem);
-  if(fromGlobal<0||toGlobal<0)return;
-  S.lancamentos.splice(fromGlobal,1);
-  const newTo=S.lancamentos.indexOf(toItem);
-  S.lancamentos.splice(newTo,0,fromItem);
-  _dragSrcIdx=null;
-  save();renderLancList();
-}
-function lancDragEnd(el){el.style.opacity='';el.style.background='';}
-function getFilteredLancs(){
-  let fl=[...S.lancamentos];
-  if(curFiltroSem!=='all')fl=fl.filter(l=>l.sem===curFiltroSem);
-  if(curFiltro!=='all')fl=fl.filter(l=>l.cat===curFiltro);
-  if(_lancFiltroSems&&_lancFiltroSems.size)fl=fl.filter(l=>_lancFiltroSems.has(l.sem));
-  if(_lancFiltroCats&&_lancFiltroCats.size)fl=fl.filter(l=>_lancFiltroCats.has(l.cat));
-  if(_lancFiltroSubs&&_lancFiltroSubs.size)fl=fl.filter(l=>_lancFiltroSubs.has(l.sub));
-  return fl;
-}
-
-// ══════════════════════════════════════
-// PONTO 2: Multiseleção para excluir
-// ══════════════════════════════════════
-let _lancSel=new Set();
-let _lancSelMode=false;
-function toggleLancSelMode(){
-  _lancSelMode=!_lancSelMode;
-  _lancSel.clear();
-  const btn=document.getElementById('lanc-sel-btn');
-  if(btn){btn.style.background=_lancSelMode?'rgba(220,38,38,.12)':'var(--bg2)';btn.style.color=_lancSelMode?'var(--danger)':'var(--ink2)';}
-  renderLancList();
-}
-function toggleLancSel(id){
-  if(_lancSel.has(id))_lancSel.delete(id);else _lancSel.add(id);
-  renderLancList();
-}
-function deletarLancSel(){
-  if(!_lancSel.size)return;
-  if(!confirm('Excluir '+_lancSel.size+' lançamento'+(+(_lancSel.size>1)?'s':'')))return;
-  S.lancamentos=S.lancamentos.filter(l=>!_lancSel.has(l.id));
-  _lancSel.clear();_lancSelMode=false;
-  save();renderSemHome();
-}
 function renderLancInlineEdit(l){
   // Gerar seletor de categoria
   var cats=Object.keys(S.cats.semana||{});
@@ -4821,7 +4632,6 @@ let _movFiltroTipo='todos',_movFiltroCat='all',_movMesFiltro=null;
 let _movEditMode=false;
 
 function renderResHome(){
-  if(!S.reservas)S.reservas=[];
   const mes=MNS[S.month.m-1].slice(0,3)+'/'+String(S.month.y).slice(2);
   if(_movMesFiltro===null||_movMesFiltro===undefined)_movMesFiltro=mes;
   const tot=S.reservas.reduce((a,r)=>a+r.saldo,0);
@@ -5562,8 +5372,6 @@ function exportPedroPDF(){
 }
 
 function renderPedroHome(){
-  if(!S.cartao)S.cartao={santander:[],carrefour:[]};
-  if(!S.moradia)S.moradia=[];
   const sv=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
   if(!getStatus()){
     // mês não iniciado — zerar tudo e mostrar empty state
@@ -5696,241 +5504,8 @@ function lmShowFields(){
   if(cart)cart.style.display=isCart?'block':'none';
   if(res)res.style.display=isRes?'block':'none';
 }
-
-// ═══════════════════════════════════════════
-// LANÇAMENTO INTELIGENTE IA
-// ═══════════════════════════════════════════
-var _iaFile = null;
-var _iaFileB64 = null;
-var _iaFileType = null;
-var _iaSem = 'Sem. 1';
-var _iaRec = null; // SpeechRecognition
-var _iaRecording = false;
-var _iaLancamentos = []; // lançamentos identificados pela IA
-
-function iaSetSem(el){
-  document.querySelectorAll('.ia-sem-btn').forEach(function(b){
-    b.classList.remove('on');
-    b.style.background='none';b.style.color='var(--ink2)';b.style.borderColor='var(--bg3)';
-  });
-  el.classList.add('on');
-  el.style.background='var(--ink)';el.style.color='white';el.style.borderColor='var(--ink)';
-  _iaSem=el.dataset.sem;
-}
-
-function iaHandleDrop(e){
-  e.preventDefault();
-  document.getElementById('ia-drop-zone').style.borderColor='#DDD8D0';
-  var file=e.dataTransfer.files[0];
-  if(file)iaHandleFile(file);
-}
-
-function iaHandleFile(file){
-  if(!file)return;
-  _iaFile=file;
-  _iaFileType=file.type;
-  var reader=new FileReader();
-  reader.onload=function(e){
-    _iaFileB64=e.target.result.split(',')[1];
-    var prev=document.getElementById('ia-preview');
-    var dc=document.getElementById('ia-drop-content');
-    if(prev&&dc){
-      dc.style.display='none';
-      prev.style.display='block';
-      if(file.type.startsWith('image/')){
-        prev.innerHTML='<img src="'+e.target.result+'" style="max-width:100%;max-height:160px;border-radius:8px;object-fit:contain">'
-          +'<div style="font-size:12px;color:var(--ink3);margin-top:6px">'+file.name+'</div>';
-      } else {
-        prev.innerHTML='<div style="font-size:32px">📄</div><div style="font-size:13px;font-weight:600;color:var(--ink2);margin-top:4px">'+file.name+'</div>';
-      }
-    }
-  };
-  reader.readAsDataURL(file);
-}
-
-function iaToggleMic(){
-  var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!SR){showToast('Voz não disponível neste browser');return;}
-  var btn=document.getElementById('ia-mic-btn');
-  if(_iaRecording){
-    if(_iaRec)_iaRec.stop();
-    _iaRecording=false;
-    if(btn){btn.style.background='var(--bg2)';btn.style.color='var(--ink2)';}
-    return;
-  }
-  _iaRec=new SR();
-  _iaRec.lang='pt-BR';
-  _iaRec.continuous=true;
-  _iaRec.interimResults=false;
-  _iaRec.onresult=function(e){
-    var txt=Array.from(e.results).map(function(r){return r[0].transcript;}).join(' ');
-    var ta=document.getElementById('ia-texto');
-    if(ta)ta.value=(ta.value+' '+txt).trim();
-  };
-  _iaRec.onend=function(){
-    _iaRecording=false;
-    if(btn){btn.style.background='var(--bg2)';btn.style.color='var(--ink2)';}
-  };
-  _iaRec.start();
-  _iaRecording=true;
-  if(btn){btn.style.background='rgba(220,38,38,.12)';btn.style.color='var(--danger)';}
-}
-
-function iaProcessar(){
-  var texto=document.getElementById('ia-texto').value.trim();
-  if(!texto&&!_iaFileB64){showToast('Adicione uma imagem ou descreva o lançamento');return;}
-
-  // Montar prompt com categorias e subcategorias do app
-  var cats=S.cats.semana||{};
-  var catsStr=Object.entries(cats).map(function(e){
-    return e[0]+(e[1].length?' ('+e[1].join(', ')+')':'');
-  }).join(', ');
-
-  var p1='Voce e um assistente de financas pessoais. Analise o conteudo e extraia lancamentos.';
-  var p2='Categorias: '+catsStr+'. Semana padrao: '+_iaSem+'.';
-  var p3='Retorne APENAS JSON array: [{"desc":"nome","val":numero,"cat":"Categoria","sub":"Sub ou vazio","sem":"Sem. X"}]';
-  var p4='Identifique TODOS os lancamentos. Escolha categoria das disponiveis. Valores sem R$.';
-  var p5=texto?'Descricao: '+texto:'';
-  var prompt=p1+' '+p2+' '+p3+' '+p4+' '+p5;
-
-  // Mostrar loading
-  var loadEl=document.getElementById('ia-loading');
-  var btnEl=document.getElementById('ia-processar-btn');
-  var resEl=document.getElementById('ia-resultado');
-  if(loadEl)loadEl.style.display='block';
-  if(btnEl)btnEl.disabled=true;
-  if(resEl)resEl.style.display='none';
-
-  // Animar barra de progresso
-  var prog=document.getElementById('ia-progress');
-  var pct=0;
-  var pInt=setInterval(function(){pct=Math.min(pct+2,85);if(prog)prog.style.width=pct+'%';},100);
-
-  // Montar mensagem para API
-  var content=[];
-  if(_iaFileB64){
-    if(_iaFileType==='application/pdf'){
-      content.push({type:'document',source:{type:'base64',media_type:'application/pdf',data:_iaFileB64}});
-    } else {
-      content.push({type:'image',source:{type:'base64',media_type:_iaFileType,data:_iaFileB64}});
-    }
-  }
-  content.push({type:'text',text:prompt});
-
-  fetch('https://api.anthropic.com/v1/messages',{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({
-      model:'claude-sonnet-4-20250514',
-      max_tokens:1000,
-      messages:[{role:'user',content:content}]
-    })
-  })
-  .then(function(r){return r.json();})
-  .then(function(data){
-    clearInterval(pInt);
-    if(prog)prog.style.width='100%';
-    setTimeout(function(){
-      if(loadEl)loadEl.style.display='none';
-      if(btnEl)btnEl.disabled=false;
-
-      var txt='';
-      if(data.content&&data.content[0])txt=data.content[0].text||'';
-      // Limpar markdown
-      txt=txt.replace(/```json/g,'').replace(/```/g,'').trim();
-
-      try{
-        var lancamentos=JSON.parse(txt);
-        if(!Array.isArray(lancamentos))throw new Error('not array');
-        _iaLancamentos=lancamentos;
-        iaRenderResultado(lancamentos);
-      } catch(e){
-        if(resEl){
-          resEl.style.display='block';
-          document.getElementById('ia-resultado-lista').innerHTML=
-            '<div style="padding:12px;background:#FEF2F2;border-radius:10px;font-size:13px;color:#DC2626">Não consegui identificar lançamentos. Tente descrever com mais detalhes.</div>';
-        }
-      }
-    },300);
-  })
-  .catch(function(err){
-    clearInterval(pInt);
-    if(loadEl)loadEl.style.display='none';
-    if(btnEl)btnEl.disabled=false;
-    showToast('Erro ao conectar com a IA');
-  });
-}
-
-function iaRenderResultado(lancamentos){
-  var lista=document.getElementById('ia-resultado-lista');
-  var res=document.getElementById('ia-resultado');
-  if(!lista||!res)return;
-  res.style.display='block';
-
-  if(!lancamentos.length){
-    lista.innerHTML='<div style="padding:12px;background:#FEF2F2;border-radius:10px;font-size:13px;color:#DC2626">Nenhum lançamento identificado.</div>';
-    return;
-  }
-
-  lista.innerHTML=lancamentos.map(function(l,i){
-    return '<div style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--bg2);border-radius:12px;margin-bottom:8px">'
-      +'<div style="flex:1">'
-        +'<div style="font-size:14px;font-weight:600;color:var(--ink)">'+l.desc+'</div>'
-        +'<div style="font-size:12px;color:var(--ink3);margin-top:2px">'
-          +l.cat+(l.sub?' · '+l.sub:'')+' · '+l.sem
-        +'</div>'
-      +'</div>'
-      +'<div style="font-size:15px;font-weight:700;color:var(--ink)">R$ '+( l.val||0).toFixed(2)+'</div>'
-      +'<button data-idx="'+i+'" onclick="iaRemoverItem(this)" style="border:none;background:none;color:var(--ink3);cursor:pointer;padding:4px">'
-        +'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'
-      +'</button>'
-    +'</div>';
-  }).join('');
-}
-
-function iaRemoverItem(btn){
-  var idx=parseInt(btn.dataset.idx);
-  _iaLancamentos.splice(idx,1);
-  iaRenderResultado(_iaLancamentos);
-}
-
-function iaConfirmarTodos(){
-  if(!_iaLancamentos.length){showToast('Nenhum lançamento para confirmar');return;}
-  var adicionados=0;
-  _iaLancamentos.forEach(function(l){
-    if(!l.val||l.val<=0)return;
-    S.lancamentos.push({
-      id:nxId(S.lancamentos),
-      desc:l.desc||l.cat,
-      val:parseFloat(l.val)||0,
-      cat:l.cat||'Variados',
-      sub:l.sub||'',
-      sem:l.sem||_iaSem,
-      mes:curKey()
-    });
-    adicionados++;
-  });
-  save();
-  closeSheet('sh-ia');
-  // Resetar
-  _iaFile=null;_iaFileB64=null;_iaLancamentos=[];
-  var prev=document.getElementById('ia-preview');
-  var dc=document.getElementById('ia-drop-content');
-  if(prev)prev.style.display='none';
-  if(dc)dc.style.display='block';
-  var ta=document.getElementById('ia-texto');
-  if(ta)ta.value='';
-  document.getElementById('ia-resultado').style.display='none';
-  showToast(adicionados+' lançamento'+(adicionados>1?'s':'')+' adicionado'+(adicionados>1?'s':'')+' ✓');
-  // Ir para lançamentos
-  if(curHT==='semana'){setST('lancs',null);renderLancList();}
-  renderSemHome();
-}
-
-// Integrar no setLT
 function setLT(t,el){
-  if(t==='ia'){closeSheet('sh-lanc');setTimeout(function(){openSheet('sh-ia');},100);return;}
-  ltipo=t;document.querySelectorAll('.type-card').forEach(c=>c.classList.remove('on'));if(el)el.classList.add('on');
+  ltipo=t;document.querySelectorAll('.type-card').forEach(c=>c.classList.remove('on'));el.classList.add('on');
   document.getElementById('lf-sem').style.display=t==='sem'?'block':'none';
   document.getElementById('lf-mes').style.display=t==='mes'?'block':'none';
 }
@@ -6419,11 +5994,11 @@ document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',e=>{
 function pChip(el,grp){el.closest('.chips').querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));el.classList.add('on');}
 function setNav(btn){document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));if(btn)btn.classList.add('on');}
 function setNavById(id){const b=document.getElementById(id);setNav(b);}
-function chMonth(dir){let{m,y}=S.month;m+=dir;if(m>12){m=1;y++;}if(m<1){m=12;y--;}if(y<2026||(y===2026&&m<6))return;S.month={m,y};save();updateMlbl();renderAll();}
+function chMonth(dir){let{m,y}=S.month;m+=dir;if(m>12){m=1;y++;}if(m<1){m=12;y--;}S.month={m,y};save();updateMlbl();renderAll();}
 function updateMlbl(){const el=document.getElementById('mlbl');if(el)el.textContent=`${MNS[S.month.m-1]} ${S.month.y}`;}
 
 // ════ MONTH CYCLE SYSTEM ════
-// monthKey: 'YYYY-MM' e.g. '2026-06'
+// monthKey: 'YYYY-MM' e.g. '2026-05'
 function mKey(m,y){return `${y}-${String(m).padStart(2,'0')}`;}
 function curKey(){return mKey(S.month.m,S.month.y);}
 
@@ -6668,172 +6243,7 @@ document.addEventListener('keydown', function(e){
 renderAll();
 renderCycleBtn();
 setTimeout(initLanc,100);
-
-
-
-// ── Auth ──
-function loginEmail(criar) {
-  var email = document.getElementById('login-email').value.trim();
-  var pass  = document.getElementById('login-pass').value;
-  if(!email || !pass){ showLoginError('Preencha e-mail e senha.'); return; }
-  showLoginLoading(true);
-  var fn = criar ? fbAuth.createUserWithEmailAndPassword(email, pass)
-                 : fbAuth.signInWithEmailAndPassword(email, pass);
-  fn.catch(function(err){
-    showLoginLoading(false);
-    showLoginError(loginErrMsg(err.code));
-  });
-}
-
-function loginGoogle() {
-  showLoginLoading(true);
-  var provider = new firebase.auth.GoogleAuthProvider();
-  fbAuth.signInWithPopup(provider).catch(function(err){
-    showLoginLoading(false);
-    showLoginError(loginErrMsg(err.code));
-  });
-}
-
-function logout() {
-  if(fbUnsub){ fbUnsub(); fbUnsub=null; }
-  fbAuth.signOut();
-}
-
-function showLoginError(msg){
-  var el=document.getElementById('login-error');
-  if(el){el.textContent=msg;el.style.display='block';}
-}
-function showLoginLoading(v){
-  var el=document.getElementById('login-loading');
-  if(el)el.style.display=v?'block':'none';
-  var btn=document.querySelector('#login-form button');
-  if(btn)btn.disabled=v;
-}
-function loginErrMsg(code){
-  var msgs={
-    'auth/user-not-found':'E-mail não cadastrado.',
-    'auth/wrong-password':'Senha incorreta.',
-    'auth/email-already-in-use':'E-mail já cadastrado. Faça login.',
-    'auth/weak-password':'Senha muito fraca (mínimo 6 caracteres).',
-    'auth/invalid-email':'E-mail inválido.',
-    'auth/too-many-requests':'Muitas tentativas. Tente mais tarde.',
-    'auth/popup-closed-by-user':'Login cancelado.',
-  };
-  return msgs[code] || 'Erro ao entrar. Tente novamente.';
-}
-
-// ── Auth state change ──
-fbAuth.onAuthStateChanged(function(user){
-  fbUser = user;
-  var loginScreen = document.getElementById('login-screen');
-  if(user){
-    // Esconder tela de login
-    if(loginScreen) loginScreen.style.display='none';
-    // Iniciar sync
-    startFirebaseSync();
-  } else {
-    // Mostrar tela de login
-    if(loginScreen) loginScreen.style.display='flex';
-    showLoginLoading(false);
-    // Parar listener
-    if(fbUnsub){ fbUnsub(); fbUnsub=null; }
-  }
-});
-
-// ── Sync Firestore ──
-function startFirebaseSync(){
-  if(!fbUser) return;
-  var docRef = fbDb.collection('users').doc(fbUser.uid);
-
-  // Listener em tempo real — atualiza quando outro dispositivo salva
-  fbUnsub = docRef.onSnapshot(function(snap){
-    if(!snap.exists) {
-      // Primeira vez: enviar dados locais para o Firestore
-      var local = localStorage.getItem(KEY);
-      if(local){
-        try {
-          var parsed = JSON.parse(local);
-          docRef.set({data: local, updatedAt: firebase.firestore.FieldValue.serverTimestamp()});
-        } catch(e){}
-      }
-      return;
-    }
-    // Dados remotos existem — comparar timestamp
-    var remote = snap.data();
-    if(!remote || !remote.data) return;
-    // Usar dados remotos (mais recentes pelo servidor)
-    try {
-      var remoteData = JSON.parse(remote.data);
-      var localData  = JSON.parse(localStorage.getItem(KEY)||'{}');
-      // Só atualizar se remoto for diferente do local atual
-      if(remote.data !== localStorage.getItem(KEY)){
-        localStorage.setItem(KEY, remote.data);
-        // Recarregar S com dados do Firebase e re-renderizar
-        try {
-          var newS = JSON.parse(remote.data);
-          if(newS && typeof newS === 'object'){
-            // Merge seguro — só copiar campos conhecidos
-            var fields=['month','monthStatus','monthData','receita','moradia','pessoal',
-              'reservasmes','cartao','cartaoPago','lancamentos','reservas','cats','metas'];
-            fields.forEach(function(k){if(newS[k]!==undefined)S[k]=newS[k];});
-            if(typeof renderAll === 'function') renderAll();
-            if(typeof renderCycleBtn === 'function') renderCycleBtn();
-          }
-        } catch(e){ console.log('Erro ao aplicar dados Firebase:',e); }
-      }
-    } catch(e){}
-  }, function(err){
-    console.log('Firestore listener erro:', err);
-  });
-}
-
-// save() já inclui Firebase sync diretamente
-function patchSaveForFirebase(){/* integrado na save() */}
-
-// Adicionar botão de logout no header
-function addLogoutButton(){
-  var gear = document.querySelector('.gear-btn');
-  if(!gear) return;
-  var btn = document.createElement('button');
-  btn.onclick = function(){ if(confirm('Sair da conta?')) logout(); };
-  btn.title = 'Sair';
-  btn.style.cssText = 'border:none;background:none;cursor:pointer;padding:4px;color:var(--ink3);display:flex;align-items:center';
-  btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>';
-  gear.parentNode.insertBefore(btn, gear.nextSibling);
-}
-
-// Inicializar após o DOM estar pronto
-document.addEventListener('keydown', function(e){
-  if(e.key !== 'Enter') return;
-  var active = document.activeElement;
-  if(!active) return;
-  var tag = active.tagName.toLowerCase();
-  if(tag !== 'input' && tag !== 'textarea') return;
-  // Não processar se já tem onkeydown específico
-  if(active.getAttribute('onkeydown')) return;
-  // Encontrar o sheet pai
-  var sheet = active.closest('.overlay.open');
-  if(!sheet) return;
-  var id = sheet.id;
-  // Mapear sheet → função de salvar
-  var saveMap = {
-    'sh-lanc': function(){ salvarLanc(); },
-    'sh-rm':   function(){ salvarShRm(); },
-    'sh-el':   function(){ salvarEL(); },
-    'sh-res-edit': function(){ salvarResEdit(); },
-    'sh-add-res':  function(){ criarRes(); },
-  };
-  if(saveMap[id]){
-    e.preventDefault();
-    saveMap[id]();
-  }
-});
-
-document.addEventListener('DOMContentLoaded', function(){
-  patchSaveForFirebase();
-  addLogoutButton();
-});
-
+</script>
 
 <!-- CAT SIDE PAGE -->
 <div class="overlay" id="cat-sheet-ov" onclick="closeCatSheet()" style="display:none;z-index:490"></div>
