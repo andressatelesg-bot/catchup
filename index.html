@@ -1922,7 +1922,28 @@ const DEF={
   }
 };
 
-let S=(()=>{try{const d=JSON.parse(localStorage.getItem(KEY));return d||JSON.parse(JSON.stringify(DEF));}catch(e){return JSON.parse(JSON.stringify(DEF));}})();
+let S=(()=>{
+  try{
+    const d=JSON.parse(localStorage.getItem(KEY));
+    if(!d) return JSON.parse(JSON.stringify(DEF));
+    // Migrar maio→junho DENTRO do carregamento
+    if(!d.monthStatus)d.monthStatus={};
+    if(d.monthStatus['2026-05']&&!d.monthStatus['2026-06']){
+      d.monthStatus['2026-06']=d.monthStatus['2026-05'];
+      delete d.monthStatus['2026-05'];
+    }
+    if(!d.monthStatus['2026-06'])d.monthStatus['2026-06']='open';
+    d.month={m:6,y:2026};
+    if(!d.reservas||!Array.isArray(d.reservas))d.reservas=DEF.reservas||[];
+    d.reservas.forEach(function(r){if(!r.movs)r.movs=[];});
+    if(!d.cartao)d.cartao={santander:[],carrefour:[]};
+    if(!d.moradia)d.moradia=DEF.moradia||[];
+    if(!d.pessoal)d.pessoal=DEF.pessoal||[];
+    if(!d.lancamentos)d.lancamentos=[];
+    if(!d.reservasmes)d.reservasmes=[];
+    return d;
+  }catch(e){return JSON.parse(JSON.stringify(DEF));}
+})();
 // ── Migração e guards de inicialização ──
 if(!S.monthStatus)S.monthStatus={};
 if(S.monthStatus['2026-05']&&!S.monthStatus['2026-06']){
