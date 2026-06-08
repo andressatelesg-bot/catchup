@@ -1988,6 +1988,9 @@ function goBack(){
   renderTab(curHT);
 }
 function renderHomeNav(){
+  if(!S.reservas)S.reservas=[];
+  if(!S.cartao)S.cartao={santander:[],carrefour:[]};
+  if(!S.moradia)S.moradia=[];
   const st=getStatus();
   const saldo=st?cSaldo():0;
   const gt=st?cGS('all'):0;
@@ -4651,6 +4654,8 @@ let _movFiltroTipo='todos',_movFiltroCat='all',_movMesFiltro=null;
 let _movEditMode=false;
 
 function renderResHome(){
+  if(!S.reservas)S.reservas=[];
+  S.reservas.forEach(function(r){if(!r.movs)r.movs=[];});
   const mes=MNS[S.month.m-1].slice(0,3)+'/'+String(S.month.y).slice(2);
   if(_movMesFiltro===null||_movMesFiltro===undefined)_movMesFiltro=mes;
   const tot=S.reservas.reduce((a,r)=>a+r.saldo,0);
@@ -5391,6 +5396,8 @@ function exportPedroPDF(){
 }
 
 function renderPedroHome(){
+  if(!S.cartao)S.cartao={santander:[],carrefour:[]};
+  if(!S.moradia)S.moradia=[];
   const sv=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
   if(!getStatus()){
     // mês não iniciado — zerar tudo e mostrar empty state
