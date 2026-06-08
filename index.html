@@ -1635,6 +1635,7 @@ body{font-family:"Outfit",sans-serif;color:var(--ink);font-size:15px;line-height
 
 <script>
 
+
 // ═══════════════════════════════════════════
 // UX CORE: sheets, modais, feedback
 // ═══════════════════════════════════════════
@@ -1931,6 +1932,7 @@ function cartCatColor(nome){const idx=S.cats.cartao.findIndex(c=>catNome(c)===no
 
 const DEF={
   month:{m:6,y:2026},
+  monthStatus:{'2026-06':'open'},
   receita:[{id:1,nome:'Salário',valor:6000},{id:2,nome:'Adobe',valor:95}],
   moradia:[
     {id:1,nome:'Aluguel + Condomínio',valor:2340.27,pago:true,pedro:true},
@@ -2006,6 +2008,14 @@ const DEF={
 };
 
 let S=(()=>{try{const d=JSON.parse(localStorage.getItem(KEY));return d||JSON.parse(JSON.stringify(DEF));}catch(e){return JSON.parse(JSON.stringify(DEF));}})();
+// Garantir campos essenciais em S
+if(!S.monthStatus)S.monthStatus={};
+if(!S.monthStatus['2026-06'])S.monthStatus['2026-06']='open';
+if(!S.month||S.month.m<6)S.month={m:6,y:2026};
+if(!S.reservas)S.reservas=[];
+if(!S.lancamentos)S.lancamentos=[];
+if(!S.cats)S.cats={semana:{Alimentação:['Mercado','Padaria','iFood'],Transporte:['Uber','Ônibus'],Variados:['Farmácia','Beleza']},reservaEnt:[],reservaSai:[]};
+
 const save=()=>{
   localStorage.setItem(KEY,JSON.stringify(S));
   // Sync Firebase em background
@@ -2019,19 +2029,12 @@ const save=()=>{
   }
 };
 // migração Mai→Jun: se dados ainda estão em Maio/2026, mover para Junho
-if(S.month&&S.month.m===5&&S.month.y===2026){
-  S.month={m:6,y:2026};
-  // migrar monthStatus de 2026-05 para 2026-06
-  if(S.monthStatus&&S.monthStatus['2026-06']&&!S.monthStatus['2026-06']){
-    S.monthStatus['2026-06']=S.monthStatus['2026-06'];
-    delete S.monthStatus['2026-06'];
-  }
-  // migrar monthData de 2026-05 para 2026-06
-  if(S.monthData&&S.monthData['2026-06']&&!S.monthData['2026-06']){
-    S.monthData['2026-06']=S.monthData['2026-06'];
-    delete S.monthData['2026-06'];
-  }
-  save();
+// Garantir que o mês atual é Junho 2026
+S.month={m:6,y:2026};
+// Garantir monthStatus existe e tem Junho aberto
+if(!S.monthStatus)S.monthStatus={};
+if(!S.monthStatus['2026-06'])S.monthStatus['2026-06']='open';
+{
   if(S.reservas)S.reservas.forEach(function(r){if(r.movs)r.movs.forEach(function(m){if(m.mes==='Mai/26')m.mes='Jun/26';});});
   save();
 }
@@ -6665,7 +6668,172 @@ document.addEventListener('keydown', function(e){
 renderAll();
 renderCycleBtn();
 setTimeout(initLanc,100);
-</script>
+
+
+
+// ── Auth ──
+function loginEmail(criar) {
+  var email = document.getElementById('login-email').value.trim();
+  var pass  = document.getElementById('login-pass').value;
+  if(!email || !pass){ showLoginError('Preencha e-mail e senha.'); return; }
+  showLoginLoading(true);
+  var fn = criar ? fbAuth.createUserWithEmailAndPassword(email, pass)
+                 : fbAuth.signInWithEmailAndPassword(email, pass);
+  fn.catch(function(err){
+    showLoginLoading(false);
+    showLoginError(loginErrMsg(err.code));
+  });
+}
+
+function loginGoogle() {
+  showLoginLoading(true);
+  var provider = new firebase.auth.GoogleAuthProvider();
+  fbAuth.signInWithPopup(provider).catch(function(err){
+    showLoginLoading(false);
+    showLoginError(loginErrMsg(err.code));
+  });
+}
+
+function logout() {
+  if(fbUnsub){ fbUnsub(); fbUnsub=null; }
+  fbAuth.signOut();
+}
+
+function showLoginError(msg){
+  var el=document.getElementById('login-error');
+  if(el){el.textContent=msg;el.style.display='block';}
+}
+function showLoginLoading(v){
+  var el=document.getElementById('login-loading');
+  if(el)el.style.display=v?'block':'none';
+  var btn=document.querySelector('#login-form button');
+  if(btn)btn.disabled=v;
+}
+function loginErrMsg(code){
+  var msgs={
+    'auth/user-not-found':'E-mail não cadastrado.',
+    'auth/wrong-password':'Senha incorreta.',
+    'auth/email-already-in-use':'E-mail já cadastrado. Faça login.',
+    'auth/weak-password':'Senha muito fraca (mínimo 6 caracteres).',
+    'auth/invalid-email':'E-mail inválido.',
+    'auth/too-many-requests':'Muitas tentativas. Tente mais tarde.',
+    'auth/popup-closed-by-user':'Login cancelado.',
+  };
+  return msgs[code] || 'Erro ao entrar. Tente novamente.';
+}
+
+// ── Auth state change ──
+fbAuth.onAuthStateChanged(function(user){
+  fbUser = user;
+  var loginScreen = document.getElementById('login-screen');
+  if(user){
+    // Esconder tela de login
+    if(loginScreen) loginScreen.style.display='none';
+    // Iniciar sync
+    startFirebaseSync();
+  } else {
+    // Mostrar tela de login
+    if(loginScreen) loginScreen.style.display='flex';
+    showLoginLoading(false);
+    // Parar listener
+    if(fbUnsub){ fbUnsub(); fbUnsub=null; }
+  }
+});
+
+// ── Sync Firestore ──
+function startFirebaseSync(){
+  if(!fbUser) return;
+  var docRef = fbDb.collection('users').doc(fbUser.uid);
+
+  // Listener em tempo real — atualiza quando outro dispositivo salva
+  fbUnsub = docRef.onSnapshot(function(snap){
+    if(!snap.exists) {
+      // Primeira vez: enviar dados locais para o Firestore
+      var local = localStorage.getItem(KEY);
+      if(local){
+        try {
+          var parsed = JSON.parse(local);
+          docRef.set({data: local, updatedAt: firebase.firestore.FieldValue.serverTimestamp()});
+        } catch(e){}
+      }
+      return;
+    }
+    // Dados remotos existem — comparar timestamp
+    var remote = snap.data();
+    if(!remote || !remote.data) return;
+    // Usar dados remotos (mais recentes pelo servidor)
+    try {
+      var remoteData = JSON.parse(remote.data);
+      var localData  = JSON.parse(localStorage.getItem(KEY)||'{}');
+      // Só atualizar se remoto for diferente do local atual
+      if(remote.data !== localStorage.getItem(KEY)){
+        localStorage.setItem(KEY, remote.data);
+        // Recarregar S com dados do Firebase e re-renderizar
+        try {
+          var newS = JSON.parse(remote.data);
+          if(newS && typeof newS === 'object'){
+            // Merge seguro — só copiar campos conhecidos
+            var fields=['month','monthStatus','monthData','receita','moradia','pessoal',
+              'reservasmes','cartao','cartaoPago','lancamentos','reservas','cats','metas'];
+            fields.forEach(function(k){if(newS[k]!==undefined)S[k]=newS[k];});
+            if(typeof renderAll === 'function') renderAll();
+            if(typeof renderCycleBtn === 'function') renderCycleBtn();
+          }
+        } catch(e){ console.log('Erro ao aplicar dados Firebase:',e); }
+      }
+    } catch(e){}
+  }, function(err){
+    console.log('Firestore listener erro:', err);
+  });
+}
+
+// save() já inclui Firebase sync diretamente
+function patchSaveForFirebase(){/* integrado na save() */}
+
+// Adicionar botão de logout no header
+function addLogoutButton(){
+  var gear = document.querySelector('.gear-btn');
+  if(!gear) return;
+  var btn = document.createElement('button');
+  btn.onclick = function(){ if(confirm('Sair da conta?')) logout(); };
+  btn.title = 'Sair';
+  btn.style.cssText = 'border:none;background:none;cursor:pointer;padding:4px;color:var(--ink3);display:flex;align-items:center';
+  btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>';
+  gear.parentNode.insertBefore(btn, gear.nextSibling);
+}
+
+// Inicializar após o DOM estar pronto
+document.addEventListener('keydown', function(e){
+  if(e.key !== 'Enter') return;
+  var active = document.activeElement;
+  if(!active) return;
+  var tag = active.tagName.toLowerCase();
+  if(tag !== 'input' && tag !== 'textarea') return;
+  // Não processar se já tem onkeydown específico
+  if(active.getAttribute('onkeydown')) return;
+  // Encontrar o sheet pai
+  var sheet = active.closest('.overlay.open');
+  if(!sheet) return;
+  var id = sheet.id;
+  // Mapear sheet → função de salvar
+  var saveMap = {
+    'sh-lanc': function(){ salvarLanc(); },
+    'sh-rm':   function(){ salvarShRm(); },
+    'sh-el':   function(){ salvarEL(); },
+    'sh-res-edit': function(){ salvarResEdit(); },
+    'sh-add-res':  function(){ criarRes(); },
+  };
+  if(saveMap[id]){
+    e.preventDefault();
+    saveMap[id]();
+  }
+});
+
+document.addEventListener('DOMContentLoaded', function(){
+  patchSaveForFirebase();
+  addLogoutButton();
+});
+
 
 <!-- CAT SIDE PAGE -->
 <div class="overlay" id="cat-sheet-ov" onclick="closeCatSheet()" style="display:none;z-index:490"></div>
