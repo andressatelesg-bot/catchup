@@ -1702,15 +1702,12 @@ function startFirebaseSync(){
       }
       return;
     }
-    // Dados remotos existem — comparar timestamp
+    // Dados remotos existem
     var remote = snap.data();
     if(!remote || !remote.data) return;
-    // Usar dados remotos (mais recentes pelo servidor)
     try {
-      var remoteData = JSON.parse(remote.data);
-      var localData  = JSON.parse(localStorage.getItem(KEY)||'{}');
-      // Só atualizar se remoto for diferente do local atual
-      if(remote.data !== localStorage.getItem(KEY)){
+      // SEMPRE aplicar dados do Firebase (podem ter reservas reais)
+      if(true){
         try{
           var ns=JSON.parse(remote.data);
           if(!ns.monthStatus)ns.monthStatus={};
