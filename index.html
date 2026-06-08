@@ -1801,9 +1801,14 @@ function startFirebaseSync(){
         // Recarregar S com dados do Firebase e re-renderizar
         try {
           var newS = JSON.parse(remote.data);
-          Object.keys(newS).forEach(function(k){ S[k]=newS[k]; });
-          if(typeof renderAll === 'function') renderAll();
-          if(typeof renderCycleBtn === 'function') renderCycleBtn();
+          if(newS && typeof newS === 'object'){
+            // Merge seguro — só copiar campos conhecidos
+            var fields=['month','monthStatus','monthData','receita','moradia','pessoal',
+              'reservasmes','cartao','cartaoPago','lancamentos','reservas','cats','metas'];
+            fields.forEach(function(k){if(newS[k]!==undefined)S[k]=newS[k];});
+            if(typeof renderAll === 'function') renderAll();
+            if(typeof renderCycleBtn === 'function') renderCycleBtn();
+          }
         } catch(e){ console.log('Erro ao aplicar dados Firebase:',e); }
       }
     } catch(e){}
@@ -2857,11 +2862,23 @@ function goPage(page){
   renderTab(page);
 }
 function renderTab(tab){
-  if(tab==='home')renderHomeNav();
-  else if(tab==='mes')renderMesHome();
-  else if(tab==='semana')renderSemHome();
-  else if(tab==='reservas')renderResHome();
-  else if(tab==='pedro')renderPedroHome();
+  try{
+    if(tab==='home')renderHomeNav();
+    else if(tab==='mes')renderMesHome();
+    else if(tab==='semana')renderSemHome();
+    else if(tab==='reservas')renderResHome();
+    else if(tab==='pedro')renderPedroHome();
+  }catch(e){
+    console.error('renderTab erro em '+tab+':', e);
+    // Tentar re-inicializar S se estiver corrompido
+    try{
+      if(!S.reservas)S.reservas=[];
+      if(!S.cartao)S.cartao={santander:[],carrefour:[]};
+      if(!S.month)S.month={m:6,y:2026};
+      if(!S.monthStatus)S.monthStatus={};
+      renderTab(tab);
+    }catch(e2){console.error('renderTab fallback erro:', e2);}
+  }
 }
 function renderAll(){
   updateMlbl();
@@ -4801,6 +4818,7 @@ let _movFiltroTipo='todos',_movFiltroCat='all',_movMesFiltro=null;
 let _movEditMode=false;
 
 function renderResHome(){
+  if(!S.reservas)S.reservas=[];
   const mes=MNS[S.month.m-1].slice(0,3)+'/'+String(S.month.y).slice(2);
   if(_movMesFiltro===null||_movMesFiltro===undefined)_movMesFiltro=mes;
   const tot=S.reservas.reduce((a,r)=>a+r.saldo,0);
@@ -5541,6 +5559,8 @@ function exportPedroPDF(){
 }
 
 function renderPedroHome(){
+  if(!S.cartao)S.cartao={santander:[],carrefour:[]};
+  if(!S.moradia)S.moradia=[];
   const sv=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
   if(!getStatus()){
     // mês não iniciado — zerar tudo e mostrar empty state
