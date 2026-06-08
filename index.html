@@ -1691,34 +1691,44 @@ function startFirebaseSync(){
 
   // Listener em tempo real — atualiza quando outro dispositivo salva
   fbUnsub = docRef.onSnapshot(function(snap){
-    if(!snap.exists){
-      docRef.set({data:localStorage.getItem(KEY),updatedAt:firebase.firestore.FieldValue.serverTimestamp()});
+    if(!snap.exists) {
+      // Primeira vez: enviar dados locais para o Firestore
+      var local = localStorage.getItem(KEY);
+      if(local){
+        try {
+          var parsed = JSON.parse(local);
+          docRef.set({data: local, updatedAt: firebase.firestore.FieldValue.serverTimestamp()});
+        } catch(e){}
+      }
       return;
     }
-    var remote=snap.data();
-    if(!remote||!remote.data)return;
-    try{
-      var ns=JSON.parse(remote.data);
-      // Migrar maio→junho
-      if(!ns.monthStatus)ns.monthStatus={};
-      if(ns.monthStatus['2026-05']&&!ns.monthStatus['2026-06']){
-        ns.monthStatus['2026-06']=ns.monthStatus['2026-05'];
-        delete ns.monthStatus['2026-05'];
+    // Dados remotos existem — comparar timestamp
+    var remote = snap.data();
+    if(!remote || !remote.data) return;
+    // Usar dados remotos (mais recentes pelo servidor)
+    try {
+      var remoteData = JSON.parse(remote.data);
+      var localData  = JSON.parse(localStorage.getItem(KEY)||'{}');
+      // Só atualizar se remoto for diferente do local atual
+      if(remote.data !== localStorage.getItem(KEY)){
+        try{
+          var ns=JSON.parse(remote.data);
+          if(!ns.monthStatus)ns.monthStatus={};
+          if(ns.monthStatus['2026-05']&&!ns.monthStatus['2026-06']){ns.monthStatus['2026-06']=ns.monthStatus['2026-05'];delete ns.monthStatus['2026-05'];}
+          if(!ns.monthStatus['2026-06'])ns.monthStatus['2026-06']='open';
+          ns.month={m:6,y:2026};
+          if(!ns.reservas)ns.reservas=S.reservas&&S.reservas.length?S.reservas:[];
+          ns.reservas.forEach(function(r){if(!r.movs)r.movs=[];});
+          if(!ns.cartao)ns.cartao={santander:[],carrefour:[]};
+          if(!ns.moradia)ns.moradia=S.moradia||[];
+          if(!ns.pessoal)ns.pessoal=S.pessoal||[];
+          if(!ns.lancamentos)ns.lancamentos=S.lancamentos||[];
+          Object.keys(ns).forEach(function(k){S[k]=ns[k];});
+          localStorage.setItem(KEY,JSON.stringify(S));
+          renderAll();
+        }catch(e){console.log('sync erro:',e);}
       }
-      if(!ns.monthStatus['2026-06'])ns.monthStatus['2026-06']='open';
-      ns.month={m:6,y:2026};
-      // Garantir integridade
-      if(!ns.reservas||!ns.reservas.length)ns.reservas=S.reservas&&S.reservas.length?S.reservas:(DEF.reservas?JSON.parse(JSON.stringify(DEF.reservas)):[]);
-      ns.reservas.forEach(function(r){if(!r.movs)r.movs=[];});
-      if(!ns.cartao)ns.cartao={santander:[],carrefour:[]};
-      if(!ns.moradia)ns.moradia=S.moradia||[];
-      if(!ns.pessoal)ns.pessoal=S.pessoal||[];
-      if(!ns.lancamentos)ns.lancamentos=S.lancamentos||[];
-      // Aplicar em S
-      Object.keys(ns).forEach(function(k){S[k]=ns[k];});
-      localStorage.setItem(KEY,JSON.stringify(S));
-      renderAll();
-    }catch(e){console.log('onSnapshot erro:',e);}
+    } catch(e){}
   }, function(err){
     console.log('Firestore listener erro:', err);
   });
@@ -1838,7 +1848,6 @@ function cartCatColor(nome){const idx=S.cats.cartao.findIndex(c=>catNome(c)===no
 
 const DEF={
   month:{m:6,y:2026},
-  monthStatus:{'2026-06':'open'},
   receita:[{id:1,nome:'Salário',valor:6000},{id:2,nome:'Adobe',valor:95}],
   moradia:[
     {id:1,nome:'Aluguel + Condomínio',valor:2340.27,pago:true,pedro:true},
@@ -1847,12 +1856,6 @@ const DEF={
     {id:4,nome:'Gás',valor:27.31,pago:false,pedro:true},
     {id:5,nome:'Limpeza',valor:95.25,pago:false,pedro:true},
     {id:6,nome:'Farmácia reserva',valor:50,pago:false,pedro:false},
-  ],
-  reservas:[
-    {id:1,nome:'Casa',emoji:'🏠',saldo:0,movs:[]},
-    {id:2,nome:'Gatos',emoji:'🐾',saldo:0,movs:[]},
-    {id:3,nome:'Emergência',emoji:'🛡️',saldo:0,movs:[]},
-    {id:4,nome:'Viagem',emoji:'✈️',saldo:0,movs:[]},
   ],
   reservasmes:[
     {id:1,nome:'RV: Casa (1x4)',valor:50,pago:false,pedro:false},
@@ -1920,23 +1923,21 @@ const DEF={
 };
 
 let S=(()=>{try{const d=JSON.parse(localStorage.getItem(KEY));return d||JSON.parse(JSON.stringify(DEF));}catch(e){return JSON.parse(JSON.stringify(DEF));}})();
-// Guards — garantir campos essenciais sempre existem
+// ── Migração e guards de inicialização ──
 if(!S.monthStatus)S.monthStatus={};
+if(S.monthStatus['2026-05']&&!S.monthStatus['2026-06']){
+  S.monthStatus['2026-06']=S.monthStatus['2026-05'];
+  delete S.monthStatus['2026-05'];
+}
 if(!S.monthStatus['2026-06'])S.monthStatus['2026-06']='open';
-if(!S.month||!S.month.m)S.month={m:6,y:2026};
+S.month={m:6,y:2026};
 if(!S.reservas)S.reservas=[];
+S.reservas.forEach(function(r){if(!r.movs)r.movs=[];});
 if(!S.lancamentos)S.lancamentos=[];
+if(!S.cartao)S.cartao={santander:[],carrefour:[]};
 if(!S.moradia)S.moradia=[];
 if(!S.pessoal)S.pessoal=[];
-if(!S.receita)S.receita=[];
 if(!S.reservasmes)S.reservasmes=[];
-if(!S.cartao)S.cartao={santander:[],carrefour:[]};
-if(!S.cartao.santander)S.cartao.santander=[];
-if(!S.cartao.carrefour)S.cartao.carrefour=[];
-if(!S.cats)S.cats={semana:{Alimentação:['Mercado','Padaria','iFood'],Transporte:['Uber','Ônibus'],Variados:['Farmácia','Beleza']},reservaEnt:['Aporte mensal'],reservaSai:['Saque']};
-if(!S.cats.semana)S.cats.semana={Alimentação:[],Transporte:[],Variados:[]};
-// Garantir reservas têm movs
-S.reservas.forEach(function(r){if(!r.movs)r.movs=[];});
 
 const save=()=>{
   localStorage.setItem(KEY,JSON.stringify(S));
@@ -5398,6 +5399,7 @@ function exportPedroPDF(){
 function renderPedroHome(){
   if(!S.cartao)S.cartao={santander:[],carrefour:[]};
   if(!S.moradia)S.moradia=[];
+  if(!S.pessoal)S.pessoal=[];
   const sv=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
   if(!getStatus()){
     // mês não iniciado — zerar tudo e mostrar empty state
