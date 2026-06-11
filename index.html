@@ -2752,23 +2752,7 @@ function configSaveMetas(){
   const btn=event?.target;if(btn){btn.textContent='Salvo ✓';setTimeout(()=>btn.textContent='Salvar metas',1500);}
 }
 
-// Keep only May 2026 lancamentos — all others are zeroed
-S.lancamentos=S.lancamentos
-  .map(l=>l.mes?l:{...l,mes:'2026-05'})
-  .filter(l=>l.mes==='2026-05');
-// Clear monthStatus for all months except May 2026 (only May should be open by default)
-if(!S.monthStatus)S.monthStatus={};
-// Ensure only May 2026 has 'open' status; others untouched (null = not started)
-if(!S.monthStatus['2026-05']){
-  S.monthStatus['2026-05']='open';
-}
-// Remove any 'open' status from months that are not May (future months shouldn't be auto-opened)
-Object.keys(S.monthStatus).forEach(k=>{
-  if(k!=='2026-05'&&S.monthStatus[k]==='open'){
-    delete S.monthStatus[k];
-  }
-});
-save();
+// Migração antiga removida — lançamentos preservados por mês
 
 // chip helper for subpage paid status
 function renderSubChip(containerId, pago, total, accentCol, addKey){
@@ -2802,8 +2786,8 @@ function cRMPedro(){
 }
 function cCart(b){const it=S.cartao[b];const p=it.filter(i=>i.div==='proprio').reduce((a,i)=>a+i.valor,0);const d=it.filter(i=>i.div==='pedro_div').reduce((a,i)=>a+i.valor,0);const n=it.filter(i=>i.div==='pedro_ind').reduce((a,i)=>a+i.valor,0);return{tot:p+d+n,div:d,ind:n,eu:p+d/2};}
 function cSaldo(){const san=cCart('santander'),car=cCart('carrefour');return cRec()-cMor().each-cPes()-cRMEu()-san.eu-car.eu;}
-const cGS=sem=>S.lancamentos.filter(l=>(l.mes||'2026-05')===curKey()&&(sem==='all'||l.sem===sem)).reduce((a,l)=>a+l.val,0);
-const cGC=(cat,sem)=>S.lancamentos.filter(l=>(l.mes||'2026-05')===curKey()&&l.cat===cat&&(sem==='all'||l.sem===sem)).reduce((a,l)=>a+l.val,0);
+const cGS=sem=>S.lancamentos.filter(l=>(l.mes||curKey())===curKey()&&(sem==='all'||l.sem===sem)).reduce((a,l)=>a+l.val,0);
+const cGC=(cat,sem)=>S.lancamentos.filter(l=>(l.mes||curKey())===curKey()&&l.cat===cat&&(sem==='all'||l.sem===sem)).reduce((a,l)=>a+l.val,0);
 
 // ── HOME TABS ──
 function goPage(page){
