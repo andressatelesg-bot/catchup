@@ -5393,71 +5393,42 @@ function pedroGoTo(tipo,id,banco){
 function exportPedroPDF(){
   var san=cCart('santander'),car=cCart('carrefour');
   var morPed=cMor().ped;
+  var rmPed=cRMPedro();
   var indTotal=(san.ind||0)+(car.ind||0);
-  var total=morPed+san.div/2+car.div/2+indTotal;
+  var divTotal=san.div/2+car.div/2;
+  var total=morPed+divTotal+indTotal+rmPed;
   var mes=MNS[S.month.m-1]+' '+S.month.y;
-
   var html='<html><head><meta charset="utf-8"><style>'+
     'body{font-family:sans-serif;padding:32px;color:#111;max-width:600px;margin:0 auto}'+
     'h1{font-size:22px;font-weight:800;margin-bottom:4px}'+
     '.sub{color:#888;font-size:13px;margin-bottom:24px}'+
-    'h2{font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#888;margin:20px 0 8px}'+
-    '.row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #eee;font-size:14px}'+
-    '.row .meta{color:#888;font-size:12px;margin-top:2px}'+
-    '.total{display:flex;justify-content:space-between;padding:16px 0;font-size:17px;font-weight:700;border-top:2px solid #111;margin-top:8px}'+
-    '.tag{display:inline-block;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:600}'+
-    '.tag-san{background:#0D948820;color:#0D9488}.tag-ind{background:#7C3AED20;color:#7C3AED}'+
-  '</style></head><body>'+
-    '<h1>Resumo Pedro</h1><div class="sub">'+mes+'</div>';
-
-  // moradia
-  var morItems=S.moradia.filter(function(i){return i.pedro;});
-  if(morItems.length){
-    html+='<h2>Moradia dividida</h2>';
-    morItems.forEach(function(it){
-      html+='<div class="row"><div><div>'+it.nome+'</div><div class="meta">Total: R$ '+it.valor.toFixed(2)+'</div></div><div><strong>R$ '+( it.valor/2).toFixed(2)+'</strong></div></div>';
-    });
+    '.row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #eee}'+
+    '.label{color:#555}.value{font-weight:600}'+
+    '.total{display:flex;justify-content:space-between;padding:16px 0;margin-top:8px}'+
+    '.total .label{font-size:16px;font-weight:700}.total .value{font-size:18px;font-weight:800}'+
+    '</style></head><body>'+
+    '<h1>Catchup — Pedro</h1>'+
+    '<div class="sub">Relatório de gastos: '+mes+'</div>';
+  // Moradia
+  if(morPed>0)html+='<div class="row"><span class="label">Moradia (÷2)</span><span class="value">'+fmt(morPed)+'</span></div>';
+  // Cartão dividido
+  if(divTotal>0)html+='<div class="row"><span class="label">Cartões (÷2)</span><span class="value">'+fmt(divTotal)+'</span></div>';
+  // Cartão individual Pedro
+  if(indTotal>0)html+='<div class="row"><span class="label">Cartão individual</span><span class="value">'+fmt(indTotal)+'</span></div>';
+  // Reservas do mês
+  if(rmPed>0)html+='<div class="row"><span class="label">Reservas do mês</span><span class="value">'+fmt(rmPed)+'</span></div>';
+  // Itens individuais
+  var itens=[];
+  (S.cartao.santander||[]).filter(i=>i.div==='pedro_ind').forEach(i=>itens.push({nome:i.item,val:i.valor,origem:'San'}));
+  (S.cartao.carrefour||[]).filter(i=>i.div==='pedro_ind').forEach(i=>itens.push({nome:i.item,val:i.valor,origem:'Car'}));
+  if(itens.length){
+    html+='<div style="margin-top:16px;font-size:12px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.05em">Itens individuais do Pedro</div>';
+    itens.forEach(function(it){html+='<div class="row" style="font-size:14px"><span class="label">'+it.nome+' ('+it.origem+')</span><span class="value">'+fmt(it.val)+'</span></div>';});
   }
-
-  // santander div
-  var sanDiv=S.cartao.santander.filter(function(i){return i.div==='pedro_div';});
-  if(sanDiv.length){
-    html+='<h2>Santander ÷ Pedro</h2>';
-    sanDiv.forEach(function(it){
-      html+='<div class="row"><div><div>'+it.item+'</div><div class="meta">'+it.cat+' · '+( it.parc||'1x')+' · Total: R$ '+it.valor.toFixed(2)+'</div></div><div><strong>R$ '+(it.valor/2).toFixed(2)+'</strong></div></div>';
-    });
-  }
-
-  // carrefour div
-  var carDiv=S.cartao.carrefour.filter(function(i){return i.div==='pedro_div';});
-  if(carDiv.length){
-    html+='<h2>Carrefour ÷ Pedro</h2>';
-    carDiv.forEach(function(it){
-      html+='<div class="row"><div><div>'+it.item+'</div><div class="meta">'+it.cat+' · '+( it.parc||'1x')+' · Total: R$ '+it.valor.toFixed(2)+'</div></div><div><strong>R$ '+(it.valor/2).toFixed(2)+'</strong></div></div>';
-    });
-  }
-
-  // individual pedro
-  var indItens=[...S.cartao.santander.filter(function(i){return i.div==='pedro_ind';}).map(function(i){return Object.assign({},i,{_b:'Santander'});}),
-    ...S.cartao.carrefour.filter(function(i){return i.div==='pedro_ind';}).map(function(i){return Object.assign({},i,{_b:'Carrefour'});})];
-  if(indItens.length){
-    html+='<h2>Individual Pedro</h2>';
-    indItens.forEach(function(it){
-      html+='<div class="row"><div><div>'+it.item+' <span class="tag tag-ind">'+it._b+'</span></div><div class="meta">'+it.cat+' · '+( it.parc||'1x')+'</div></div><div><strong>R$ '+it.valor.toFixed(2)+'</strong></div></div>';
-    });
-  }
-
-  html+='<div class="total"><span>Total Pedro</span><span>R$ '+total.toFixed(2)+'</span></div>';
+  html+='<div class="total"><span class="label">Total Pedro — '+mes+'</span><span class="value">'+fmt(total)+'</span></div>';
   html+='</body></html>';
-
-  // Usar Blob URL para evitar bloqueio de popup
-  var blob=new Blob([html],{type:'text/html'});
-  var url=URL.createObjectURL(blob);
-  var a=document.createElement('a');
-  a.href=url;
-  a.download='Pedro_'+mes.replace(' ','_')+'.html';
-  a.click();
-  setTimeout(function(){URL.revokeObjectURL(url);},1000);
+  var w=window.open('','_blank');
+  if(w){w.document.write(html);w.document.close();w.print();}
 }
 
 function renderPedroHome(){
@@ -6111,46 +6082,58 @@ function setStatus(st){
 }
 
 function iniciarMes(){
-  // copy fixed data from previous month
   const {m,y}=S.month;
-  let pm=m-1,py=y;if(pm<1){pm=12;py--;}
-  const prevKey=mKey(pm,py);
-  const prevData=(S.monthData||{})[prevKey];
-
-  // save current month data slot
+  const curK=mKey(m,y);
+  // Salvar snapshot do mês atual em monthData (backup)
   if(!S.monthData)S.monthData={};
+  S.monthData[curK]={
+    receita:JSON.parse(JSON.stringify(S.receita||[])),
+    moradia:JSON.parse(JSON.stringify(S.moradia||[])),
+    pessoal:JSON.parse(JSON.stringify(S.pessoal||[])),
+    cartao:JSON.parse(JSON.stringify(S.cartao||{santander:[],carrefour:[]})),
+    reservasmes:JSON.parse(JSON.stringify(S.reservasmes||[])),
+    lancamentos:JSON.parse(JSON.stringify(S.lancamentos||[])),
+    metas:JSON.parse(JSON.stringify(S.metas||{})),
+  };
 
-  if(prevData){
-    // restore fixed items from prev, but zero out weekly data
-    if(prevData.receita)S.receita=JSON.parse(JSON.stringify(prevData.receita));
-    if(prevData.moradia)S.moradia=JSON.parse(JSON.stringify(prevData.moradia)).map(i=>({...i,pago:false}));
-    if(prevData.reservasmes)S.reservasmes=JSON.parse(JSON.stringify(prevData.reservasmes)).map(i=>({...i,pago:false}));
-    if(prevData.pessoal)S.pessoal=JSON.parse(JSON.stringify(prevData.pessoal)).map(i=>({...i,pago:false}));
-    if(prevData.cartao)S.cartao=JSON.parse(JSON.stringify(prevData.cartao));
-    if(prevData.metas)S.metas=JSON.parse(JSON.stringify(prevData.metas));
-    if(prevData.cats)S.cats=JSON.parse(JSON.stringify(prevData.cats));
-    // handle installments — decrement parcela counters
-    ['santander','carrefour'].forEach(b=>{
-      S.cartao[b]=S.cartao[b].map(item=>{
-        if(item.parc&&item.parc!=='-'){
-          const m=item.parc.match(/^(\d+)x(\d+)$/);
-          if(m){
-            const cur=parseInt(m[1])+1,tot=parseInt(m[2]);
-            if(cur>tot)return null; // expired
-            return{...item,parc:`${cur}x${tot}`};
-          }
-        }
-        return item;
-      }).filter(Boolean);
-    });
+  // Replicar dados fixos do mês atual pro novo mês (parcelas avançam, pagamentos resetam)
+  S.moradia=(S.moradia||[]).map(function(i){return Object.assign({},i,{pago:false});});
+  S.pessoal=(S.pessoal||[]).map(function(i){return Object.assign({},i,{pago:false});});
+  S.cartaoPago={santander:false,carrefour:false};
+  // Avançar parcelas do cartão
+  function avancParc(items){
+    return (items||[]).map(function(it){
+      if(!it.parc||!it.parc.includes('x'))return it;
+      var parts=it.parc.split('x');
+      var cur=parseInt(parts[0]),tot=parseInt(parts[1]);
+      if(isNaN(cur)||isNaN(tot))return it;
+      cur++;
+      if(cur>tot)return null;
+      return Object.assign({},it,{parc:cur+'x'+tot});
+    }).filter(Boolean);
   }
-  // new month always starts with zero weekly data
+  S.cartao={
+    santander:avancParc(S.cartao&&S.cartao.santander),
+    carrefour:avancParc(S.cartao&&S.cartao.carrefour)
+  };
+  // Avançar parcelas reservasmes
+  S.reservasmes=(S.reservasmes||[]).map(function(i){
+    var it=Object.assign({},i,{pago:false});
+    if(it.parc&&it.parc.includes('x')){
+      var parts=it.parc.split('x');
+      var cur=parseInt(parts[0]),tot=parseInt(parts[1]);
+      if(!isNaN(cur)&&!isNaN(tot)){cur++;if(cur>tot)return null;it.parc=cur+'x'+tot;}
+    }
+    return it;
+  }).filter(Boolean);
+  // Limpar lançamentos semanais
   S.lancamentos=[];
+  // Ativar novo mês
   setStatus('open');
+  save();
   renderAll();
-  renderCycleBtn();
+  showToast('Mês iniciado! Dados de '+MNS[m-1]+' salvos como backup.');
 }
-
 
 function handleCycleBtn(){
   const st=getStatus();
