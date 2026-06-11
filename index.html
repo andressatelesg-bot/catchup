@@ -1010,14 +1010,6 @@ body{font-family:"Outfit",sans-serif;color:var(--ink);font-size:15px;line-height
   </div>
   <div style="padding:14px 16px">
     <div class="card" style="margin:0;overflow:hidden">
-      <!-- Botão Sincronizar -->
-      <div style="padding:0 0 12px">
-        <button onclick="forceSyncFirebase()" style="width:100%;padding:14px;border-radius:var(--r-sm);background:#111110;color:white;border:none;font-family:Outfit,sans-serif;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
-          Sincronizar agora
-        </button>
-        <div id="sync-status" style="text-align:center;font-size:12px;color:var(--ink3);margin-top:6px;min-height:16px"></div>
-      </div>
       <div onclick="goSub('sub-config-cart')" style="display:flex;align-items:center;gap:14px;padding:15px 18px;cursor:pointer;border-bottom:1px solid var(--line)"><div style="width:36px;height:36px;border-radius:var(--r-sm);background:#FDF2F8;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#BE185D" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div><div style="flex:1"><div style="font-size:14px;font-weight:600">Categorias do cartão</div><div style="font-size:12px;color:var(--ink3);margin-top:2px">Gerencie as categorias dos gastos</div></div><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink3)" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
       <div onclick="goSub('sub-config-sem')" style="display:flex;align-items:center;gap:14px;padding:15px 18px;cursor:pointer;border-bottom:1px solid var(--line)"><div style="width:36px;height:36px;border-radius:var(--r-sm);background:#F0FDF4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div style="flex:1"><div style="font-size:14px;font-weight:600">Categorias semanais</div><div style="font-size:12px;color:var(--ink3);margin-top:2px">Categorias e subcategorias de lançamentos</div></div><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink3)" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
       <div onclick="goSub('sub-config-res')" style="display:flex;align-items:center;gap:14px;padding:15px 18px;cursor:pointer;border-bottom:1px solid var(--line)"><div style="width:36px;height:36px;border-radius:var(--r-sm);background:#FFFBEB;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><div style="flex:1"><div style="font-size:14px;font-weight:600">Categorias de reservas</div><div style="font-size:12px;color:var(--ink3);margin-top:2px">Categorias de entrada e saída das caixinhas</div></div><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink3)" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
@@ -2406,11 +2398,15 @@ let _configCaixinhaEdit = null; // id da caixinha em edição inline
 
 function renderConfigCaixinhas(){
   const el=document.getElementById('config-caixinhas-list');if(!el)return;
+  const ativas=S.reservas.filter(r=>!r.arquivada);
+  const arquivadas=S.reservas.filter(r=>r.arquivada);
   if(!S.reservas||!S.reservas.length){
     el.innerHTML='<div class="empty" style="padding:24px"><div class="empty-t">Nenhuma caixinha criada</div></div>';
     return;
   }
-  el.innerHTML=S.reservas.map(function(r){
+  // ativas já declarado acima
+  
+  var html=ativas.map(function(r){
     if(r.id===_configCaixinhaEdit){
       return renderConfigCaixinhaEdit(r);
     }
@@ -2425,6 +2421,20 @@ function renderConfigCaixinhas(){
       '</div>'+
     '</div>';
   }).join('');
+  if(arquivadas.length){
+    html+='<div style="font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em;margin:16px 0 8px">Arquivadas</div>';
+    html+=arquivadas.map(function(r){
+      return '<div class="card" style="margin-bottom:8px;overflow:hidden;opacity:.6">'+
+        '<div style="display:flex;align-items:center;gap:12px;padding:12px 18px">'+
+          '<div style="font-size:22px;width:32px;text-align:center">'+(r.emoji||'💰')+'</div>'+
+          '<div style="flex:1"><div style="font-size:14px;font-weight:600;color:var(--ink)">'+r.nome+'</div>'+
+            '<div style="font-size:12px;color:var(--ink3)">Arquivada · Saldo: R$ '+r.saldo.toFixed(2)+'</div></div>'+
+          '<button onclick="arquivarCaixinha('+r.id+')" style="padding:6px 12px;border-radius:99px;border:1.5px solid #059669;background:none;color:#059669;font-size:12px;font-weight:600;cursor:pointer;font-family:Outfit,sans-serif">Restaurar</button>'+
+        '</div>'+
+      '</div>';
+    }).join('');
+  }
+  el.innerHTML=html;
 }
 
 function renderConfigCaixinhaEdit(r){
@@ -2446,7 +2456,10 @@ function renderConfigCaixinhaEdit(r){
       '<div id="emoji-picker-'+r.id+'" style="display:none">'+renderEmojiPicker(r.id)+'</div>'+
       '<div><label style="font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em;display:block;margin-bottom:4px">Saldo inicial (R$)</label>'+
         '<input class="finput" type="number" inputmode="decimal" style="padding:10px 12px;font-size:14px" value="'+r.saldo+'" data-id="'+r.id+'" oninput="configCaixinhaTmpSaldo(this)" placeholder="0,00"></div>'+
-      '<button data-id="'+r.id+'" onclick="configConfirmCaixinhaBtn(this)" style="width:100%;padding:11px;border-radius:var(--r-sm);background:var(--ink);color:white;border:none;font-family:Outfit,sans-serif;font-size:14px;font-weight:600;cursor:pointer">Confirmar</button>'+
+      '<div style="display:flex;gap:8px">'+
+        '<button data-id="'+r.id+'" onclick="arquivarCaixinha('+r.id+')" style="flex:1;padding:11px;border-radius:var(--r-sm);background:none;color:'+(r.arquivada?'#059669':'#6A6864')+';border:1.5px solid var(--bg3);font-family:Outfit,sans-serif;font-size:13px;font-weight:600;cursor:pointer">'+(r.arquivada?'Restaurar':'Arquivar')+'</button>'+
+        '<button data-id="'+r.id+'" onclick="configConfirmCaixinhaBtn(this)" style="flex:2;padding:11px;border-radius:var(--r-sm);background:var(--ink);color:white;border:none;font-family:Outfit,sans-serif;font-size:14px;font-weight:600;cursor:pointer">Confirmar</button>'+
+      '</div>'+
     '</div>'+
   '</div>';
 }
@@ -2531,6 +2544,15 @@ function configEditEmojiBtn(el){
   save();renderConfigCaixinhas();renderResHome();
 }
 function configEditEmoji(id){configEditEmojiBtn({dataset:{id:id}});}
+function arquivarCaixinha(id){
+  var r=S.reservas.find(function(x){return x.id===id;});
+  if(!r)return;
+  r.arquivada=!r.arquivada;
+  save();
+  renderConfigCaixinhas();
+  renderResHome();
+  showToast(r.arquivada?'Caixinha arquivada':'Caixinha restaurada');
+}
 function configAddCaixinha(){
   if(!S.reservas)S.reservas=[];
   var newId=nxId(S.reservas);
@@ -2786,6 +2808,9 @@ const cGC=(cat,sem)=>S.lancamentos.filter(l=>(l.mes||'2026-05')===curKey()&&l.ca
 // ── HOME TABS ──
 function goPage(page){
   closeAllModals();
+  // Fechar subpages abertas
+  document.querySelectorAll('.subpage.open').forEach(function(sp){sp.classList.remove('open');});
+  subStack=[];
   if(page==='mensal') page='mes';
   if(page==='semanal') page='semana';
   curHT=page;
@@ -2794,7 +2819,8 @@ function goPage(page){
     const e=document.getElementById('ht-'+t);
     if(e) e.style.display = t===page ? 'block' : 'none';
   });
-  document.getElementById('p-home').scrollTop=0;
+  const ph=document.getElementById('p-home');
+  if(ph)ph.scrollTop=0;
   renderTab(page);
 }
 function renderTab(tab){
@@ -4511,6 +4537,8 @@ function renderLancList(){
   if(_lancFiltroSems&&_lancFiltroSems.size)fl=fl.filter(l=>_lancFiltroSems.has(l.sem));
   if(_lancFiltroCats&&_lancFiltroCats.size)fl=fl.filter(l=>_lancFiltroCats.has(l.cat));
   if(_lancFiltroSubs&&_lancFiltroSubs.size)fl=fl.filter(l=>_lancFiltroSubs.has(l.sub));
+  // Filtrar pelo mês atual
+  const ck=curKey();fl=fl.filter(l=>!l.mes||l.mes===ck);
   // total
   const lTotal=fl.reduce((a,l)=>a+l.val,0);
   const ltEl=document.getElementById('lanc-total-lbl');
@@ -4518,7 +4546,7 @@ function renderLancList(){
   var delSelBtn=document.getElementById('lanc-del-sel-btn');
   if(delSelBtn)delSelBtn.style.display=(_lancSelectMode&&_lancSelected.size>0)?'flex':'none';
   if(!fl.length){el.innerHTML=`<div class="empty"><div class="empty-e">📝</div><div class="empty-t">Nenhum lançamento</div></div>`;return;}
-  el.innerHTML=fl.map(l=>{
+  el.innerHTML=fl.map((l,i)=>{
     if(l._editing){
       return renderLancInlineEdit(l);
     }
@@ -4648,7 +4676,10 @@ function confirmLancInline(id){
   const l=S.lancamentos.find(x=>x.id===id);if(!l)return;
   delete l._editing;
   if(document.activeElement&&document.activeElement.blur)document.activeElement.blur();
-  save();renderSemHome();if(curCatDet)renderScd(curCatDet);
+  save();
+  renderLancList();
+  renderSemHome();
+  if(curCatDet)renderScd(curCatDet);
 }
 function deletarLancInline(id){
   S.lancamentos=S.lancamentos.filter(x=>x.id!==id);
@@ -4686,7 +4717,8 @@ function renderResHome(){
   const sv=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
   sv('res-total',fmt(tot));sv('res-ent',fmt(ent));sv('res-sai',fmt(sai));
   const grid=document.getElementById('res-grid');
-  if(grid)grid.innerHTML=S.reservas.map(r=>{
+  const reservasAtivas=S.reservas.filter(function(r){return !r.arquivada;});
+  if(grid)grid.innerHTML=reservasAtivas.map(r=>{
     const mm=r.movs.filter(m=>m.mes===mes);
     const e=mm.filter(m=>m.tipo==='entrada').reduce((a,m)=>a+m.val,0),s=mm.filter(m=>m.tipo==='saida').reduce((a,m)=>a+m.val,0);
     const resSub=(e||s)?'<div class="res-sub">'+(e?'+'+fmt(e):'')+( s?' -'+fmt(s):'')+'</div>':'';
@@ -5554,7 +5586,14 @@ function lmShowFields(){
   if(res)res.style.display=isRes?'block':'none';
 }
 function setLT(t,el){
-  ltipo=t;document.querySelectorAll('.type-card').forEach(c=>c.classList.remove('on'));el.classList.add('on');
+  if(t==='ia'){
+    closeSheet('sh-lanc');
+    setTimeout(function(){openSheet('sh-ia');},150);
+    return;
+  }
+  ltipo=t;
+  document.querySelectorAll('.type-card').forEach(c=>c.classList.remove('on'));
+  if(el)el.classList.add('on');
   document.getElementById('lf-sem').style.display=t==='sem'?'block':'none';
   document.getElementById('lf-mes').style.display=t==='mes'?'block':'none';
 }
@@ -5628,12 +5667,12 @@ function salvarLanc(){
       S[tipo].push({id:nxId(S[tipo]),nome:desc,valor:val,pago:false,pedro,div});
     }
   }
-  save();showToast('Lançamento salvo ✓');closeSheet('sh-lanc');
-  // Se estamos na aba semanal, ir para lançamentos e re-renderizar
-  if(curHT==='semana'){
-    if(ltipo==='sem'){
-      setST('lancs',document.querySelector('#ht-semana .itab:nth-child(3)'));
-    }
+  save();
+  showToast('Lançamento salvo ✓');
+  closeSheet('sh-lanc');
+  if(curHT==='semana'&&ltipo==='sem'){
+    curST='lancs';
+    document.querySelectorAll('#ht-semana .itab').forEach(function(b,i){b.classList.toggle('on',i===2);});
   }
   renderAll();
 }
@@ -6043,7 +6082,7 @@ document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',e=>{
 function pChip(el,grp){el.closest('.chips').querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));el.classList.add('on');}
 function setNav(btn){document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));if(btn)btn.classList.add('on');}
 function setNavById(id){const b=document.getElementById(id);setNav(b);}
-function chMonth(dir){let{m,y}=S.month;m+=dir;if(m>12){m=1;y++;}if(m<1){m=12;y--;}S.month={m,y};save();updateMlbl();renderAll();}
+function chMonth(dir){let{m,y}=S.month;m+=dir;if(m>12){m=1;y++;}if(m<1){m=12;y--;}if(y<2026||(y===2026&&m<6))return;S.month={m,y};save();updateMlbl();renderAll();}
 function updateMlbl(){const el=document.getElementById('mlbl');if(el)el.textContent=`${MNS[S.month.m-1]} ${S.month.y}`;}
 
 // ════ MONTH CYCLE SYSTEM ════
