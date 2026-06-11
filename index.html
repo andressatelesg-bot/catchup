@@ -2642,6 +2642,33 @@ function importLancFile(input){
 function forceSyncFirebase(){
   var st=document.getElementById('sync-status');
   if(st)st.textContent='Sincronizando…';
+  showToast('Sincronizando e atualizando…');
+  // Limpar cache do Service Worker e recarregar com versão nova
+  if('serviceWorker' in navigator){
+    navigator.serviceWorker.getRegistrations().then(function(regs){
+      Promise.all(regs.map(function(r){return r.unregister();})).then(function(){
+        // Limpar todos os caches
+        caches.keys().then(function(keys){
+          Promise.all(keys.map(function(k){return caches.delete(k);})).then(function(){
+            // Salvar dados atuais no Firebase antes de recarregar
+            if(typeof fbUser!=='undefined'&&fbUser&&typeof fbDb!=='undefined'&&fbDb){
+              fbDb.collection('users').doc(fbUser.uid).set({
+                data:JSON.stringify(S),
+                ts:firebase.firestore.FieldValue.serverTimestamp()
+              }).then(function(){
+                window.location.reload(true);
+              }).catch(function(){
+                window.location.reload(true);
+              });
+            } else {
+              window.location.reload(true);
+            }
+          });
+        });
+      });
+    });
+    return;
+  }
   if(typeof fbUser==='undefined'||!fbUser){
     if(st)st.textContent='Não conectado ao Firebase.';
     return;
