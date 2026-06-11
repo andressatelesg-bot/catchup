@@ -2653,37 +2653,28 @@ function importLancFile(input){
 const APP_VERSION = "v52";
 
 function checkAppVersion(){
-  // Buscar o index.html do servidor e comparar versão
-  fetch('/index.html?nocache='+Date.now())
-    .then(function(r){return r.text();})
-    .then(function(html){
-      var m = html.match(/APP_VERSION\s*=\s*"(v\d+)"/);
-      if(!m) return;
-      var serverVersion = m[1];
-      var el = document.getElementById('app-version');
-      if(serverVersion !== APP_VERSION){
-        showToast('Nova versão disponível: '+serverVersion+' — atualizando…');
-        setTimeout(function(){
-          // Limpar cache e recarregar
-          if('serviceWorker' in navigator){
-            navigator.serviceWorker.getRegistrations().then(function(regs){
-              Promise.all(regs.map(function(r){return r.unregister();})).then(function(){
-                caches.keys().then(function(keys){
-                  Promise.all(keys.map(function(k){return caches.delete(k);})).then(function(){
-                    window.location.reload(true);
-                  });
-                });
-              });
+  showToast('Limpando cache e atualizando…');
+  // Salvar dados no Firebase antes de recarregar
+  var salvar = (typeof fbUser!=='undefined' && fbUser && typeof fbDb!=='undefined' && fbDb)
+    ? fbDb.collection('users').doc(fbUser.uid).set({data:JSON.stringify(S),ts:firebase.firestore.FieldValue.serverTimestamp()})
+    : Promise.resolve();
+  salvar.then(function(){
+    if('serviceWorker' in navigator){
+      navigator.serviceWorker.getRegistrations().then(function(regs){
+        Promise.all(regs.map(function(r){return r.unregister();})).then(function(){
+          caches.keys().then(function(keys){
+            Promise.all(keys.map(function(k){return caches.delete(k);})).then(function(){
+              window.location.reload(true);
             });
-          } else {
-            window.location.reload(true);
-          }
-        }, 1500);
-      } else {
-        showToast('Você já está na versão mais recente ('+APP_VERSION+') ✓');
-      }
-    })
-    .catch(function(){ showToast('Não foi possível verificar atualizações'); });
+          });
+        });
+      });
+    } else {
+      window.location.reload(true);
+    }
+  }).catch(function(){
+    window.location.reload(true);
+  });
 }
 
 function forceSyncFirebase(){
@@ -6267,21 +6258,10 @@ function applyMonthPicker(){
   save();closeMonthPicker();renderAll();renderCycleBtn();
 }
 
-// Mês inicial = Junho 2026, não permite voltar antes disso
-const _origChMonth = chMonth;
-window.chMonth = function(dir){
-  var cur = S.month;
-  var newM = cur.m + dir, newY = cur.y;
-  if(newM > 12){newM=1;newY++;}
-  if(newM < 1){newM=12;newY--;}
-  // Bloquear antes de Jun/2026
-  if(newY < 2026 || (newY===2026 && newM < 6)) return;
-  S.month={m:newM,y:newY};
-  save();updateMlbl();renderAll();
-};
-// Garantir mês inicial = Junho 2026
-if(!S.month || S.month.m < 6 || (S.month.m===6 && S.month.y<2026)){
-  S.month={m:6,y:2026};save();
+// chMonth já definida corretamente acima
+// Garantir mês mínimo = Junho 2026
+if(!S.month || S.month.y<2026 || (S.month.y===2026 && S.month.m<6)){
+  S.month={m:6,y:2026};
 }
 
 // ═══════════════════════════════════════════
