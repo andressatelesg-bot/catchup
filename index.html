@@ -1006,6 +1006,7 @@ body{font-family:"Outfit",sans-serif;color:var(--ink);font-size:15px;line-height
       <div style="font-size:13px;font-weight:600;color:#166534">Sincronização</div>
       <div style="font-size:12px;color:#166534;opacity:.7;margin-top:2px" id="sync-status-lbl">Dados salvos localmente e na nuvem</div>
     </div>
+    <button onclick="listarBackups()" style="display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:99px;border:none;background:#D97706;color:white;font-family:Outfit,sans-serif;font-size:13px;font-weight:600;cursor:pointer">🗂 Backups</button>
     <button onclick="checkAppVersion()" style="display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:99px;border:none;background:#2563EB;color:white;font-family:Outfit,sans-serif;font-size:13px;font-weight:600;cursor:pointer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg> Atualizar app</button>
     <button onclick="forceSyncNow()" style="display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:99px;border:none;background:#16A34A;color:white;font-family:Outfit,sans-serif;font-size:13px;font-weight:600;cursor:pointer" id="sync-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg> Sincronizar</button>
   </div>
@@ -1214,7 +1215,7 @@ body{font-family:"Outfit",sans-serif;color:var(--ink);font-size:15px;line-height
         <div class="chip" onclick="pChip(this,'lss')">Sem. 5</div>
       </div>
     </div>
-    <div class="fg"><label class="flbl">Valor (R$)</label><input class="finput" id="ls-val" type="number" inputmode="decimal" placeholder="0,00" onkeydown="if(event.key==='Enter'){event.preventDefault();salvarLanc();}"></div>
+    <div class="fg"><label class="flbl">Valor (R$)</label><input class="finput" id="ls-val" type="text" inputmode="decimal" placeholder="0,00 ou 87+6" onkeydown="if(event.key==='Enter'){event.preventDefault();salvarLanc();}"></div>
     <div class="fg"><label class="flbl">Descrição <span style="font-weight:400;color:var(--ink3)">(opcional)</span></label><input class="finput" id="ls-desc" type="text" placeholder="O que foi?"></div>
   </div>
 
@@ -1762,6 +1763,81 @@ document.addEventListener('DOMContentLoaded', function(){
   addLogoutButton();
 });
 
+
+// ═══════════════════════════════════════════
+// SISTEMA DE BACKUP ROBUSTO
+// ═══════════════════════════════════════════
+var _lastBackupTime = 0;
+var _backupMinInterval = 5 * 60 * 1000; // mínimo 5 min entre backups automáticos
+
+function saveBackup(label){
+  if(!fbUser||!fbDb) return;
+  var now = Date.now();
+  // Backup automático: no máximo a cada 5 minutos
+  // Backup manual (label definido): sempre salva
+  if(!label && (now - _lastBackupTime) < _backupMinInterval) return;
+  _lastBackupTime = now;
+  var ts = new Date().toISOString();
+  var key = label ? (label + '_' + ts) : ts;
+  fbDb.collection('users').doc(fbUser.uid)
+    .collection('backups').doc(key.replace(/[:.]/g,'_'))
+    .set({
+      data: JSON.stringify(S),
+      ts: ts,
+      label: label || 'auto',
+      mes: (S.month ? S.month.m + '/' + S.month.y : ''),
+      lancamentos: (S.lancamentos || []).length
+    }).catch(function(e){ console.log('backup erro:', e); });
+}
+
+function listarBackups(){
+  if(!fbUser||!fbDb){ console.log('Não autenticado'); return; }
+  fbDb.collection('users').doc(fbUser.uid)
+    .collection('backups')
+    .orderBy('ts','desc').limit(50)
+    .get().then(function(snap){
+      console.log('=== BACKUPS DISPONÍVEIS ===');
+      snap.docs.forEach(function(doc, i){
+        var d = doc.data();
+        console.log(i+':', d.ts, '| '+d.label+' | mês:'+d.mes+' | lançamentos:'+d.lancamentos, '| id:'+doc.id);
+      });
+    });
+}
+
+function restaurarBackup(docId){
+  if(!fbUser||!fbDb){ console.log('Não autenticado'); return; }
+  if(!confirm('Restaurar backup '+docId+'? Os dados atuais serão substituídos.')) return;
+  fbDb.collection('users').doc(fbUser.uid)
+    .collection('backups').doc(docId)
+    .get().then(function(doc){
+      if(!doc.exists){ console.log('Backup não encontrado'); return; }
+      var ns = JSON.parse(doc.data().data);
+      Object.keys(ns).forEach(function(k){ S[k]=ns[k]; });
+      localStorage.setItem(KEY, JSON.stringify(S));
+      fbDb.collection('users').doc(fbUser.uid).set({
+        data: JSON.stringify(S),
+        ts: firebase.firestore.FieldValue.serverTimestamp()
+      }).then(function(){
+        renderAll();
+        showToast('Backup restaurado! ✓');
+      });
+    });
+}
+
+// Limpar backups antigos (manter últimos 50)
+function limparBackupsAntigos(){
+  if(!fbUser||!fbDb) return;
+  fbDb.collection('users').doc(fbUser.uid)
+    .collection('backups')
+    .orderBy('ts','desc')
+    .get().then(function(snap){
+      var docs = snap.docs;
+      if(docs.length > 50){
+        docs.slice(50).forEach(function(doc){ doc.ref.delete(); });
+      }
+    });
+}
+
 const KEY='catchup_v1';
 const MNS=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
 const ICONS={Alimentação:'🛒',Transporte:'🚗',Variados:'🎨',Tecido:'🧵',Farmácia:'💊',Casa:'',Pets:'🐾',Pessoal:'',Saúde:'🏥',Eletrônicos:'💻',Roupas:'👗',Assinaturas:'📱',Pedro:'',Padaria:'🥐',Mercado:'🛒',iFood:'🍔',Uber:'🚕',Ônibus:'🚌',Restaurante:'🍽️'};
@@ -1944,6 +2020,7 @@ if(!S.reservasmes)S.reservasmes=[];
 
 const save=()=>{
   localStorage.setItem(KEY,JSON.stringify(S));
+  saveBackup(); // backup automático no Firebase
   // Backup diário no localStorage
   var today=new Date().toISOString().slice(0,10);
   var lastBackup=localStorage.getItem('catchup_backup_date');
@@ -2011,7 +2088,7 @@ function renderHomeNav(){
   const disp=Math.max(0,saldo-gt);
   const tot=S.reservas.reduce((a,r)=>a+r.saldo,0);
   const san=cCart('santander'),car=cCart('carrefour');
-  const pedro=cMor().ped+san.div/2+car.div/2+car.ind;
+  const pedro=cMor().ped+(san.div||0)/2+(car.div||0)/2+(san.ind||0)+(car.ind||0)+cRMPedro();
   const rec=cRec();
   const sv=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
   // Mensal card
@@ -4577,6 +4654,7 @@ function renderLancList(){
   if(_lancFiltroSubs&&_lancFiltroSubs.size)fl=fl.filter(l=>_lancFiltroSubs.has(l.sub));
   // Filtrar pelo mês atual
   const ck=curKey();fl=fl.filter(l=>!l.mes||l.mes===ck);
+  fl=[...fl].reverse(); // mais recentes primeiro
   // total
   const lTotal=fl.reduce((a,l)=>a+l.val,0);
   const ltEl=document.getElementById('lanc-total-lbl');
@@ -4672,7 +4750,7 @@ function renderLancInlineEdit(l){
     '<div><label style="font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em;display:block;margin-bottom:4px">Descrição</label>'+
       '<input class="finput" style="padding:10px 12px;font-size:14px" value="'+l.desc+'" data-id="'+l.id+'" oninput="lancTmpDescInput(this)"></div>'+
     '<div><label style="font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em;display:block;margin-bottom:4px">Valor (R$)</label>'+
-      '<input class="finput" type="number" inputmode="decimal" style="padding:10px 12px;font-size:14px" value="'+l.val+'" data-id="'+l.id+'" oninput="lancTmpValInput(this)"></div>'+
+      '<input class="finput" type="text" inputmode="decimal" style="padding:10px 12px;font-size:14px" value="'+(l.expr||l.val)+'" data-id="'+l.id+'" oninput="lancTmpValInput(this)"></div>'+
     '<div><label style="font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em;display:block;margin-bottom:4px">Semana</label>'+
       '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px">'+semChips+'</div></div>'+
     '<button data-id="'+l.id+'" onclick="confirmLancInlineBtn(this)" style="width:100%;padding:11px;border-radius:var(--r-sm);background:var(--ink);color:white;border:none;font-family:Outfit,sans-serif;font-size:14px;font-weight:600;cursor:pointer">Confirmar</button>'+
@@ -4680,7 +4758,12 @@ function renderLancInlineEdit(l){
 }
 // Handlers usando data-id para evitar aspas problemáticas
 function lancTmpDescInput(el){lancTmp(parseInt(el.dataset.id),'desc',el.value);}
-function lancTmpValInput(el){lancTmp(parseInt(el.dataset.id),'val',parseFloat(el.value)||0);}
+function lancTmpValInput(el){
+  var id=parseInt(el.dataset.id),raw=el.value||'0',val=0;
+  try{val=parseFloat(Function('return ('+raw.replace(/[^0-9+\-*/.()]/g,'')+')')()||0);}catch(e){val=parseFloat(raw)||0;}
+  lancTmp(id,'val',val);
+  lancTmp(id,'expr',raw);
+}
 function lancTmpCatSelect(el){
   var id=parseInt(el.dataset.id),cat=el.value;
   lancTmp(id,'cat',cat);lancTmp(id,'sub','');
@@ -4718,6 +4801,8 @@ function confirmLancInline(id){
   renderLancList();
   renderSemHome();
   if(curCatDet)renderScd(curCatDet);
+  // Re-render após delay para garantir que Firebase não sobrescreva
+  setTimeout(function(){renderLancList();},300);
 }
 function deletarLancInline(id){
   S.lancamentos=S.lancamentos.filter(x=>x.id!==id);
@@ -5553,6 +5638,8 @@ function initLanc(){
   if(subDisp){subDisp.textContent='Selecionar…';subDisp.style.color='var(--ink3)';}
   if(catHidden)catHidden.value='';
   if(subHidden)subHidden.value='';
+  var lsValEl=document.getElementById('ls-val');if(lsValEl){lsValEl.value='';lsValEl.type='text';}
+  var lsDescEl=document.getElementById('ls-desc');if(lsDescEl)lsDescEl.value='';
   const sel=document.getElementById('ls-cat');
   if(sel){/* hidden, valor gerenciado pelo picker */}
   // resetar lm-res
@@ -5635,13 +5722,15 @@ function openAnexo(data){
 
 function salvarLanc(){
   if(ltipo==='sem'){
-    const val=parseFloat(document.getElementById('ls-val').value)||0;
+    const rawVal=document.getElementById('ls-val').value||'0';
+    let val=0;try{val=parseFloat(Function('return ('+rawVal.replace(/[^0-9+\-*/.()]/g,'')+')')()||0);}catch(e){val=parseFloat(rawVal)||0;}
     const catEl=document.getElementById('ls-cat');const cat=catEl?catEl.value:'';
     const subEl=document.getElementById('ls-sub');const sub=subEl?subEl.value:'';
     const descEl=document.getElementById('ls-desc');const desc=(descEl&&descEl.value.trim())||cat;
     const semEl=document.querySelector('#ls-sem .chip.on'),sem=semEl?.textContent||'Sem. 1';
     if(!val||!cat){alert('Informe categoria e valor.');return;}
-    S.lancamentos.push({id:nxId(S.lancamentos),desc,cat,sub,sem,val,mes:curKey(),anexo:_lancAnexo||null});
+    const rawValFinal=document.getElementById('ls-val')?document.getElementById('ls-val').value:'';
+    S.lancamentos.push({id:nxId(S.lancamentos),desc,cat,sub,sem,val,expr:rawValFinal,mes:curKey(),anexo:_lancAnexo||null});
     _lancAnexo=null;
   }else{
     const onde=document.querySelector('#lm-onde .chip.on')?.textContent||'Moradia';
@@ -6153,6 +6242,8 @@ function iniciarMes(){
     }
     return it;
   }).filter(Boolean);
+  // Backup ANTES de limpar lançamentos
+  saveBackup('pre_mes_'+MNS[m-1]+'_'+y);
   // Limpar lançamentos semanais
   S.lancamentos=[];
   // Ativar novo mês
