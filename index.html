@@ -4810,18 +4810,98 @@ function deletarLancInline(id){
 }
 function openEL(id){
   const l=S.lancamentos.find(x=>x.id===id);if(!l)return;
-  document.getElementById('el-id').value=id;document.getElementById('el-desc').value=l.desc;document.getElementById('el-val').value=l.val;
-  const sel=document.getElementById('el-cat');sel.innerHTML=Object.keys(S.cats.semana).map(c=>`<option ${c===l.cat?'selected':''}>${c}</option>`).join('');
-  updSub(l.cat,'el-sub',l.sub);
+  document.getElementById('el-id').value=id;
+  document.getElementById('el-desc').value=l.desc;
+  document.getElementById('el-val').value=l.expr||l.val;
+  // Popular categoria
+  document.getElementById('el-cat').value=l.cat||'';
+  var catDisp=document.getElementById('el-cat-display');
+  if(catDisp){catDisp.textContent=l.cat||'Selecionar…';catDisp.style.color=l.cat?'var(--ink)':'var(--ink3)';}
+  var catIcon=document.getElementById('el-cat-icon');
+  if(catIcon&&l.cat){var cor=semCatCor?semCatCor(l.cat):'#888';catIcon.style.background=cor+'22';catIcon.innerHTML='<div style="width:10px;height:10px;border-radius:50%;background:'+cor+'"></div>';}
+  // Popular subcategoria
+  document.getElementById('el-sub').value=l.sub||'';
+  var subDisp=document.getElementById('el-sub-display');
+  if(subDisp){subDisp.textContent=l.sub||'Sem subcategoria';subDisp.style.color=l.sub?'var(--ink)':'var(--ink3)';}
+  // Semana
   document.querySelectorAll('#el-sem .chip').forEach(c=>c.classList.toggle('on',c.textContent===l.sem));
   openSheet('sh-el');
 }
+
+function openElCatPicker(){
+  var current=document.getElementById('el-cat').value||'';
+  var cats=Object.keys(S.cats.semana);
+  var list=document.getElementById('cat-sheet-list');
+  if(!list)return;
+  list.innerHTML=cats.map(function(cat){
+    var cor=semCatCor?semCatCor(cat):'#888';
+    var isA=cat===current;
+    return '<div onclick="pickElCat(\''+cat+'\')" style="display:flex;align-items:center;gap:14px;padding:14px 20px;cursor:pointer;border-bottom:1px solid var(--line)">'+
+      '<div style="width:32px;height:32px;border-radius:8px;background:'+cor+'22;display:flex;align-items:center;justify-content:center"><div style="width:10px;height:10px;border-radius:50%;background:'+cor+'"></div></div>'+
+      '<span style="font-size:15px;font-weight:'+(isA?'700':'400')+';flex:1;color:var(--ink)">'+cat+'</span>'+
+      (isA?'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ok)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>':'')+
+    '</div>';
+  }).join('');
+  var titleEl=document.querySelector('#cat-sheet > div > span');
+  if(titleEl)titleEl.textContent='Categoria';
+  var mb=document.getElementById('cat-sheet-manage-btn');
+  if(mb)mb.onclick=function(){closeCatSheet();goToSemConfig();};
+  document.getElementById('cat-sheet-ov').style.display='block';
+  document.getElementById('cat-sheet').style.transform='translateX(0)';
+}
+function pickElCat(cat){
+  document.getElementById('el-cat').value=cat;
+  var disp=document.getElementById('el-cat-display');
+  if(disp){disp.textContent=cat;disp.style.color='var(--ink)';}
+  var icon=document.getElementById('el-cat-icon');
+  if(icon){var cor=semCatCor?semCatCor(cat):'#888';icon.style.background=cor+'22';icon.innerHTML='<div style="width:10px;height:10px;border-radius:50%;background:'+cor+'"></div>';}
+  // resetar sub
+  document.getElementById('el-sub').value='';
+  var subDisp=document.getElementById('el-sub-display');
+  if(subDisp){subDisp.textContent='Selecionar…';subDisp.style.color='var(--ink3)';}
+  closeCatSheet();
+}
+function openElSubPicker(){
+  var cat=document.getElementById('el-cat').value;
+  if(!cat){showToast('Selecione a categoria primeiro');return;}
+  var current=document.getElementById('el-sub').value||'';
+  var subs=S.cats.semana[cat]||[];
+  var list=document.getElementById('cat-sheet-list');
+  if(!list)return;
+  list.innerHTML=['<div onclick="pickElSub(\'\')" style="display:flex;align-items:center;gap:14px;padding:14px 20px;cursor:pointer;border-bottom:1px solid var(--line)"><span style="font-size:15px;color:var(--ink3)">Sem subcategoria</span></div>']
+    .concat(subs.map(function(s){
+      var isA=s===current;
+      return '<div onclick="pickElSub(\''+s+'\')" style="display:flex;align-items:center;gap:14px;padding:14px 20px;cursor:pointer;border-bottom:1px solid var(--line)">'+
+        '<span style="font-size:15px;font-weight:'+(isA?'700':'400')+';flex:1;color:var(--ink)">'+s+'</span>'+
+        (isA?'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ok)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>':'')+
+      '</div>';
+    })).join('');
+  var titleEl=document.querySelector('#cat-sheet > div > span');
+  if(titleEl)titleEl.textContent='Subcategoria';
+  var mb=document.getElementById('cat-sheet-manage-btn');
+  if(mb)mb.onclick=function(){closeCatSheet();goToSemConfig();};
+  document.getElementById('cat-sheet-ov').style.display='block';
+  document.getElementById('cat-sheet').style.transform='translateX(0)';
+}
+function pickElSub(sub){
+  document.getElementById('el-sub').value=sub;
+  var disp=document.getElementById('el-sub-display');
+  if(disp){disp.textContent=sub||'Sem subcategoria';disp.style.color=sub?'var(--ink)':'var(--ink3)';}
+  closeCatSheet();
+}
 function salvarEL(){
   const id=parseInt(document.getElementById('el-id').value),l=S.lancamentos.find(x=>x.id===id);if(!l)return;
-  l.desc=document.getElementById('el-desc').value;l.val=parseFloat(document.getElementById('el-val').value)||0;
-  l.cat=document.getElementById('el-cat').value;l.sub=document.getElementById('el-sub').value;
+  l.desc=document.getElementById('el-desc').value;
+  var rawVal=document.getElementById('el-val').value||'0';
+  var val=0;try{val=parseFloat(Function('return ('+rawVal.replace(/[^0-9+\-*/.()]/g,'')+')')()||0);}catch(e){val=parseFloat(rawVal)||0;}
+  l.val=val;l.expr=rawVal;
+  l.cat=document.getElementById('el-cat').value;
+  l.sub=document.getElementById('el-sub').value;
   const sc=document.querySelector('#el-sem .chip.on');if(sc)l.sem=sc.textContent;
-  save();closeSheet('sh-el');renderSemHome();if(curCatDet)openCatDet(curCatDet);
+  save();closeSheet('sh-el');
+  renderLancList();renderSemHome();
+  setTimeout(function(){renderLancList();},300);
+  if(curCatDet)openCatDet(curCatDet);
 }
 function deletarEL(){if(!confirm('Remover?'))return;const id=parseInt(document.getElementById('el-id').value);S.lancamentos=S.lancamentos.filter(x=>x.id!==id);save();closeSheet('sh-el');renderSemHome();}
 
