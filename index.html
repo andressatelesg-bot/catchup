@@ -4654,7 +4654,7 @@ function renderLancList(){
   if(_lancFiltroSubs&&_lancFiltroSubs.size)fl=fl.filter(l=>_lancFiltroSubs.has(l.sub));
   // Filtrar pelo mês atual
   const ck=curKey();fl=fl.filter(l=>!l.mes||l.mes===ck);
-  fl=[...fl].reverse(); // mais recentes primeiro
+  fl=[...fl].sort(function(a,b){return b.id-a.id;}); // mais recentes primeiro
   // total
   const lTotal=fl.reduce((a,l)=>a+l.val,0);
   const ltEl=document.getElementById('lanc-total-lbl');
