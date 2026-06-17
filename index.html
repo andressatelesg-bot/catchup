@@ -6260,7 +6260,60 @@ document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',e=>{
 function pChip(el,grp){el.closest('.chips').querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));el.classList.add('on');}
 function setNav(btn){document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));if(btn)btn.classList.add('on');}
 function setNavById(id){const b=document.getElementById(id);setNav(b);}
-function chMonth(dir){let{m,y}=S.month;m+=dir;if(m>12){m=1;y++;}if(m<1){m=12;y--;}if(y<2026||(y===2026&&m<6))return;S.month={m,y};save();updateMlbl();renderAll();}
+
+// ═══════════════════════════════════════════
+// DADOS POR MÊS — cada mês tem seus próprios dados isolados
+// ═══════════════════════════════════════════
+const MONTH_FIELDS = ['moradia','pessoal','cartao','cartaoPago','reservasmes','receita','lancamentos'];
+
+function saveMonthData(key){
+  // Salva snapshot dos dados mensais no monthData[key]
+  if(!S.monthData)S.monthData={};
+  var snap={};
+  MONTH_FIELDS.forEach(function(f){ if(S[f]!==undefined) snap[f]=JSON.parse(JSON.stringify(S[f])); });
+  S.monthData[key]=snap;
+}
+
+function loadMonthData(key){
+  // Carrega dados do mês key para S, ou mantém os atuais se não tiver snap
+  if(!S.monthData||!S.monthData[key]) return false;
+  var snap=S.monthData[key];
+  MONTH_FIELDS.forEach(function(f){ if(snap[f]!==undefined) S[f]=JSON.parse(JSON.stringify(snap[f])); });
+  return true;
+}
+
+function switchMonth(newM, newY){
+  // 1. Salvar mês atual
+  var oldKey=curKey();
+  saveMonthData(oldKey);
+  // 2. Mudar mês
+  S.month={m:newM,y:newY};
+  var newKey=mKey(newM,newY);
+  // 3. Carregar dados do novo mês (se existir)
+  if(!loadMonthData(newKey)){
+    // Novo mês sem dados — inicializar com os dados atuais como base
+    // (parcelas avançadas, pagamentos resetados)
+    S.moradia=(S.moradia||[]).map(function(i){return Object.assign({},i,{pago:false});});
+    S.pessoal=(S.pessoal||[]).map(function(i){return Object.assign({},i,{pago:false});});
+    S.cartaoPago={santander:false,carrefour:false};
+    S.reservasmes=(S.reservasmes||[]).map(function(i){return Object.assign({},i,{pago:false});});
+    S.lancamentos=[];
+    // Salvar esse estado inicial
+    saveMonthData(newKey);
+  }
+  save();
+  updateMlbl();
+  renderAll();
+}
+
+function chMonth(dir){
+  let{m,y}=S.month;
+  m+=dir;
+  if(m>12){m=1;y++;}
+  if(m<1){m=12;y--;}
+  if(y<2026||(y===2026&&m<6))return;
+  switchMonth(m,y);
+}
 function updateMlbl(){const el=document.getElementById('mlbl');if(el)el.textContent=`${MNS[S.month.m-1]} ${S.month.y}`;}
 
 // ════ MONTH CYCLE SYSTEM ════
@@ -6322,6 +6375,8 @@ function iniciarMes(){
     }
     return it;
   }).filter(Boolean);
+  // Salvar snapshot do mês atual em monthData
+  saveMonthData(curK);
   // Backup ANTES de limpar lançamentos
   saveBackup('pre_mes_'+MNS[m-1]+'_'+y);
   // Limpar lançamentos semanais
