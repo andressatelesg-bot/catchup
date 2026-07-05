@@ -1693,15 +1693,17 @@ function startFirebaseSync(){
   var docRef = fbDb.collection('users').doc(fbUser.uid);
   var _lastRemoteTs = null;
   var _localTs = Date.now();
+  var _lastSavedTs = 0; // timestamp do último save que fizemos
 
   fbUnsub = docRef.onSnapshot(function(snap){
     if(!snap.exists){
       // Primeira vez: enviar dados locais
-      _localTs = Date.now();
+      _lastSavedTs = Date.now();
+      _localTs = _lastSavedTs;
       docRef.set({
         data: JSON.stringify(S),
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-        deviceTs: _localTs
+        deviceTs: _lastSavedTs
       });
       return;
     }
@@ -1709,9 +1711,9 @@ function startFirebaseSync(){
     var remote = snap.data();
     if(!remote || !remote.data) return;
 
-    // Verificar se o dado remoto é mais recente que o local
     var remoteDeviceTs = remote.deviceTs || 0;
-    if(remoteDeviceTs <= _localTs) return; // dado local é mais recente, ignorar
+    // Ignorar se é o nosso próprio save ou dado mais antigo
+    if(remoteDeviceTs <= _lastSavedTs) return;
 
     try{
       var ns = JSON.parse(remote.data);
@@ -2072,6 +2074,7 @@ const save=()=>{
   if(typeof fbUser!=='undefined' && fbUser && typeof fbDb!=='undefined' && fbDb){
     try{
       var _ts = Date.now();
+      if(typeof _lastSavedTs !== 'undefined') _lastSavedTs = _ts;
       fbDb.collection('users').doc(fbUser.uid).set({
         data: JSON.stringify(S),
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
@@ -5333,9 +5336,11 @@ function openResMovEdit(el){
   var rid=parseInt(el.dataset.rid),idx=parseInt(el.dataset.idx);
   var r=S.reservas.find(function(x){return x.id===rid;});
   if(!r||!r.movs[idx])return;
-  _resEditRid=rid; _resEditIdx=idx; _resEditCtx='caixinha';
-  fillResEditSheet(r.movs[idx]);
-  openSheet('sh-res-edit');
+  // Fechar qualquer edição aberta
+  r.movs.forEach(function(m){delete m._editing;});
+  // Abrir edição inline
+  r.movs[idx]._editing=true;
+  renderResSubpage();
 }
 var _resEditRid=null,_resEditIdx=-1,_resEditCtx='caixinha';
 function fillResEditSheet(m){
