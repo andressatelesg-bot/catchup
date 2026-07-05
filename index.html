@@ -1424,8 +1424,28 @@ body{font-family:"Outfit",sans-serif;color:var(--ink);font-size:15px;line-height
         <button onclick="confirmResDetSaldo()" style="padding:9px 16px;border-radius:var(--r-sm);background:var(--ink);color:white;border:none;font-family:Outfit,sans-serif;font-size:14px;font-weight:600;cursor:pointer">OK</button>
       </div>
       <div style="display:flex;justify-content:space-between;margin-top:12px;padding-top:12px;border-top:1px solid #D9770625">
-        <div><div style="font-size:10px;font-weight:600;color:#D97706;opacity:.7;text-transform:uppercase;letter-spacing:.07em;margin-bottom:3px">Entradas</div><div style="font-size:14px;font-weight:700;color:#D97706" id="res-det-ent">—</div></div>
-        <div style="text-align:right"><div style="font-size:10px;font-weight:600;color:#D97706;opacity:.7;text-transform:uppercase;letter-spacing:.07em;margin-bottom:3px">Saídas</div><div style="font-size:14px;font-weight:700;color:var(--danger)" id="res-det-sai">—</div></div>
+        <div>
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px">
+            <div style="font-size:10px;font-weight:600;color:#D97706;opacity:.7;text-transform:uppercase;letter-spacing:.07em">Entradas</div>
+            <button onclick="editResDetEnt()" style="font-size:10px;font-weight:600;color:#D97706;border:none;background:none;cursor:pointer;font-family:Outfit,sans-serif;opacity:.7">Editar</button>
+          </div>
+          <div id="res-det-ent-view" style="font-size:14px;font-weight:700;color:#D97706">—</div>
+          <div id="res-det-ent-edit" style="display:none;gap:6px;margin-top:4px">
+            <input class="finput" id="res-det-ent-input" type="number" inputmode="decimal" style="width:90px;padding:6px 8px;font-size:13px;font-weight:700">
+            <button onclick="confirmResDetEnt()" style="padding:6px 10px;border-radius:var(--r-sm);background:#D97706;color:white;border:none;font-family:Outfit,sans-serif;font-size:12px;font-weight:600;cursor:pointer">OK</button>
+          </div>
+        </div>
+        <div style="text-align:right">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;justify-content:flex-end">
+            <button onclick="editResDetSai()" style="font-size:10px;font-weight:600;color:var(--danger);border:none;background:none;cursor:pointer;font-family:Outfit,sans-serif;opacity:.7">Editar</button>
+            <div style="font-size:10px;font-weight:600;color:var(--danger);opacity:.7;text-transform:uppercase;letter-spacing:.07em">Saídas</div>
+          </div>
+          <div id="res-det-sai-view" style="font-size:14px;font-weight:700;color:var(--danger)">—</div>
+          <div id="res-det-sai-edit" style="display:none;gap:6px;margin-top:4px;justify-content:flex-end">
+            <input class="finput" id="res-det-sai-input" type="number" inputmode="decimal" style="width:90px;padding:6px 8px;font-size:13px;font-weight:700">
+            <button onclick="confirmResDetSai()" style="padding:6px 10px;border-radius:var(--r-sm);background:var(--danger);color:white;border:none;font-family:Outfit,sans-serif;font-size:12px;font-weight:600;cursor:pointer">OK</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -5488,6 +5508,56 @@ function setResDetFiltro(tipo){
   else if(tipo==='proprio'||tipo==='pedro_div'||tipo==='pedro_ind')setResDetFiltroDivisao(tipo);
   else if(tipo==='mes')setResDetFiltroMes('mes');
 }
+
+function editResDetEnt(){
+  var r=S.reservas.find(function(x){return x.id===_curResId;});if(!r)return;
+  var ent=r.movs.filter(function(m){return m.tipo==='entrada';}).reduce(function(a,m){return a+m.val;},0);
+  var inp=document.getElementById('res-det-ent-input');
+  if(inp)inp.value=ent;
+  var view=document.getElementById('res-det-ent-view');
+  var edit=document.getElementById('res-det-ent-edit');
+  if(view)view.style.display='none';
+  if(edit)edit.style.display='flex';
+  if(inp)inp.focus();
+}
+function confirmResDetEnt(){
+  var r=S.reservas.find(function(x){return x.id===_curResId;});if(!r)return;
+  var inp=document.getElementById('res-det-ent-input');
+  var novoTotal=parseFloat(inp?inp.value:0)||0;
+  var atualTotal=r.movs.filter(function(m){return m.tipo==='entrada';}).reduce(function(a,m){return a+m.val;},0);
+  var diff=novoTotal-atualTotal;
+  // Ajustar saldo
+  r.saldo+=diff;
+  // Adicionar movimentação de ajuste se houver diferença
+  if(Math.abs(diff)>0.001){
+    r.movs.push({tipo:diff>0?'entrada':'saida',val:Math.abs(diff),desc:'Ajuste manual',cat:'Ajuste',mes:MNS[S.month.m-1].slice(0,3)+'/'+String(S.month.y).slice(2)});
+  }
+  save();renderResSubpage();showToast('Entradas atualizadas ✓');
+}
+function editResDetSai(){
+  var r=S.reservas.find(function(x){return x.id===_curResId;});if(!r)return;
+  var sai=r.movs.filter(function(m){return m.tipo==='saida';}).reduce(function(a,m){return a+m.val;},0);
+  var inp=document.getElementById('res-det-sai-input');
+  if(inp)inp.value=sai;
+  var view=document.getElementById('res-det-sai-view');
+  var edit=document.getElementById('res-det-sai-edit');
+  if(view)view.style.display='none';
+  if(edit)edit.style.display='flex';
+  if(inp)inp.focus();
+}
+function confirmResDetSai(){
+  var r=S.reservas.find(function(x){return x.id===_curResId;});if(!r)return;
+  var inp=document.getElementById('res-det-sai-input');
+  var novoTotal=parseFloat(inp?inp.value:0)||0;
+  var atualTotal=r.movs.filter(function(m){return m.tipo==='saida';}).reduce(function(a,m){return a+m.val;},0);
+  var diff=novoTotal-atualTotal;
+  // Ajustar saldo
+  r.saldo-=diff;
+  if(Math.abs(diff)>0.001){
+    r.movs.push({tipo:diff>0?'saida':'entrada',val:Math.abs(diff),desc:'Ajuste manual',cat:'Ajuste',mes:MNS[S.month.m-1].slice(0,3)+'/'+String(S.month.y).slice(2)});
+  }
+  save();renderResSubpage();showToast('Saídas atualizadas ✓');
+}
 function editResDetSaldo(){
   var r=S.reservas.find(function(x){return x.id===_curResId;});if(!r)return;
   var inp=document.getElementById('res-saldo-input');
@@ -5547,7 +5617,11 @@ function renderResSubpage(){
   // entradas e saídas totais
   const ent=r.movs.filter(m=>m.tipo==='entrada').reduce((a,m)=>a+m.val,0);
   const sai=r.movs.filter(m=>m.tipo==='saida').reduce((a,m)=>a+m.val,0);
-  sv('res-det-ent',fmt(ent));sv('res-det-sai',fmt(sai));
+  var entView=document.getElementById('res-det-ent-view');if(entView)entView.textContent=fmt(ent);
+  var saiView=document.getElementById('res-det-sai-view');if(saiView)saiView.textContent=fmt(sai);
+  // Fechar edições inline de ent/sai
+  ['res-det-ent-edit','res-det-sai-edit'].forEach(function(id){var e=document.getElementById(id);if(e)e.style.display='none';});
+  ['res-det-ent-view','res-det-sai-view'].forEach(function(id){var e=document.getElementById(id);if(e)e.style.display='';});
   // filtrar movs
   let movs=r.movs;
   const curMes=MNS[S.month.m-1].slice(0,3)+'/'+String(S.month.y).slice(2);
