@@ -641,8 +641,8 @@ body{font-family:"Outfit",sans-serif;color:var(--ink);font-size:15px;line-height
           <div id="metas-sem-list"></div>
         </div>
         <div id="st-lancs" style="display:none">
-          <!-- botão filtro avançado + total -->
-          <div style="display:flex;align-items:center;justify-content:space-between;padding:0 16px 8px">
+          <!-- linha superior: total + botões -->
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 16px;border-bottom:1px solid var(--line)">
             <span id="lanc-total-lbl" style="font-size:13px;font-weight:600;color:var(--ink2)"></span>
             <div style="display:flex;gap:6px">
               <button onclick="toggleLancSelectMode()" id="lanc-select-btn" style="display:flex;align-items:center;justify-content:center;border:none;background:var(--bg2);color:var(--ink2);cursor:pointer;width:30px;height:30px;border-radius:50%;flex-shrink:0"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></button>
@@ -1014,7 +1014,7 @@ body{font-family:"Outfit",sans-serif;color:var(--ink);font-size:15px;line-height
       <div style="font-size:12px;color:#166534;opacity:.7;margin-top:2px" id="sync-status-lbl">Dados salvos localmente e na nuvem</div>
     </div>
     <button onclick="listarBackups()" style="display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:99px;border:none;background:#D97706;color:white;font-family:Outfit,sans-serif;font-size:13px;font-weight:600;cursor:pointer">🗂 Backups</button>
-    <button onclick="checkAppVersion()" style="display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:99px;border:none;background:#2563EB;color:white;font-family:Outfit,sans-serif;font-size:13px;font-weight:600;cursor:pointer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg> Atualizar app</button>
+    <button onclick="checkAppVersion()" style="display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:99px;border:none;background:#2563EB;color:white;font-family:Outfit,sans-serif;font-size:13px;font-weight:600;cursor:pointer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg> Verificar nova versão</button>
     <button onclick="forceSyncNow()" style="display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:99px;border:none;background:#16A34A;color:white;font-family:Outfit,sans-serif;font-size:13px;font-weight:600;cursor:pointer" id="sync-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg> Sincronizar</button>
   </div>
   <div style="padding:14px 16px">
@@ -1708,18 +1708,16 @@ fbAuth.onAuthStateChanged(function(user){
 });
 
 // ── Sync Firestore ──
+// Timestamp global do último save — usado para evitar loop de sync
+var _lastSavedTs = 0;
+
 function startFirebaseSync(){
   if(!fbUser||!fbDb) return;
   var docRef = fbDb.collection('users').doc(fbUser.uid);
-  var _lastRemoteTs = null;
-  var _localTs = Date.now();
-  var _lastSavedTs = 0; // timestamp do último save que fizemos
 
   fbUnsub = docRef.onSnapshot(function(snap){
     if(!snap.exists){
-      // Primeira vez: enviar dados locais
       _lastSavedTs = Date.now();
-      _localTs = _lastSavedTs;
       docRef.set({
         data: JSON.stringify(S),
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
@@ -1731,33 +1729,34 @@ function startFirebaseSync(){
     var remote = snap.data();
     if(!remote || !remote.data) return;
 
-    var remoteDeviceTs = remote.deviceTs || 0;
-    // Ignorar se é o nosso próprio save ou dado mais antigo
-    if(remoteDeviceTs <= _lastSavedTs) return;
+    var remoteTs = remote.deviceTs || 0;
+
+    // Ignorar APENAS o próprio save (evitar loop)
+    if(remoteTs > 0 && remoteTs === _lastSavedTs) return;
+    // Aceitar qualquer outro snapshot (de outro dispositivo)
 
     try{
       var ns = JSON.parse(remote.data);
+      if(!ns) return;
 
       // Garantir campos essenciais
       if(!ns.monthStatus) ns.monthStatus = {};
-      if(!ns.monthStatus['2026-06']) ns.monthStatus['2026-06'] = 'open';
       if(!ns.reservas) ns.reservas = S.reservas || [];
       ns.reservas.forEach(function(r){ if(!r.movs) r.movs = []; });
       if(!ns.cartao) ns.cartao = {santander:[], carrefour:[]};
 
-      // Preservar mês atual de navegação do usuário
+      // Preservar mês de navegação atual
       var savedMonth = S.month;
       Object.keys(ns).forEach(function(k){ S[k] = ns[k]; });
       S.month = savedMonth;
 
       localStorage.setItem(KEY, JSON.stringify(S));
-      _lastRemoteTs = remoteDeviceTs;
       renderAll();
-      console.log('Sync recebido do Firebase ✓');
+      console.log('Sync recebido ✓ ts:', remoteTs);
     }catch(e){ console.log('sync erro:', e); }
 
   }, function(err){
-    console.log('Firestore listener erro:', err);
+    console.log('Firestore sync erro:', err);
   });
 }
 function patchSaveForFirebase(){/* integrado na save() */}
@@ -2093,16 +2092,15 @@ const save=()=>{
   // Sync Firebase em background
   if(typeof fbUser!=='undefined' && fbUser && typeof fbDb!=='undefined' && fbDb){
     try{
-      var _ts = Date.now();
-      if(typeof _lastSavedTs !== 'undefined') _lastSavedTs = _ts;
+      _lastSavedTs = Date.now();
       fbDb.collection('users').doc(fbUser.uid).set({
         data: JSON.stringify(S),
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-        deviceTs: _ts
+        deviceTs: _lastSavedTs
       }).then(function(){
-        console.log('Salvo no Firebase ✓');
+        console.log('Salvo ✓');
       }).catch(function(e){
-        console.log('Erro ao salvar no Firebase:', e);
+        console.log('Erro Firebase:', e);
       });
     }catch(e){}
   }
@@ -2785,10 +2783,16 @@ function importLancFile(input){
 const APP_VERSION = "v52";
 
 function checkAppVersion(){
-  showToast('Limpando cache e atualizando…');
-  // Salvar dados no Firebase antes de recarregar
+  // 1. Salvar TODOS os dados no Firebase primeiro
+  showToast('Salvando dados antes de atualizar…');
+  // Salvar dados atuais com timestamp antes de recarregar
+  _lastSavedTs = Date.now();
   var salvar = (typeof fbUser!=='undefined' && fbUser && typeof fbDb!=='undefined' && fbDb)
-    ? fbDb.collection('users').doc(fbUser.uid).set({data:JSON.stringify(S),ts:firebase.firestore.FieldValue.serverTimestamp()})
+    ? fbDb.collection('users').doc(fbUser.uid).set({
+        data:JSON.stringify(S),
+        updatedAt:firebase.firestore.FieldValue.serverTimestamp(),
+        deviceTs:_lastSavedTs
+      })
     : Promise.resolve();
   salvar.then(function(){
     if('serviceWorker' in navigator){
@@ -4290,7 +4294,8 @@ function setST(tab,btn){
   // fechar edições inline ao trocar de aba
   if(typeof S!=='undefined'&&S.lancamentos)S.lancamentos.forEach(function(l){delete l._editing;});
   curST=tab;
-  ['cats','metas','lancs'].forEach(t=>{const e=document.getElementById('st-'+t);if(e)e.style.display=t===tab?'block':'none';});
+  ['cats','metas','lancs'].forEach(t=>{const e=document.getElementById('st-'+t);if(e)e.style.display=t===tab?(t==='lancs'?'flex':'block'):'none';});
+  if(tab==='lancs'){var sl=document.getElementById('st-lancs');if(sl){sl.style.flexDirection='column';}}
   document.querySelectorAll('#ht-semana .itab').forEach(b=>b.classList.remove('on'));
   if(btn)btn.classList.add('on');
   renderSemHome();
@@ -4825,7 +4830,7 @@ function renderLancInlineEdit(l){
 // Handlers usando data-id para evitar aspas problemáticas
 function lancTmpDescInput(el){lancTmp(parseInt(el.dataset.id),'desc',el.value);}
 function lancTmpValInput(el){
-  var id=parseInt(el.dataset.id),raw=el.value||'0',val=0;
+  var id=parseInt(el.dataset.id),raw=(el.value||'0').replace(',','.'),val=0;
   try{val=parseFloat(Function('return ('+raw.replace(/[^0-9+\-*/.()]/g,'')+')')()||0);}catch(e){val=parseFloat(raw)||0;}
   lancTmp(id,'val',val);
   lancTmp(id,'expr',raw);
@@ -5924,8 +5929,14 @@ function openAnexo(data){
 
 function salvarLanc(){
   if(ltipo==='sem'){
-    const rawVal=document.getElementById('ls-val').value||'0';
-    let val=0;try{val=parseFloat(Function('return ('+rawVal.replace(/[^0-9+\-*/.()]/g,'')+')')()||0);}catch(e){val=parseFloat(rawVal)||0;}
+    const rawVal=(document.getElementById('ls-val').value||'0');
+    let val=0;
+    try{
+      var rawNorm=rawVal.replace(/,/g,'.');
+      var rawSafe=rawNorm.replace(/[^0-9+\-*/.()]/g,'');
+      if(rawSafe) val=parseFloat(Function('return ('+rawSafe+')')()||0);
+      if(isNaN(val))val=0;
+    }catch(e){val=parseFloat(rawVal.replace(',','.'))||0;}
     const catEl=document.getElementById('ls-cat');const cat=catEl?catEl.value:'';
     const subEl=document.getElementById('ls-sub');const sub=subEl?subEl.value:'';
     const descEl=document.getElementById('ls-desc');const desc=(descEl&&descEl.value.trim())||cat;
@@ -5973,8 +5984,20 @@ function salvarLanc(){
   if(curHT==='semana'&&ltipo==='sem'){
     curST='lancs';
     document.querySelectorAll('#ht-semana .itab').forEach(function(b,i){b.classList.toggle('on',i===2);});
+    ['st-cats','st-metas','st-lancs'].forEach(function(id){
+      var el=document.getElementById(id);
+      if(el)el.style.display=(id==='st-lancs')?'flex':'none';
+    });
+    var sl=document.getElementById('st-lancs');
+    if(sl)sl.style.flexDirection='column';
   }
   renderAll();
+  renderLancList();
+  // Garantir lista visível com flex
+  if(curST==='lancs'){
+    var sl=document.getElementById('st-lancs');
+    if(sl){sl.style.display='flex';sl.style.flexDirection='column';}
+  }
 }
 function updSub(cat,selId,selected){const sel=document.getElementById(selId);if(!sel)return;const subs=S.cats.semana[cat]||[];sel.innerHTML=`<option value="">Sem subcategoria</option>`+subs.map(s=>`<option ${s===selected?'selected':''}>${s}</option>`).join('');}
 
@@ -6463,8 +6486,23 @@ function setStatus(st){
 function iniciarMes(){
   const {m,y}=S.month;
   const curK=mKey(m,y);
-  // Salvar snapshot do mês atual em monthData (backup)
   if(!S.monthData)S.monthData={};
+
+  // Encontrar o mês anterior com dados salvos
+  var prevM=m-1,prevY=y;
+  if(prevM<1){prevM=12;prevY--;}
+  var prevK=mKey(prevM,prevY);
+
+  // Fonte dos dados: mês anterior (monthData) ou mês atual (S)
+  var fonte=S.monthData[prevK]||S.monthData[curK]||S;
+  var moradia=JSON.parse(JSON.stringify(fonte.moradia||S.moradia||[]));
+  var pessoal=JSON.parse(JSON.stringify(fonte.pessoal||S.pessoal||[]));
+  var cartao=JSON.parse(JSON.stringify(fonte.cartao||S.cartao||{santander:[],carrefour:[]}));
+  var reservasmes=JSON.parse(JSON.stringify(fonte.reservasmes||S.reservasmes||[]));
+  var receita=JSON.parse(JSON.stringify(fonte.receita||S.receita||[]));
+  var metas=JSON.parse(JSON.stringify(fonte.metas||S.metas||{}));
+
+  // Salvar snapshot do mês atual antes de sobrescrever
   S.monthData[curK]={
     receita:JSON.parse(JSON.stringify(S.receita||[])),
     moradia:JSON.parse(JSON.stringify(S.moradia||[])),
@@ -6475,9 +6513,11 @@ function iniciarMes(){
     metas:JSON.parse(JSON.stringify(S.metas||{})),
   };
 
-  // Replicar dados fixos do mês atual pro novo mês (parcelas avançam, pagamentos resetam)
-  S.moradia=(S.moradia||[]).map(function(i){return Object.assign({},i,{pago:false});});
-  S.pessoal=(S.pessoal||[]).map(function(i){return Object.assign({},i,{pago:false});});
+  // Replicar do mês anterior (pagamentos zerados)
+  S.moradia=moradia.map(function(i){return Object.assign({},i,{pago:false});});
+  S.pessoal=pessoal.map(function(i){return Object.assign({},i,{pago:false});});
+  S.receita=receita;
+  S.metas=metas;
   S.cartaoPago={santander:false,carrefour:false};
   // Avançar parcelas do cartão
   function avancParc(items){
