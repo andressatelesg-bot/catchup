@@ -6530,23 +6530,17 @@ function loadMonthData(key){
 }
 
 function switchMonth(newM, newY){
-  // 1. Salvar mês atual
+  // 1. Salvar snapshot do mês atual antes de sair
   var oldKey=curKey();
   saveMonthData(oldKey);
   // 2. Mudar mês
   S.month={m:newM,y:newY};
   var newKey=mKey(newM,newY);
-  // 3. Carregar dados do novo mês (se existir)
+  // 3. Carregar dados do novo mês se já existir
   if(!loadMonthData(newKey)){
-    // Novo mês sem dados — inicializar com os dados atuais como base
-    // (parcelas avançadas, pagamentos resetados)
-    S.moradia=(S.moradia||[]).map(function(i){return Object.assign({},i,{pago:false});});
-    S.pessoal=(S.pessoal||[]).map(function(i){return Object.assign({},i,{pago:false});});
-    S.cartaoPago={santander:false,carrefour:false};
-    S.reservasmes=(reservasmes||[]).map(function(i){return Object.assign({},i,{pago:false});});
-    S.lancamentos=[];
-    // Salvar esse estado inicial
-    saveMonthData(newKey);
+    // Mês sem dados — mostrar com os dados do mês atual (sem modificar)
+    // O usuário vai clicar "Iniciar mês" para criar os dados
+    // NÃO modificar S aqui — deixar os dados do mês anterior visíveis
   }
   save();
   updateMlbl();
@@ -6582,15 +6576,22 @@ function iniciarMes(){
   const curK=mKey(m,y);
   if(!S.monthData)S.monthData={};
 
-  // S já tem os dados do mês atual (ex: julho ao abrir agosto)
-  // Usar S diretamente como fonte — é sempre o mês anterior correto
-  var moradia=JSON.parse(JSON.stringify(S.moradia||[]));
-  var pessoal=JSON.parse(JSON.stringify(S.pessoal||[]));
-  var cartao=JSON.parse(JSON.stringify(S.cartao||{santander:[],carrefour:[]}));
-  var reservasmes=JSON.parse(JSON.stringify(S.reservasmes||[]));
-  var receita=JSON.parse(JSON.stringify(S.receita||[]));
-  var metas=JSON.parse(JSON.stringify(S.metas||{}));
-  var lancamentos=JSON.parse(JSON.stringify(S.lancamentos||[]));
+  // Buscar dados do mês anterior EXPLICITAMENTE
+  var prevM=m-1,prevY=y;
+  if(prevM<1){prevM=12;prevY--;}
+  var prevK=mKey(prevM,prevY);
+  
+  // Fonte: monthData do mês anterior > S atual
+  var fonte = S.monthData[prevK] || S;
+  console.log('iniciarMes: mês='+curK+' fonte='+(S.monthData[prevK]?prevK:'S atual'));
+  
+  var moradia=JSON.parse(JSON.stringify(fonte.moradia||S.moradia||[]));
+  var pessoal=JSON.parse(JSON.stringify(fonte.pessoal||S.pessoal||[]));
+  var cartao=JSON.parse(JSON.stringify(fonte.cartao||S.cartao||{santander:[],carrefour:[]}));
+  var reservasmes=JSON.parse(JSON.stringify(fonte.reservasmes||S.reservasmes||[]));
+  var receita=JSON.parse(JSON.stringify(fonte.receita||S.receita||[]));
+  var metas=JSON.parse(JSON.stringify(fonte.metas||S.metas||{}));
+  var lancamentos=JSON.parse(JSON.stringify(fonte.lancamentos||S.lancamentos||[]));
 
   // Salvar snapshot completo do mês atual em monthData ANTES de modificar
   S.monthData[curK]={
