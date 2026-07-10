@@ -2917,17 +2917,25 @@ function checkAppVersion(){
   }
 }
 function _limparCacheERecarregar(){
+  // Preservar dados críticos antes de limpar cache
+  var dadosAtuais = localStorage.getItem('catchup_v1');
+  var tsAtual = localStorage.getItem('catchup_ts');
   if('serviceWorker' in navigator){
     navigator.serviceWorker.getRegistrations().then(function(regs){
       Promise.all(regs.map(function(r){return r.unregister();})).then(function(){
         caches.keys().then(function(keys){
           Promise.all(keys.map(function(k){return caches.delete(k);})).then(function(){
+            // Restaurar dados após limpar cache
+            if(dadosAtuais) localStorage.setItem('catchup_v1', dadosAtuais);
+            if(tsAtual) localStorage.setItem('catchup_ts', tsAtual);
             window.location.reload(true);
           });
         });
       });
     });
   } else {
+    if(dadosAtuais) localStorage.setItem('catchup_v1', dadosAtuais);
+    if(tsAtual) localStorage.setItem('catchup_ts', tsAtual);
     window.location.reload(true);
   }
 }
