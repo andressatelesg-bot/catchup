@@ -1013,6 +1013,7 @@ body{font-family:"Outfit",sans-serif;color:var(--ink);font-size:15px;line-height
       <div style="font-size:13px;font-weight:600;color:#166534">Sincronização</div>
       <div style="font-size:12px;color:#166534;opacity:.7;margin-top:2px" id="sync-status-lbl">Dados salvos localmente e na nuvem</div>
     </div>
+    <button onclick="salvarBackupManual()" style="display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:99px;border:none;background:#7C3AED;color:white;font-family:Outfit,sans-serif;font-size:13px;font-weight:600;cursor:pointer"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Salvar backup</button>
     <button onclick="listarBackups()" style="display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:99px;border:none;background:#D97706;color:white;font-family:Outfit,sans-serif;font-size:13px;font-weight:600;cursor:pointer">🗂 Backups</button>
     <button onclick="checkAppVersion()" style="display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:99px;border:none;background:#2563EB;color:white;font-family:Outfit,sans-serif;font-size:13px;font-weight:600;cursor:pointer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg> Verificar nova versão</button>
     <button onclick="forceSyncNow()" style="display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:99px;border:none;background:#16A34A;color:white;font-family:Outfit,sans-serif;font-size:13px;font-weight:600;cursor:pointer" id="sync-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg> Sincronizar</button>
@@ -1709,55 +1710,63 @@ fbAuth.onAuthStateChanged(function(user){
 
 // ── Sync Firestore ──
 // Timestamp global do último save — usado para evitar loop de sync
-var _lastSavedTs = 0;
+// Restaurar timestamp do último save
+var _lastSavedTs = parseInt(localStorage.getItem('catchup_ts')||'0');
 
 function startFirebaseSync(){
   if(!fbUser||!fbDb) return;
   var docRef = fbDb.collection('users').doc(fbUser.uid);
 
-  fbUnsub = docRef.onSnapshot(function(snap){
+  // Buscar dados do Firebase UMA VEZ ao iniciar
+  docRef.get().then(function(snap){
     if(!snap.exists){
-      _lastSavedTs = Date.now();
-      docRef.set({
-        data: JSON.stringify(S),
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-        deviceTs: _lastSavedTs
-      });
+      // Primeira vez — enviar dados locais
+      save();
       return;
     }
-
     var remote = snap.data();
-    if(!remote || !remote.data) return;
-
+    if(!remote||!remote.data) return;
     var remoteTs = remote.deviceTs || 0;
+    var localTs = _lastSavedTs || 0;
 
-    // Ignorar APENAS o próprio save (evitar loop)
-    if(remoteTs > 0 && remoteTs === _lastSavedTs) return;
-    // Aceitar qualquer outro snapshot (de outro dispositivo)
+    // Usar Firebase se for mais recente que o local
+    if(remoteTs > localTs){
+      try{
+        var ns = JSON.parse(remote.data);
+        var savedMonth = S.month;
+        Object.keys(ns).forEach(function(k){ S[k]=ns[k]; });
+        S.month = savedMonth;
+        _lastSavedTs = remoteTs;
+        localStorage.setItem(KEY, JSON.stringify(S));
+        localStorage.setItem('catchup_ts', String(remoteTs));
+        renderAll();
+        console.log('Carregado do Firebase ✓ ts:', remoteTs);
+      }catch(e){ console.log('erro ao carregar Firebase:', e); }
+    } else {
+      console.log('Local mais recente, mantendo ✓ local:', localTs, 'remote:', remoteTs);
+    }
 
-    try{
-      var ns = JSON.parse(remote.data);
-      if(!ns) return;
-
-      // Garantir campos essenciais
-      if(!ns.monthStatus) ns.monthStatus = {};
-      if(!ns.reservas) ns.reservas = S.reservas || [];
-      ns.reservas.forEach(function(r){ if(!r.movs) r.movs = []; });
-      if(!ns.cartao) ns.cartao = {santander:[], carrefour:[]};
-
-      // Preservar mês de navegação atual
-      var savedMonth = S.month;
-      Object.keys(ns).forEach(function(k){ S[k] = ns[k]; });
-      S.month = savedMonth;
-
-      localStorage.setItem(KEY, JSON.stringify(S));
-      renderAll();
-      console.log('Sync recebido ✓ ts:', remoteTs);
-    }catch(e){ console.log('sync erro:', e); }
-
-  }, function(err){
-    console.log('Firestore sync erro:', err);
-  });
+    // Listener em tempo real para outros dispositivos
+    fbUnsub = docRef.onSnapshot(function(snap2){
+      if(!snap2.exists) return;
+      var r = snap2.data();
+      if(!r||!r.data) return;
+      var rTs = r.deviceTs || 0;
+      if(rTs === _lastSavedTs) return; // próprio save
+      if(rTs <= _lastSavedTs) return;  // dado mais antigo
+      try{
+        var ns2 = JSON.parse(r.data);
+        var sm = S.month;
+        Object.keys(ns2).forEach(function(k){ S[k]=ns2[k]; });
+        S.month = sm;
+        _lastSavedTs = rTs;
+        localStorage.setItem(KEY, JSON.stringify(S));
+        localStorage.setItem('catchup_ts', String(rTs));
+        renderAll();
+        console.log('Sync tempo real ✓ ts:', rTs);
+      }catch(e){ console.log('sync erro:', e); }
+    });
+  }).catch(function(e){ console.log('Firebase get erro:', e); });
 }
 function patchSaveForFirebase(){/* integrado na save() */}
 
@@ -1830,6 +1839,28 @@ function saveBackup(label){
       mes: (S.month ? S.month.m + '/' + S.month.y : ''),
       lancamentos: (S.lancamentos || []).length
     }).catch(function(e){ console.log('backup erro:', e); });
+}
+
+function salvarBackupManual(){
+  if(!fbUser||!fbDb){showToast('Faça login primeiro');return;}
+  var ts = new Date().toISOString().replace('T',' ').slice(0,19);
+  var label = 'manual_'+ts.replace(/[: ]/g,'_');
+  var dados = JSON.stringify(S);
+  fbDb.collection('users').doc(fbUser.uid)
+    .collection('backups').doc(label)
+    .set({
+      data: dados,
+      ts: ts,
+      label: 'Manual — '+ts,
+      mes: (S.month?MNS[S.month.m-1]+' '+S.month.y:''),
+      lancamentos: (S.lancamentos||[]).length
+    }).then(function(){
+      showToast('Backup salvo ✓ — '+ts);
+      console.log('Backup manual salvo:', label);
+    }).catch(function(e){
+      showToast('Erro ao salvar backup');
+      console.log('Erro backup:', e);
+    });
 }
 
 function listarBackups(){
@@ -2077,31 +2108,30 @@ if(!S.pessoal)S.pessoal=[];
 if(!S.reservasmes)S.reservasmes=[];
 
 const save=()=>{
-  localStorage.setItem(KEY,JSON.stringify(S));
-  saveBackup(); // backup automático no Firebase
-  // Backup diário no localStorage
+  _lastSavedTs = Date.now();
+  var dados = JSON.stringify(S);
+  // 1. Salvar localmente
+  localStorage.setItem(KEY, dados);
+  localStorage.setItem('catchup_ts', String(_lastSavedTs));
+  // 2. Backup diário
+  saveBackup();
   var today=new Date().toISOString().slice(0,10);
-  var lastBackup=localStorage.getItem('catchup_backup_date');
-  if(lastBackup!==today){
-    localStorage.setItem('catchup_backup_'+today, JSON.stringify(S));
+  if(localStorage.getItem('catchup_backup_date')!==today){
+    localStorage.setItem('catchup_backup_'+today, dados);
     localStorage.setItem('catchup_backup_date', today);
-    // Manter só os últimos 7 backups
     var allKeys=Object.keys(localStorage).filter(function(k){return k.startsWith('catchup_backup_2');}).sort();
     while(allKeys.length>7){localStorage.removeItem(allKeys.shift());}
   }
-  // Sync Firebase em background
-  if(typeof fbUser!=='undefined' && fbUser && typeof fbDb!=='undefined' && fbDb){
+  // 3. Salvar no Firebase
+  if(typeof fbUser!=='undefined'&&fbUser&&typeof fbDb!=='undefined'&&fbDb){
     try{
-      _lastSavedTs = Date.now();
       fbDb.collection('users').doc(fbUser.uid).set({
-        data: JSON.stringify(S),
+        data: dados,
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
         deviceTs: _lastSavedTs
       }).then(function(){
-        console.log('Salvo ✓');
-      }).catch(function(e){
-        console.log('Erro Firebase:', e);
-      });
+        console.log('Salvo ✓', new Date().toLocaleTimeString());
+      }).catch(function(e){ console.log('Erro Firebase:', e); });
     }catch(e){}
   }
 };
@@ -2783,34 +2813,43 @@ function importLancFile(input){
 const APP_VERSION = "v52";
 
 function checkAppVersion(){
-  // 1. Salvar TODOS os dados no Firebase primeiro
-  showToast('Salvando dados antes de atualizar…');
-  // Salvar dados atuais com timestamp antes de recarregar
+  showToast('Salvando dados…');
   _lastSavedTs = Date.now();
-  var salvar = (typeof fbUser!=='undefined' && fbUser && typeof fbDb!=='undefined' && fbDb)
-    ? fbDb.collection('users').doc(fbUser.uid).set({
-        data:JSON.stringify(S),
-        updatedAt:firebase.firestore.FieldValue.serverTimestamp(),
-        deviceTs:_lastSavedTs
-      })
-    : Promise.resolve();
-  salvar.then(function(){
-    if('serviceWorker' in navigator){
-      navigator.serviceWorker.getRegistrations().then(function(regs){
-        Promise.all(regs.map(function(r){return r.unregister();})).then(function(){
-          caches.keys().then(function(keys){
-            Promise.all(keys.map(function(k){return caches.delete(k);})).then(function(){
-              window.location.reload(true);
-            });
+  // Gravar ts no localStorage para preservar após reload
+  localStorage.setItem('catchup_last_ts', String(_lastSavedTs));
+  // Salvar dados no Firebase e aguardar confirmação antes de recarregar
+  var dados = JSON.stringify(S);
+  localStorage.setItem(KEY, dados); // garantir localStorage atualizado
+  if(typeof fbUser!=='undefined' && fbUser && typeof fbDb!=='undefined' && fbDb){
+    fbDb.collection('users').doc(fbUser.uid).set({
+      data: dados,
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      deviceTs: _lastSavedTs
+    }).then(function(){
+      showToast('Dados salvos. Atualizando…');
+      setTimeout(function(){ _limparCacheERecarregar(); }, 500);
+    }).catch(function(){
+      // Mesmo com erro no Firebase, recarregar (dados estão no localStorage)
+      _limparCacheERecarregar();
+    });
+  } else {
+    _limparCacheERecarregar();
+  }
+}
+function _limparCacheERecarregar(){
+  if('serviceWorker' in navigator){
+    navigator.serviceWorker.getRegistrations().then(function(regs){
+      Promise.all(regs.map(function(r){return r.unregister();})).then(function(){
+        caches.keys().then(function(keys){
+          Promise.all(keys.map(function(k){return caches.delete(k);})).then(function(){
+            window.location.reload(true);
           });
         });
       });
-    } else {
-      window.location.reload(true);
-    }
-  }).catch(function(){
+    });
+  } else {
     window.location.reload(true);
-  });
+  }
 }
 
 function forceSyncFirebase(){
@@ -6449,7 +6488,7 @@ function switchMonth(newM, newY){
     S.moradia=(S.moradia||[]).map(function(i){return Object.assign({},i,{pago:false});});
     S.pessoal=(S.pessoal||[]).map(function(i){return Object.assign({},i,{pago:false});});
     S.cartaoPago={santander:false,carrefour:false};
-    S.reservasmes=(S.reservasmes||[]).map(function(i){return Object.assign({},i,{pago:false});});
+    S.reservasmes=(reservasmes||[]).map(function(i){return Object.assign({},i,{pago:false});});
     S.lancamentos=[];
     // Salvar esse estado inicial
     saveMonthData(newKey);
@@ -6488,32 +6527,24 @@ function iniciarMes(){
   const curK=mKey(m,y);
   if(!S.monthData)S.monthData={};
 
-  // Encontrar o mês anterior com dados salvos
-  var prevM=m-1,prevY=y;
-  if(prevM<1){prevM=12;prevY--;}
-  var prevK=mKey(prevM,prevY);
+  // S já tem os dados do mês atual (ex: julho ao abrir agosto)
+  // Usar S diretamente como fonte — é sempre o mês anterior correto
+  var moradia=JSON.parse(JSON.stringify(S.moradia||[]));
+  var pessoal=JSON.parse(JSON.stringify(S.pessoal||[]));
+  var cartao=JSON.parse(JSON.stringify(S.cartao||{santander:[],carrefour:[]}));
+  var reservasmes=JSON.parse(JSON.stringify(S.reservasmes||[]));
+  var receita=JSON.parse(JSON.stringify(S.receita||[]));
+  var metas=JSON.parse(JSON.stringify(S.metas||{}));
+  var lancamentos=JSON.parse(JSON.stringify(S.lancamentos||[]));
 
-  // Fonte dos dados: mês anterior (monthData) ou mês atual (S)
-  var fonte=S.monthData[prevK]||S.monthData[curK]||S;
-  var moradia=JSON.parse(JSON.stringify(fonte.moradia||S.moradia||[]));
-  var pessoal=JSON.parse(JSON.stringify(fonte.pessoal||S.pessoal||[]));
-  var cartao=JSON.parse(JSON.stringify(fonte.cartao||S.cartao||{santander:[],carrefour:[]}));
-  var reservasmes=JSON.parse(JSON.stringify(fonte.reservasmes||S.reservasmes||[]));
-  var receita=JSON.parse(JSON.stringify(fonte.receita||S.receita||[]));
-  var metas=JSON.parse(JSON.stringify(fonte.metas||S.metas||{}));
-
-  // Salvar snapshot do mês atual antes de sobrescrever
+  // Salvar snapshot completo do mês atual em monthData ANTES de modificar
   S.monthData[curK]={
-    receita:JSON.parse(JSON.stringify(S.receita||[])),
-    moradia:JSON.parse(JSON.stringify(S.moradia||[])),
-    pessoal:JSON.parse(JSON.stringify(S.pessoal||[])),
-    cartao:JSON.parse(JSON.stringify(S.cartao||{santander:[],carrefour:[]})),
-    reservasmes:JSON.parse(JSON.stringify(S.reservasmes||[])),
-    lancamentos:JSON.parse(JSON.stringify(S.lancamentos||[])),
-    metas:JSON.parse(JSON.stringify(S.metas||{})),
+    receita:receita,moradia:moradia,pessoal:pessoal,
+    cartao:cartao,reservasmes:reservasmes,
+    lancamentos:lancamentos,metas:metas
   };
 
-  // Replicar do mês anterior (pagamentos zerados)
+  // Replicar para o novo mês (pagamentos zerados)
   S.moradia=moradia.map(function(i){return Object.assign({},i,{pago:false});});
   S.pessoal=pessoal.map(function(i){return Object.assign({},i,{pago:false});});
   S.receita=receita;
@@ -6532,8 +6563,8 @@ function iniciarMes(){
     }).filter(Boolean);
   }
   S.cartao={
-    santander:avancParc(S.cartao&&S.cartao.santander),
-    carrefour:avancParc(S.cartao&&S.cartao.carrefour)
+    santander:avancParc(cartao&&cartao.santander),
+    carrefour:avancParc(cartao&&cartao.carrefour)
   };
   // Avançar parcelas reservasmes
   S.reservasmes=(S.reservasmes||[]).map(function(i){
@@ -6545,8 +6576,6 @@ function iniciarMes(){
     }
     return it;
   }).filter(Boolean);
-  // Salvar snapshot do mês atual em monthData
-  saveMonthData(curK);
   // Backup ANTES de limpar lançamentos
   saveBackup('pre_mes_'+MNS[m-1]+'_'+y);
   // Limpar lançamentos semanais
