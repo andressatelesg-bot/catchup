@@ -2853,50 +2853,25 @@ function _limparCacheERecarregar(){
 }
 
 function forceSyncFirebase(){
+  if(!fbUser||!fbDb){showToast('Faça login primeiro');return;}
   var st=document.getElementById('sync-status');
   if(st)st.textContent='Sincronizando…';
-  showToast('Sincronizando e atualizando…');
-  // Limpar cache do Service Worker e recarregar com versão nova
-  if('serviceWorker' in navigator){
-    navigator.serviceWorker.getRegistrations().then(function(regs){
-      Promise.all(regs.map(function(r){return r.unregister();})).then(function(){
-        // Limpar todos os caches
-        caches.keys().then(function(keys){
-          Promise.all(keys.map(function(k){return caches.delete(k);})).then(function(){
-            // Salvar dados atuais no Firebase antes de recarregar
-            if(typeof fbUser!=='undefined'&&fbUser&&typeof fbDb!=='undefined'&&fbDb){
-              fbDb.collection('users').doc(fbUser.uid).set({
-                data:JSON.stringify(S),
-                ts:firebase.firestore.FieldValue.serverTimestamp()
-              }).then(function(){
-                window.location.reload(true);
-              }).catch(function(){
-                window.location.reload(true);
-              });
-            } else {
-              window.location.reload(true);
-            }
-          });
-        });
-      });
-    });
-    return;
-  }
-  if(typeof fbUser==='undefined'||!fbUser){
-    if(st)st.textContent='Não conectado ao Firebase.';
-    return;
-  }
-  // Forçar upload dos dados locais
-  var data=localStorage.getItem(KEY);
+  // Sempre salvar dados atuais antes de sincronizar
+  _lastSavedTs=Date.now();
+  var dados=JSON.stringify(S);
+  localStorage.setItem(KEY,dados);
+  localStorage.setItem('catchup_ts',String(_lastSavedTs));
   fbDb.collection('users').doc(fbUser.uid).set({
-    data:data,
-    updatedAt:firebase.firestore.FieldValue.serverTimestamp()
+    data:dados,
+    updatedAt:firebase.firestore.FieldValue.serverTimestamp(),
+    deviceTs:_lastSavedTs
   }).then(function(){
-    if(st){st.textContent='✓ Sincronizado com sucesso!';st.style.color='var(--ok)';
-      setTimeout(function(){st.textContent='';st.style.color='var(--ink3)';},3000);}
-    showToast('Dados sincronizados ✓');
-  }).catch(function(err){
-    if(st){st.textContent='Erro: '+err.message;st.style.color='var(--danger)';}
+    if(st){st.textContent='✓ Sincronizado!';st.style.color='var(--ok)';
+      setTimeout(function(){st.textContent='Dados salvos localmente e na nuvem ✓';st.style.color='var(--ink3)';},2000);}
+    showToast('Sincronizado ✓');
+  }).catch(function(e){
+    if(st){st.textContent='Erro ao sincronizar';st.style.color='var(--danger)';}
+    showToast('Erro ao sincronizar');
   });
 }
 function goToResConfig(){
@@ -6567,7 +6542,7 @@ function iniciarMes(){
     carrefour:avancParc(cartao&&cartao.carrefour)
   };
   // Avançar parcelas reservasmes
-  S.reservasmes=(S.reservasmes||[]).map(function(i){
+  S.reservasmes=(reservasmes||[]).map(function(i){
     var it=Object.assign({},i,{pago:false});
     if(it.parc&&it.parc.includes('x')){
       var parts=it.parc.split('x');
