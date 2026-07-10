@@ -6576,31 +6576,16 @@ function iniciarMes(){
   const curK=mKey(m,y);
   if(!S.monthData)S.monthData={};
 
-  // Buscar dados do mês anterior EXPLICITAMENTE
-  var prevM=m-1,prevY=y;
-  if(prevM<1){prevM=12;prevY--;}
-  var prevK=mKey(prevM,prevY);
-  
-  // Fonte: monthData do mês anterior > S atual
-  var fonte = S.monthData[prevK] || S;
-  console.log('iniciarMes: mês='+curK+' fonte='+(S.monthData[prevK]?prevK:'S atual'));
-  
-  var moradia=JSON.parse(JSON.stringify(fonte.moradia||S.moradia||[]));
-  var pessoal=JSON.parse(JSON.stringify(fonte.pessoal||S.pessoal||[]));
-  var cartao=JSON.parse(JSON.stringify(fonte.cartao||S.cartao||{santander:[],carrefour:[]}));
-  var reservasmes=JSON.parse(JSON.stringify(fonte.reservasmes||S.reservasmes||[]));
-  var receita=JSON.parse(JSON.stringify(fonte.receita||S.receita||[]));
-  var metas=JSON.parse(JSON.stringify(fonte.metas||S.metas||{}));
-  var lancamentos=JSON.parse(JSON.stringify(fonte.lancamentos||S.lancamentos||[]));
+  // Usar S diretamente — contém os dados do mês anterior (ex: julho ao abrir agosto)
+  // Tirar uma cópia limpa de cada campo
+  var moradia=JSON.parse(JSON.stringify(S.moradia||[]));
+  var pessoal=JSON.parse(JSON.stringify(S.pessoal||[]));
+  var cartao=JSON.parse(JSON.stringify(S.cartao||{santander:[],carrefour:[]}));
+  var reservasmes=JSON.parse(JSON.stringify(S.reservasmes||[]));
+  var receita=JSON.parse(JSON.stringify(S.receita||[]));
+  var metas=JSON.parse(JSON.stringify(S.metas||{}));
 
-  // Salvar snapshot completo do mês atual em monthData ANTES de modificar
-  S.monthData[curK]={
-    receita:receita,moradia:moradia,pessoal:pessoal,
-    cartao:cartao,reservasmes:reservasmes,
-    lancamentos:lancamentos,metas:metas
-  };
-
-  // Replicar para o novo mês (pagamentos zerados)
+  // Aplicar no novo mês — pagamentos zerados
   S.moradia=moradia.map(function(i){return Object.assign({},i,{pago:false});});
   S.pessoal=pessoal.map(function(i){return Object.assign({},i,{pago:false});});
   S.receita=receita;
