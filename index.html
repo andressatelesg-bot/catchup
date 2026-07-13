@@ -404,7 +404,7 @@ body{font-family:"Outfit",sans-serif;color:var(--ink);font-size:15px;line-height
         <button class="icon-btn" onclick="goSub('sub-config')">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
         </button>
-        <span class="app-logo">catchup</span><span id="app-version" style="font-size:9px;font-weight:500;color:rgba(255,255,255,.35);margin-left:4px;letter-spacing:.05em">v52</span>
+        <span class="app-logo">catchup</span><span id="app-version" style="font-size:9px;font-weight:500;color:rgba(255,255,255,.35);margin-left:4px;letter-spacing:.05em">v53</span>
       </div>
       <div class="month-nav">
         <button onclick="chMonth(-1)">&#8249;</button>
@@ -2890,7 +2890,7 @@ function importLancFile(input){
   };
   reader.readAsDataURL(file);
 }
-const APP_VERSION = "v52";
+const APP_VERSION = "v53";
 
 function checkAppVersion(){
   showToast('Salvando dados…');
@@ -6579,19 +6579,48 @@ function setStatus(st){
   save();
 }
 
+function getPrevMonthKey(m,y){
+  var pm=m-1, py=y;
+  if(pm<1){pm=12;py--;}
+  return mKey(pm,py);
+}
+
 function iniciarMes(){
   const {m,y}=S.month;
   const curK=mKey(m,y);
   if(!S.monthData)S.monthData={};
 
-  // Usar S diretamente — contém os dados do mês anterior (ex: julho ao abrir agosto)
-  // Tirar uma cópia limpa de cada campo
-  var moradia=JSON.parse(JSON.stringify(S.moradia||[]));
-  var pessoal=JSON.parse(JSON.stringify(S.pessoal||[]));
-  var cartao=JSON.parse(JSON.stringify(S.cartao||{santander:[],carrefour:[]}));
-  var reservasmes=JSON.parse(JSON.stringify(S.reservasmes||[]));
-  var receita=JSON.parse(JSON.stringify(S.receita||[]));
-  var metas=JSON.parse(JSON.stringify(S.metas||{}));
+  // Guard: não sobrescrever silenciosamente um mês que já foi iniciado/fechado antes
+  var curStatus=(S.monthStatus||{})[curK];
+  if(curStatus){
+    if(!confirm('Este mês ('+MNS[m-1]+' '+y+') já foi iniciado ou fechado antes. Iniciar novamente vai sobrescrever os dados atuais dele. Continuar?')){
+      return;
+    }
+  }
+
+  // Fonte dos dados: preferir o snapshot salvo do mês anterior (monthData),
+  // em vez de assumir que "S" ao vivo ainda representa esse mês anterior.
+  // Isso evita copiar dados errados quando o usuário navega vários meses
+  // sem iniciar cada um, ou quando o mês de destino já tinha dados salvos.
+  const prevKey=getPrevMonthKey(m,y);
+  let source;
+  if(S.monthData[prevKey]){
+    source=S.monthData[prevKey];
+  } else {
+    // Sem snapshot do mês anterior — fallback ao comportamento antigo,
+    // assumindo que os dados ao vivo em S ainda são desse mês anterior.
+    source={
+      moradia:S.moradia, pessoal:S.pessoal, cartao:S.cartao,
+      reservasmes:S.reservasmes, receita:S.receita, metas:S.metas
+    };
+  }
+
+  var moradia=JSON.parse(JSON.stringify(source.moradia||[]));
+  var pessoal=JSON.parse(JSON.stringify(source.pessoal||[]));
+  var cartao=JSON.parse(JSON.stringify(source.cartao||{santander:[],carrefour:[]}));
+  var reservasmes=JSON.parse(JSON.stringify(source.reservasmes||[]));
+  var receita=JSON.parse(JSON.stringify(source.receita||[]));
+  var metas=JSON.parse(JSON.stringify(source.metas||S.metas||{}));
 
   // Aplicar no novo mês — pagamentos zerados
   S.moradia=moradia.map(function(i){return Object.assign({},i,{pago:false});});
