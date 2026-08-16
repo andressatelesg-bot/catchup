@@ -404,7 +404,7 @@ body{font-family:"Outfit",sans-serif;color:var(--ink);font-size:15px;line-height
         <button class="icon-btn" onclick="goSub('sub-config')">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
         </button>
-        <span class="app-logo">catchup</span><span id="app-version" style="font-size:9px;font-weight:500;color:rgba(255,255,255,.35);margin-left:4px;letter-spacing:.05em">v53</span>
+        <span class="app-logo">catchup</span><span id="app-version" style="font-size:9px;font-weight:500;color:rgba(255,255,255,.35);margin-left:4px;letter-spacing:.05em">v63</span>
       </div>
       <div class="month-nav">
         <button onclick="chMonth(-1)">&#8249;</button>
@@ -440,7 +440,6 @@ body{font-family:"Outfit",sans-serif;color:var(--ink);font-size:15px;line-height
     <div class="content">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
         <div style="font-size:22px;font-weight:800;letter-spacing:-.5px;line-height:1.2">Home</div>
-        <button id="cycle-btn-home" onclick="handleCycleBtn()" style="padding:6px 14px;border-radius:99px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif;transition:.15s;border:1.5px solid var(--ink3);background:none;color:var(--ink2)">—</button>
       </div>
 
       <div id="home-cards-container">
@@ -529,14 +528,7 @@ body{font-family:"Outfit",sans-serif;color:var(--ink);font-size:15px;line-height
       <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:18px">
         <button onclick="goPage('home');setNavById('nb-home')" style="display:flex;align-items:center;gap:3px;border:none;background:none;color:var(--ink3);font-size:13px;font-weight:500;cursor:pointer;font-family:'Outfit',sans-serif;padding:0;flex-shrink:0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg> Home</button>
         <div style="font-size:20px;font-weight:800;letter-spacing:-.4px;flex:1;text-align:center">Mensal</div>
-        <button id="cycle-btn-mes" onclick="handleCycleBtn()" style="padding:5px 12px;border-radius:99px;font-size:11px;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif;transition:.15s;border:1.5px solid var(--ink3);background:none;color:var(--ink2);flex-shrink:0">—</button>
-      </div>
-      <div id="mes-closed-banner" style="display:none;align-items:center;gap:10px;background:#F3F4F6;border-radius:12px;padding:12px 16px;margin:0 16px 16px;border:1.5px solid #D1D5DB">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-        <div>
-          <div style="font-size:13px;font-weight:700;color:#374151">Mês encerrado</div>
-          <div style="font-size:12px;color:#6B7280">Dados somente leitura</div>
-        </div>
+        <div style="width:1px;flex-shrink:0"></div>
       </div>
       <div id="mes-main-content" style="transition:opacity .3s,filter .3s">
       <!-- HERO CARD -->
@@ -603,7 +595,7 @@ body{font-family:"Outfit",sans-serif;color:var(--ink);font-size:15px;line-height
       <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:18px">
         <button onclick="goPage('home');setNavById('nb-home')" style="display:flex;align-items:center;gap:3px;border:none;background:none;color:var(--ink3);font-size:13px;font-weight:500;cursor:pointer;font-family:'Outfit',sans-serif;padding:0;flex-shrink:0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg> Home</button>
         <div style="font-size:20px;font-weight:800;letter-spacing:-.4px;flex:1;text-align:center">Semanal</div>
-        <button id="cycle-btn-sem" onclick="handleCycleBtn()" style="padding:5px 12px;border-radius:99px;font-size:11px;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif;transition:.15s;border:1.5px solid var(--ink3);background:none;color:var(--ink2);flex-shrink:0">—</button>
+        <div style="width:14px;flex-shrink:0"></div>
       </div>
       <div style="background:#EFF6FF;border-radius:var(--r);padding:18px 20px 16px;margin-bottom:14px;box-shadow:0 2px 8px rgba(30,95,168,.10),0 4px 20px rgba(30,95,168,.07)">
         <div style="font-size:10px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:#1E5FA8;margin-bottom:8px">Disponível para gastar</div>
@@ -677,7 +669,7 @@ body{font-family:"Outfit",sans-serif;color:var(--ink);font-size:15px;line-height
       <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:18px">
         <button onclick="goPage('home');setNavById('nb-home')" style="display:flex;align-items:center;gap:3px;border:none;background:none;color:var(--ink3);font-size:13px;font-weight:500;cursor:pointer;font-family:'Outfit',sans-serif;padding:0;flex-shrink:0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg> Home</button>
         <div style="font-size:20px;font-weight:800;letter-spacing:-.4px;flex:1;text-align:center;display:flex;align-items:center;justify-content:center;gap:8px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Reservas</div>
-        <button id="cycle-btn-res" onclick="handleCycleBtn()" style="padding:5px 12px;border-radius:99px;font-size:11px;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif;transition:.15s;border:1.5px solid var(--ink3);background:none;color:var(--ink2);flex-shrink:0">—</button>
+        <div style="width:14px;flex-shrink:0"></div>
       </div>
       <div style="background:#FFFBEB;border-radius:var(--r);padding:18px 18px 16px;margin-bottom:16px;box-shadow:0 2px 8px rgba(217,119,6,.10),0 4px 20px rgba(217,119,6,.07)">
         <div style="font-size:10px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:#D97706;margin-bottom:8px">Total em reservas</div>
@@ -730,7 +722,6 @@ body{font-family:"Outfit",sans-serif;color:var(--ink);font-size:15px;line-height
         <div style="font-size:20px;font-weight:800;letter-spacing:-.4px;flex:1;text-align:center">Pedro</div>
         <div style="display:flex;gap:8px;align-items:center">
           <button onclick="exportPedroPDF()" style="display:flex;align-items:center;gap:5px;border:none;background:var(--bg2);color:var(--ink2);font-family:Outfit,sans-serif;font-size:12px;font-weight:600;cursor:pointer;padding:7px 12px;border-radius:99px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> PDF</button>
-          <button id="cycle-btn-ped" onclick="handleCycleBtn()" style="padding:5px 12px;border-radius:99px;font-size:11px;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif;transition:.15s;border:1.5px solid var(--ink3);background:none;color:var(--ink2);flex-shrink:0">—</button>
         </div>
       </div>
       <!-- HERO -->
@@ -748,18 +739,11 @@ body{font-family:"Outfit",sans-serif;color:var(--ink);font-size:15px;line-height
           </div>
         </div>
       </div>
-      <!-- CARDS DE RESUMO 2x2 -->
+      <!-- CARDS DE RESUMO -->
+      <div id="pedro-cards-bancos" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px"></div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px">
         <div style="background:#E6FAF8;border-radius:var(--r-sm);padding:13px 15px;box-shadow:0 1px 3px rgba(0,0,0,.05)">
-          <div style="font-size:10px;font-weight:600;color:#0D9488;text-transform:uppercase;letter-spacing:.07em;margin-bottom:3px;opacity:.75">Santander ÷2</div>
-          <div style="font-size:17px;font-weight:700;color:#111110" id="pedro-san-val">—</div>
-        </div>
-        <div style="background:#E6FAF8;border-radius:var(--r-sm);padding:13px 15px;box-shadow:0 1px 3px rgba(0,0,0,.05)">
-          <div style="font-size:10px;font-weight:600;color:#0D9488;text-transform:uppercase;letter-spacing:.07em;margin-bottom:3px;opacity:.75">Carrefour ÷2</div>
-          <div style="font-size:17px;font-weight:700;color:#111110" id="pedro-car-val">—</div>
-        </div>
-        <div style="background:#E6FAF8;border-radius:var(--r-sm);padding:13px 15px;box-shadow:0 1px 3px rgba(0,0,0,.05)">
-          <div style="font-size:10px;font-weight:600;color:#0D9488;text-transform:uppercase;letter-spacing:.07em;margin-bottom:3px;opacity:.75">Individual Pedro</div>
+          <div style="font-size:10px;font-weight:600;color:#7C3AED;text-transform:uppercase;letter-spacing:.07em;margin-bottom:3px;opacity:.75">Individual Pedro</div>
           <div style="font-size:17px;font-weight:700;color:#111110" id="pedro-ind-val">—</div>
         </div>
         <div style="background:#E6FAF8;border-radius:var(--r-sm);padding:13px 15px;box-shadow:0 1px 3px rgba(0,0,0,.05)">
@@ -774,10 +758,7 @@ body{font-family:"Outfit",sans-serif;color:var(--ink);font-size:15px;line-height
       <!-- LISTAS -->
       <div style="font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--ink2);margin-bottom:10px">Moradia dividida</div>
       <div class="card" style="margin-bottom:16px" id="pedro-mor-list"></div>
-      <div style="font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--ink2);margin-bottom:10px">Santander ÷ Pedro</div>
-      <div class="card" style="margin-bottom:16px" id="pedro-san"></div>
-      <div style="font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--ink2);margin-bottom:10px">Carrefour ÷ Pedro</div>
-      <div class="card" style="margin-bottom:16px" id="pedro-car"></div>
+      <div id="pedro-listas-cartoes"></div>
       <div style="font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--ink2);margin-bottom:10px">Individual Pedro</div>
       <div class="card" style="margin-bottom:16px" id="pedro-ind"></div>
     </div>
@@ -925,80 +906,39 @@ body{font-family:"Outfit",sans-serif;color:var(--ink);font-size:15px;line-height
   <!-- TABS -->
   <div style="padding:12px 16px 0">
     <div style="background:var(--w);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-bottom:14px">
-      <div class="itabs" style="border-bottom:1px solid var(--line)">
-        <button class="itab on" id="ct-ambos" onclick="setCartTab('ambos',this)">Ambos</button>
-        <button class="itab" id="ct-san" onclick="setCartTab('san',this)">Santander</button>
-        <button class="itab" id="ct-car" onclick="setCartTab('car',this)">Carrefour</button>
-      </div>
+      <div class="itabs" id="cart-tabs-bar" style="border-bottom:1px solid var(--line)"></div>
       <!-- AMBOS -->
       <div id="ct-view-ambos">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border-bottom:1px solid var(--line)">
-          <div style="background:var(--w);padding:14px 18px;display:flex;align-items:center;justify-content:space-between">
-            <div><div style="font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px">Santander</div><div style="font-size:17px;font-weight:700;color:#111110" id="cart-san-total">—</div></div>
-            <button id="cart-chk-santander" onclick="toggleCartPago('santander')" class="chk" style="flex-shrink:0"></button>
-          </div>
-          <div style="background:var(--w);padding:14px 18px;display:flex;align-items:center;justify-content:space-between">
-            <div><div style="font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px">Carrefour</div><div style="font-size:17px;font-weight:700;color:#111110" id="cart-car-total">—</div></div>
-            <button id="cart-chk-carrefour" onclick="toggleCartPago('carrefour')" class="chk" style="flex-shrink:0"></button>
-          </div>
-        </div>
+        <div id="cart-ambos-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border-bottom:1px solid var(--line)"></div>
         <div style="padding:14px 18px 4px">
           <div style="font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.09em;margin-bottom:12px">Por categoria — consolidado</div>
           <div id="cart-cat-ambos"></div>
         </div>
       </div>
-      <!-- SANTANDER -->
-      <div id="ct-view-san" style="display:none">
+      <!-- UM CARTÃO (reaproveitado pra qualquer cartão selecionado) -->
+      <div id="ct-view-banco" style="display:none">
         <div style="padding:14px 18px 0;border-bottom:1px solid var(--line)">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
             <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;flex:1">
-              <div><div style="font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px">Total</div><div style="font-size:17px;font-weight:700;color:#111110" id="cart-san-tot-view">—</div></div>
-              <div><div style="font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px">Meu valor</div><div style="font-size:17px;font-weight:700;color:#111110" id="cart-san-eu">—</div></div>
-              <div><div style="font-size:10px;font-weight:600;color:#0D9488;text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px">Pedro</div><div style="font-size:17px;font-weight:700;color:#111110" id="cart-san-pedro">—</div></div>
+              <div><div style="font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px">Total</div><div style="font-size:17px;font-weight:700;color:#111110" id="cart-banco-tot-view">—</div></div>
+              <div><div style="font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px">Meu valor</div><div style="font-size:17px;font-weight:700;color:#111110" id="cart-banco-eu">—</div></div>
+              <div><div style="font-size:10px;font-weight:600;color:#0D9488;text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px">Pedro</div><div style="font-size:17px;font-weight:700;color:#111110" id="cart-banco-pedro">—</div></div>
             </div>
-            <button onclick="addCartItemTop('santander')" class="sub-act" style="flex-shrink:0;margin-left:8px">+</button>
+            <button onclick="addCartItemTop(curCartTab)" class="sub-act" style="flex-shrink:0;margin-left:8px">+</button>
           </div>
-          <div style="display:flex;gap:6px;padding-bottom:14px;overflow-x:auto" id="san-div-pills">
-            <button class="cart-fpill on" onclick="setCartFiltro('san','all',this)">Todos</button>
-            <button class="cart-fpill" onclick="setCartFiltro('san','proprio',this)">Só meu</button>
-            <button class="cart-fpill" onclick="setCartFiltro('san','pedro_div',this)" style="color:#0D9488;border-color:rgba(13,148,136,.3)">÷ Pedro</button>
+          <div style="display:flex;gap:6px;padding-bottom:14px;overflow-x:auto" id="cart-div-pills">
+            <button class="cart-fpill on" onclick="setCartFiltro(curCartTab,'all',this)">Todos</button>
+            <button class="cart-fpill" onclick="setCartFiltro(curCartTab,'proprio',this)">Só meu</button>
+            <button class="cart-fpill" onclick="setCartFiltro(curCartTab,'pedro_div',this)" style="color:#0D9488;border-color:rgba(13,148,136,.3)">÷ Pedro</button>
+            <button class="cart-fpill" onclick="setCartFiltro(curCartTab,'pedro_ind',this)" style="color:#7C3AED;border-color:rgba(124,58,237,.3)">Pedro paga</button>
           </div>
         </div>
         <!-- inline new item zone (top) -->
-        <div id="cart-top-new-san"></div>
+        <div id="cart-top-new-atual"></div>
         <div style="padding:12px 18px 4px;font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.09em">Por categoria</div>
-        <div style="padding:0 18px 12px"><div id="cart-cat-san"></div></div>
-        <div id="list-san" style="border-top:1px solid var(--line)"></div>
-        <button class="add-btn" onclick="addCartItemTop('santander')">＋ Adicionar item</button>
-        
-      </div>
-      <!-- CARREFOUR -->
-      <div id="ct-view-car" style="display:none">
-        <div style="padding:14px 18px 0;border-bottom:1px solid var(--line)">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;flex:1">
-              <div><div style="font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px">Total</div><div style="font-size:17px;font-weight:700;color:#111110" id="cart-car-tot-view">—</div></div>
-              <div><div style="font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px">Meu valor</div><div style="font-size:17px;font-weight:700;color:#111110" id="cart-car-eu">—</div></div>
-              <div><div style="font-size:10px;font-weight:600;color:#0D9488;text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px">Pedro</div><div style="font-size:17px;font-weight:700;color:#111110" id="cart-car-pedro">—</div></div>
-            </div>
-            <button onclick="addCartItemTop('carrefour')" class="sub-act" style="flex-shrink:0;margin-left:8px">+</button>
-          </div>
-          <div style="display:flex;gap:6px;padding-bottom:14px;overflow-x:auto" id="car-div-pills">
-            <button class="cart-fpill on" onclick="setCartFiltro('car','all',this)">Todos</button>
-            <button class="cart-fpill" onclick="setCartFiltro('car','proprio',this)">Só meu</button>
-            <button class="cart-fpill" onclick="setCartFiltro('car','pedro_div',this)" style="color:#0D9488;border-color:rgba(13,148,136,.3)">÷ Pedro</button>
-            <button class="cart-fpill" onclick="setCartFiltro('car','pedro_ind',this)" style="color:#7C3AED;border-color:rgba(124,58,237,.3)">Pedro paga</button>
-          </div>
-        </div>
-        <!-- inline new item zone (top) -->
-        <div id="cart-top-new-car"></div>
-        <div style="padding:12px 18px 4px;font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.09em">Por categoria</div>
-        <div style="padding:0 18px 12px"><div id="cart-cat-car"></div></div>
-        <div id="list-car" style="border-top:1px solid var(--line)"></div>
-        <button class="add-btn" onclick="addCartItemTop('carrefour')">＋ Adicionar item</button>
-        
-      </div>
-
+        <div style="padding:0 18px 12px"><div id="cart-cat-atual"></div></div>
+        <div id="list-atual" style="border-top:1px solid var(--line)"></div>
+        <button class="add-btn" onclick="addCartItemTop(curCartTab)">＋ Adicionar item</button>
       </div>
     </div>
   </div>
@@ -1008,22 +948,27 @@ body{font-family:"Outfit",sans-serif;color:var(--ink);font-size:15px;line-height
 <div class="subpage" id="sub-config">
   <div class="sub-hd"><div class="sub-hd-inner"><button class="back-btn" onclick="goBack()">‹ Voltar</button><span class="sub-title">Configurações</span><div style="width:34px"></div></div></div>
   <!-- Sync banner -->
-  <div style="margin:12px 16px 0;background:#F0FDF4;border-radius:var(--r-sm);padding:12px 16px;display:flex;align-items:center;gap:12px">
-    <div style="flex:1">
-      <div style="font-size:13px;font-weight:600;color:#166534">Sincronização</div>
-      <div style="font-size:12px;color:#166534;opacity:.7;margin-top:2px" id="sync-status-lbl">Dados salvos localmente e na nuvem</div>
+  <div style="margin:12px 16px 0;background:#F0FDF4;border-radius:var(--r-sm);padding:14px 16px;display:flex;flex-direction:column;gap:12px">
+    <div>
+      <div style="font-size:13px;font-weight:600;color:#166534">Backup e sincronização</div>
+      <div style="font-size:12px;color:#166534;opacity:.7;margin-top:2px" id="sync-status-lbl">Backup automático a cada 5 min enquanto o app estiver aberto</div>
     </div>
-    <button onclick="salvarBackupManual()" style="display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:99px;border:none;background:#7C3AED;color:white;font-family:Outfit,sans-serif;font-size:13px;font-weight:600;cursor:pointer"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Salvar backup</button>
-    <button onclick="abrirSubpageBackups()" style="display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:99px;border:none;background:#D97706;color:white;font-family:Outfit,sans-serif;font-size:13px;font-weight:600;cursor:pointer">🗂 Backups</button>
-    <button onclick="checkAppVersion()" style="display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:99px;border:none;background:#2563EB;color:white;font-family:Outfit,sans-serif;font-size:13px;font-weight:600;cursor:pointer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg> Verificar nova versão</button>
-    <button onclick="forceSyncNow()" style="display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:99px;border:none;background:#16A34A;color:white;font-family:Outfit,sans-serif;font-size:13px;font-weight:600;cursor:pointer" id="sync-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg> Sincronizar</button>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button onclick="salvarBackupManual()" style="flex:1;min-width:140px;display:flex;align-items:center;justify-content:center;gap:6px;padding:10px 14px;border-radius:99px;border:none;background:#7C3AED;color:white;font-family:Outfit,sans-serif;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Salvar backup</button>
+      <button onclick="abrirSubpageBackups()" style="flex:1;min-width:140px;display:flex;align-items:center;justify-content:center;gap:6px;padding:10px 14px;border-radius:99px;border:none;background:#D97706;color:white;font-family:Outfit,sans-serif;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap">🗂 Ver backups</button>
+    </div>
+    <div style="display:flex;gap:14px;flex-wrap:wrap;padding-top:2px;border-top:1px solid rgba(22,101,52,.12)">
+      <button onclick="forceSyncNow()" id="sync-btn" style="display:flex;align-items:center;gap:5px;border:none;background:none;padding:6px 0 0;color:#166534;font-family:Outfit,sans-serif;font-size:12px;font-weight:600;cursor:pointer;opacity:.75"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg> Forçar sincronização</button>
+      <button onclick="checkAppVersion()" style="display:flex;align-items:center;gap:5px;border:none;background:none;padding:6px 0 0;color:#166534;font-family:Outfit,sans-serif;font-size:12px;font-weight:600;cursor:pointer;opacity:.75"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg> Verificar atualização</button>
+    </div>
   </div>
   <div style="padding:14px 16px">
     <div class="card" style="margin:0;overflow:hidden">
       <div onclick="goSub('sub-config-cart')" style="display:flex;align-items:center;gap:14px;padding:15px 18px;cursor:pointer;border-bottom:1px solid var(--line)"><div style="width:36px;height:36px;border-radius:var(--r-sm);background:#FDF2F8;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#BE185D" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div><div style="flex:1"><div style="font-size:14px;font-weight:600">Categorias do cartão</div><div style="font-size:12px;color:var(--ink3);margin-top:2px">Gerencie as categorias dos gastos</div></div><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink3)" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
       <div onclick="goSub('sub-config-sem')" style="display:flex;align-items:center;gap:14px;padding:15px 18px;cursor:pointer;border-bottom:1px solid var(--line)"><div style="width:36px;height:36px;border-radius:var(--r-sm);background:#F0FDF4;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div style="flex:1"><div style="font-size:14px;font-weight:600">Categorias semanais</div><div style="font-size:12px;color:var(--ink3);margin-top:2px">Categorias e subcategorias de lançamentos</div></div><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink3)" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
       <div onclick="goSub('sub-config-res')" style="display:flex;align-items:center;gap:14px;padding:15px 18px;cursor:pointer;border-bottom:1px solid var(--line)"><div style="width:36px;height:36px;border-radius:var(--r-sm);background:#FFFBEB;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><div style="flex:1"><div style="font-size:14px;font-weight:600">Categorias de reservas</div><div style="font-size:12px;color:var(--ink3);margin-top:2px">Categorias de entrada e saída das caixinhas</div></div><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink3)" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
-      <div onclick="goSub('sub-config-caixinhas')" style="display:flex;align-items:center;gap:14px;padding:15px 18px;cursor:pointer"><div style="width:36px;height:36px;border-radius:var(--r-sm);background:#FFFBEB;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg></div><div style="flex:1"><div style="font-size:14px;font-weight:600">Caixinhas</div><div style="font-size:12px;color:var(--ink3);margin-top:2px">Criar, editar e organizar suas caixinhas</div></div><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink3)" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
+      <div onclick="goSub('sub-config-caixinhas')" style="display:flex;align-items:center;gap:14px;padding:15px 18px;cursor:pointer;border-bottom:1px solid var(--line)"><div style="width:36px;height:36px;border-radius:var(--r-sm);background:#FFFBEB;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg></div><div style="flex:1"><div style="font-size:14px;font-weight:600">Caixinhas</div><div style="font-size:12px;color:var(--ink3);margin-top:2px">Criar, editar e organizar suas caixinhas</div></div><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink3)" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
+      <div onclick="goSub('sub-config-cartoes')" style="display:flex;align-items:center;gap:14px;padding:15px 18px;cursor:pointer"><div style="width:36px;height:36px;border-radius:var(--r-sm);background:#FDF2F8;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#BE185D" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div><div style="flex:1"><div style="font-size:14px;font-weight:600">Cartões de crédito</div><div style="font-size:12px;color:var(--ink3);margin-top:2px">Adicionar ou renomear seus cartões</div></div><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink3)" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
     </div>
   </div>
 </div>
@@ -1059,6 +1004,18 @@ body{font-family:"Outfit",sans-serif;color:var(--ink);font-size:15px;line-height
   <div style="padding:14px 16px 90px">
     <div id="config-caixinhas-list"></div>
     <button onclick="configAddCaixinha()" style="width:100%;margin-top:12px;padding:13px;border-radius:var(--r-sm);border:1.5px solid #D97706;background:none;color:#D97706;font-family:Outfit,sans-serif;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Criar caixinha</button>
+  </div>
+</div>
+
+<!-- CONFIG: CARTÕES DE CRÉDITO -->
+<div class="subpage" id="sub-config-cartoes">
+  <div class="sub-hd"><div class="sub-hd-inner"><button class="back-btn" onclick="goBack()">‹ Voltar</button><span class="sub-title">Cartões de crédito</span><div style="width:34px"></div></div></div>
+  <div style="padding:14px 16px 90px">
+    <div id="config-cartoes-list"></div>
+    <div style="display:flex;gap:8px;margin-top:12px">
+      <input class="finput" id="config-cartao-novo-input" type="text" placeholder="Nome do novo cartão…" style="flex:1;padding:11px 14px;font-size:14px">
+      <button onclick="configAddCartao()" style="padding:11px 18px;border-radius:var(--r-sm);background:var(--ink);color:white;border:none;font-family:Outfit,sans-serif;font-size:14px;font-weight:600;cursor:pointer">+</button>
+    </div>
   </div>
 </div>
 
@@ -1579,14 +1536,6 @@ body{font-family:"Outfit",sans-serif;color:var(--ink);font-size:15px;line-height
   <button class="btn btn-ghost" style="margin-top:8px" onclick="closeSheet('sh-cated')">Fechar</button>
 </div></div>
 
-<div class="overlay" id="sh-fechar"><div class="sheet">
-  <div class="sh-hd"><div class="sh-handle"></div><div class="sh-title">Fechar mês</div></div>
-  <div style="margin:14px 20px 0;padding:14px;background:var(--warn-lt);border-radius:var(--r-sm);font-size:13px;color:var(--warn)"> Despesas fixas e parcelamentos serão copiados para o próximo mês.</div>
-  <div class="card" style="margin:14px 20px 0" id="fechar-res"></div>
-  <button class="btn btn-primary" onclick="fecharMes()">Confirmar</button>
-  <button class="btn btn-ghost" onclick="closeSheet('sh-fechar')">Cancelar</button>
-</div></div>
-
 <script>
 
 // ═══════════════════════════════════════════
@@ -1707,6 +1656,7 @@ function loginErrMsg(code){
 }
 
 // ── Auth state change ──
+var _autoBackupTimer=null;
 fbAuth.onAuthStateChanged(function(user){
   fbUser = user;
   var loginScreen = document.getElementById('login-screen');
@@ -1715,12 +1665,16 @@ fbAuth.onAuthStateChanged(function(user){
     if(loginScreen) loginScreen.style.display='none';
     // Iniciar sync
     startFirebaseSync();
+    // Backup automático a cada 5 minutos enquanto o app estiver aberto e logada
+    if(_autoBackupTimer) clearInterval(_autoBackupTimer);
+    _autoBackupTimer = setInterval(function(){ saveBackup(); }, 5*60*1000);
   } else {
     // Mostrar tela de login
     if(loginScreen) loginScreen.style.display='flex';
     showLoginLoading(false);
     // Parar listener
     if(fbUnsub){ fbUnsub(); fbUnsub=null; }
+    if(_autoBackupTimer){ clearInterval(_autoBackupTimer); _autoBackupTimer=null; }
   }
 });
 
@@ -1736,14 +1690,17 @@ function startFirebaseSync(){
   // Buscar dados do Firebase UMA VEZ ao iniciar
   docRef.get().then(function(snap){
     if(!snap.exists){
-      // Primeira vez — enviar dados locais
+      // Primeira vez de verdade (conta nova, sem documento nenhum) — aí sim pode enviar
+      _syncReady=true;
       save();
       return;
     }
     var remote = snap.data();
-    if(!remote||!remote.data) return;
+    if(!remote||!remote.data){ _syncReady=true; return; }
     var remoteTs = remote.deviceTs || 0;
-    var localTs = _lastSavedTs || 0;
+    // Usa o timestamp capturado ANTES de qualquer save() de boot/migração —
+    // não o _lastSavedTs, que já pode ter sido carimbado com Date.now() só de a página abrir.
+    var localTs = _bootLocalTs || 0;
 
     // Usar Firebase se for mais recente que o local
     if(remoteTs > localTs){
@@ -1761,6 +1718,9 @@ function startFirebaseSync(){
     } else {
       console.log('Local mais recente, mantendo ✓ local:', localTs, 'remote:', remoteTs);
     }
+    // Só a partir daqui é seguro deixar save() empurrar dados pro Firestore —
+    // a comparação inicial já rodou, então qualquer save() agora é uma edição real.
+    _syncReady=true;
 
     // Listener em tempo real para outros dispositivos
     fbUnsub = docRef.onSnapshot(function(snap2){
@@ -1851,32 +1811,47 @@ function saveBackup(label){
     .set({
       data: JSON.stringify(S),
       ts: ts,
-      label: label || 'auto',
-      mes: (S.month ? S.month.m + '/' + S.month.y : ''),
+      label: label || 'Automático',
+      mes: (S.month ? MNS[S.month.m-1]+' '+S.month.y : ''),
       lancamentos: (S.lancamentos || []).length
     }).catch(function(e){ console.log('backup erro:', e); });
 }
 
 function salvarBackupManual(){
   if(!fbUser||!fbDb){showToast('Faça login primeiro');return;}
-  var ts = new Date().toISOString().replace('T',' ').slice(0,19);
-  var label = 'manual_'+ts.replace(/[: ]/g,'_');
+  var ts = new Date().toISOString();
+  var docId = ('manual_'+ts).replace(/[:.]/g,'_');
   var dados = JSON.stringify(S);
   fbDb.collection('users').doc(fbUser.uid)
-    .collection('backups').doc(label)
+    .collection('backups').doc(docId)
     .set({
       data: dados,
       ts: ts,
-      label: 'Manual — '+ts,
+      label: 'Manual',
       mes: (S.month?MNS[S.month.m-1]+' '+S.month.y:''),
       lancamentos: (S.lancamentos||[]).length
     }).then(function(){
-      showToast('Backup salvo ✓ — '+ts);
-      console.log('Backup manual salvo:', label);
+      showToast('Backup salvo ✓ — '+formatBackupData(ts));
+      console.log('Backup manual salvo:', docId);
     }).catch(function(e){
       showToast('Erro ao salvar backup');
       console.log('Erro backup:', e);
     });
+}
+
+// Formata um timestamp ISO (UTC) no horário LOCAL da usuária, de forma clara:
+// "Hoje, 14:32" / "Ontem, 09:10" / "12 ago, 18:05"
+function formatBackupData(isoTs){
+  if(!isoTs)return'';
+  var d=new Date(isoTs);
+  if(isNaN(d.getTime()))return isoTs;
+  var hoje=new Date();
+  var ontem=new Date();ontem.setDate(hoje.getDate()-1);
+  var hora=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+  var mesmoDia=function(a,b){return a.getFullYear()===b.getFullYear()&&a.getMonth()===b.getMonth()&&a.getDate()===b.getDate();};
+  if(mesmoDia(d,hoje))return'Hoje, '+hora;
+  if(mesmoDia(d,ontem))return'Ontem, '+hora;
+  return d.getDate()+' '+MNS[d.getMonth()].slice(0,3).toLowerCase()+', '+hora;
 }
 
 function abrirSubpageBackups(){
@@ -1892,19 +1867,26 @@ function abrirSubpageBackups(){
     .get().then(function(snap){
       if(!el)return;
       if(snap.empty){el.innerHTML='<div style="text-align:center;color:var(--ink3);padding:20px">Nenhum backup encontrado</div>';return;}
-      el.innerHTML=snap.docs.map(function(doc){
+      el.innerHTML=snap.docs.map(function(doc,i){
         var d=doc.data();
-        var data=d.ts?d.ts.slice(0,16).replace('T',' '):'';
-        var label=d.label||'auto';
+        var dataFmt=formatBackupData(d.ts);
+        var label=d.label||'Automático';
         var lan=d.lancamentos||0;
         var mes=d.mes||'';
-        var isManual=label.startsWith('Manual')||label.startsWith('manual');
+        var isManual=label.indexOf('Manual')===0;
+        var isPreMes=label.indexOf('pre_mes_')===0;
+        var badgeTxt=isManual?'Manual':isPreMes?'Antes de iniciar mês':'Automático';
+        var badgeCol=isManual?'#7C3AED':isPreMes?'#D97706':'#6B7280';
+        var maisRecente=i===0?'<div style="font-size:10px;font-weight:700;color:var(--ok);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">● Mais recente</div>':'';
         return '<div style="background:var(--bg2);border-radius:14px;padding:16px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px">'+
-          '<div>'+
-            '<div style="font-size:13px;font-weight:700;color:var(--ink)">'+data+'</div>'+
-            '<div style="font-size:12px;color:var(--ink3);margin-top:2px">'+
-              (isManual?'<span style="background:#7C3AED22;color:#7C3AED;font-weight:600;padding:1px 6px;border-radius:99px;font-size:11px">Manual</span> ':'')+''+
-              mes+(lan?' · '+lan+' lançamento'+(lan>1?'s':''):'')+'</div>'+
+          '<div style="min-width:0">'+
+            maisRecente+
+            '<div style="font-size:14px;font-weight:700;color:var(--ink)">'+dataFmt+'</div>'+
+            '<div style="font-size:12px;color:var(--ink3);margin-top:3px;display:flex;align-items:center;gap:6px;flex-wrap:wrap">'+
+              '<span style="background:'+badgeCol+'22;color:'+badgeCol+';font-weight:600;padding:1px 8px;border-radius:99px;font-size:11px">'+badgeTxt+'</span>'+
+              (mes?'<span>'+mes+'</span>':'')+
+              (lan?'<span>· '+lan+' lançamento'+(lan>1?'s':'')+'</span>':'')+
+            '</div>'+
           '</div>'+
           '<button onclick="restaurarBackupApp(this.dataset.id)" data-id="'+doc.id+'" style="padding:8px 14px;border-radius:99px;background:var(--ink);color:white;border:none;font-family:Outfit,sans-serif;font-size:12px;font-weight:600;cursor:pointer;flex-shrink:0">Restaurar</button>'+
         '</div>';
@@ -1992,6 +1974,15 @@ function limparBackupsAntigos(){
 }
 
 const KEY='catchup_v1';
+// Timestamp local capturado ANTES de qualquer save() de inicialização/migração rodar.
+// É esse valor (e não o _lastSavedTs, que pode já ter sido "carimbado" por saves de boot)
+// que deve ser usado na PRIMEIRA comparação com o Firebase, pra um navegador recém-aberto
+// nunca se achar "mais recente" que a nuvem só por ter acabado de carregar a página.
+var _bootLocalTs = parseInt(localStorage.getItem('catchup_ts')||'0');
+// Só true depois que a primeira comparação com o Firebase já rodou — enquanto for false,
+// save() nunca envia nada pro Firestore, só grava local. Isso evita que os saves de
+// inicialização empurrem um estado vazio/desatualizado por cima dos dados reais na nuvem.
+var _syncReady=false;
 const MNS=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
 const ICONS={Alimentação:'🛒',Transporte:'🚗',Variados:'🎨',Tecido:'🧵',Farmácia:'💊',Casa:'',Pets:'🐾',Pessoal:'',Saúde:'🏥',Eletrônicos:'💻',Roupas:'👗',Assinaturas:'📱',Pedro:'',Padaria:'🥐',Mercado:'🛒',iFood:'🍔',Uber:'🚕',Ônibus:'🚌',Restaurante:'🍽️'};
 const ic=c=>ICONS[c]||'📌';
@@ -2057,8 +2048,7 @@ function cartCatList(){return S.cats.cartao.map(c=>typeof c==='string'?c:(c&&c.n
 function cartCatColor(nome){const idx=S.cats.cartao.findIndex(c=>catNome(c)===nome);if(idx<0)return PALS[0];return catCor(S.cats.cartao[idx],idx);}
 
 const DEF={
-  month:{m:6,y:2026},
-  monthStatus:{'2026-06':'open'},
+  month:{m:8,y:2026},
   receita:[{id:1,nome:'Salário',valor:6000},{id:2,nome:'Adobe',valor:95}],
   moradia:[
     {id:1,nome:'Aluguel + Condomínio',valor:2340.27,pago:true,pedro:true},
@@ -2137,14 +2127,6 @@ let S=(()=>{
   try{
     const d=JSON.parse(localStorage.getItem(KEY));
     if(!d) return JSON.parse(JSON.stringify(DEF));
-    // Migrar maio→junho DENTRO do carregamento
-    if(!d.monthStatus)d.monthStatus={};
-    if(d.monthStatus['2026-05']&&!d.monthStatus['2026-06']){
-      d.monthStatus['2026-06']=d.monthStatus['2026-05'];
-      delete d.monthStatus['2026-05'];
-    }
-    if(!d.monthStatus['2026-06'])d.monthStatus['2026-06']='open';
-    d.month={m:6,y:2026};
     if(!d.reservas||!Array.isArray(d.reservas))d.reservas=DEF.reservas||[];
     d.reservas.forEach(function(r){if(!r.movs)r.movs=[];});
     if(!d.cartao)d.cartao={santander:[],carrefour:[]};
@@ -2155,30 +2137,9 @@ let S=(()=>{
     return d;
   }catch(e){return JSON.parse(JSON.stringify(DEF));}
 })();
-// ── Migração e guards de inicialização ──
-if(!S.monthStatus)S.monthStatus={};
-if(S.monthStatus['2026-05']&&!S.monthStatus['2026-06']){
-  S.monthStatus['2026-06']=S.monthStatus['2026-05'];
-  delete S.monthStatus['2026-05'];
-}
-if(!S.monthStatus['2026-06'])S.monthStatus['2026-06']='open';
-// Abrir sempre no primeiro mês com status 'open'
-(function(){
-  var keys=Object.keys(S.monthStatus||{}).sort();
-  var firstOpen=null;
-  for(var i=0;i<keys.length;i++){
-    if(S.monthStatus[keys[i]]==='open'){firstOpen=keys[i];break;}
-  }
-  if(firstOpen){
-    var parts=firstOpen.split('-');
-    S.month={m:parseInt(parts[1]),y:parseInt(parts[0])};
-  } else {
-    // Nenhum mês aberto — mínimo junho 2026
-    if(!S.month||S.month.y<2026||(S.month.y===2026&&S.month.m<6)){
-      S.month={m:6,y:2026};
-    }
-  }
-})();
+// Rede de segurança mínima — a garantia real do mês mínimo (agosto/2026) acontece
+// mais abaixo, no bloco de migração pra lista viva.
+if(!S.month) S.month={m:8,y:2026};
 if(!S.reservas)S.reservas=[];
 S.reservas.forEach(function(r){if(!r.movs)r.movs=[];});
 if(!S.lancamentos)S.lancamentos=[];
@@ -2202,7 +2163,10 @@ const save=()=>{
     var allKeys=Object.keys(localStorage).filter(function(k){return k.startsWith('catchup_backup_2');}).sort();
     while(allKeys.length>7){localStorage.removeItem(allKeys.shift());}
   }
-  // 3. Salvar no Firebase
+  // 3. Salvar no Firebase — só depois que a checagem inicial de sincronização já
+  // rodou. Antes disso, save() grava só localmente (evita sobrescrever a nuvem
+  // com um estado ainda não comparado, ex: logo depois de abrir a página).
+  if(!_syncReady) return;
   if(typeof fbUser!=='undefined'&&fbUser&&typeof fbDb!=='undefined'&&fbDb){
     try{
       fbDb.collection('users').doc(fbUser.uid).set({
@@ -2235,7 +2199,110 @@ save();
 if(!S.cartaoPago)S.cartaoPago={santander:false,carrefour:false};
 save();
 
-// ── ROUTER ──
+// ── CARTÕES EXTRAS (além de Santander/Carrefour) ──
+// S.cartoesExtra é a lista de metadados dos cartões adicionais criados pela usuária.
+// Os itens de cada cartão extra ficam em S.cartao['extra_'+id], no mesmo formato
+// que S.cartao.santander / S.cartao.carrefour já usam.
+if(!S.cartoesExtra)S.cartoesExtra=[];
+if(!S.nomesCartao)S.nomesCartao={};
+function initCartoesExtra(){
+  if(!S.cartoesExtra)S.cartoesExtra=[];
+  S.cartoesExtra.forEach(function(c){
+    var key='extra_'+c.id;
+    if(!S.cartao[key])S.cartao[key]=[];
+    if(!S.cartaoPago)S.cartaoPago={};
+    if(S.cartaoPago[key]===undefined)S.cartaoPago[key]=false;
+  });
+}
+initCartoesExtra();
+function todosCartoes(){
+  initCartoesExtra();
+  if(!S.nomesCartao)S.nomesCartao={};
+  var lista=[
+    {key:'santander',nome:S.nomesCartao.santander||'Santander'},
+    {key:'carrefour',nome:S.nomesCartao.carrefour||'Carrefour'}
+  ];
+  S.cartoesExtra.forEach(function(c){lista.push({key:'extra_'+c.id,nome:c.nome});});
+  return lista;
+}
+// Renomeia qualquer cartão (fixo ou extra) pela chave — usado na tela de Configurações
+function renomearCartao(key,novoNome){
+  novoNome=(novoNome||'').trim();
+  if(!novoNome)return;
+  if(key==='santander'||key==='carrefour'){
+    if(!S.nomesCartao)S.nomesCartao={};
+    S.nomesCartao[key]=novoNome;
+    save();
+  } else if(key.indexOf('extra_')===0){
+    var id=parseInt(key.slice(6));
+    renomearCartaoExtra(id,novoNome);
+  }
+}
+function criarCartaoExtra(nome){
+  nome=(nome||'').trim();
+  if(!nome)return null;
+  initCartoesExtra();
+  var novoId=(S.cartoesExtra.reduce(function(m,c){return Math.max(m,c.id);},0))+1;
+  S.cartoesExtra.push({id:novoId,nome:nome});
+  var key='extra_'+novoId;
+  if(!S.cartao)S.cartao={};
+  S.cartao[key]=[];
+  if(!S.cartaoPago)S.cartaoPago={};
+  S.cartaoPago[key]=false;
+  save();
+  return key;
+}
+function renomearCartaoExtra(id,novoNome){
+  novoNome=(novoNome||'').trim();
+  if(!novoNome)return;
+  var c=S.cartoesExtra.find(function(x){return x.id===id;});
+  if(c){c.nome=novoNome;save();}
+}
+function removerCartaoExtra(id){
+  var key='extra_'+id;
+  S.cartoesExtra=S.cartoesExtra.filter(function(x){return x.id!==id;});
+  if(S.cartao)delete S.cartao[key];
+  if(S.cartaoPago)delete S.cartaoPago[key];
+  save();
+}
+
+// ── CONFIG: CARTÕES DE CRÉDITO (adicionar/renomear) ──
+function renderConfigCartoes(){
+  const el=document.getElementById('config-cartoes-list');if(!el)return;
+  const cartoes=todosCartoes();
+  el.innerHTML=cartoes.map(function(c){
+    const isExtra=c.key.indexOf('extra_')===0;
+    return `<div class="card" style="margin-bottom:10px;overflow:hidden">
+      <div style="display:flex;align-items:center;gap:12px;padding:14px 16px">
+        <div style="width:36px;height:36px;border-radius:var(--r-sm);background:#FDF2F8;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#BE185D" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        </div>
+        <input class="finput" value="${c.nome}" data-key="${c.key}" style="flex:1;padding:9px 12px;font-size:14px;font-weight:500" onchange="renomearCartao(this.dataset.key,this.value);renderConfigCartoes();">
+        ${isExtra?`<button data-key="${c.key}" onclick="configRmCartaoBtn(this)" style="border:none;background:none;color:var(--danger);cursor:pointer;padding:4px;flex-shrink:0">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+        </button>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+function configAddCartao(){
+  const inp=document.getElementById('config-cartao-novo-input');
+  if(!inp||!inp.value.trim())return;
+  criarCartaoExtra(inp.value.trim());
+  inp.value='';
+  renderConfigCartoes();
+  showToast('Cartão criado ✓');
+}
+function configRmCartaoBtn(el){
+  const key=el.dataset.key;
+  if(key.indexOf('extra_')!==0)return;
+  if(!confirm('Remover este cartão? Ele deixa de aparecer na aba Cartões (o histórico de gastos já lançado continua salvo).'))return;
+  const id=parseInt(key.slice(6));
+  removerCartaoExtra(id);
+  renderConfigCartoes();
+  showToast('Cartão removido ✓');
+}
+
 let subStack=[],curHT='home',curST='cats',curWeek='all',curFiltro='all',curFiltroSem='all',curCatDet='',curCartTab='ambos',ltipo='sem';
 
 function goSub(id){
@@ -2256,29 +2323,28 @@ function renderHomeNav(){
   if(!S.reservas)S.reservas=[];
   if(!S.cartao)S.cartao={santander:[],carrefour:[]};
   if(!S.moradia)S.moradia=[];
-  const st=getStatus();
-  const saldo=st?cSaldo():0;
-  const gt=st?cGS('all'):0;
+  const saldo=cSaldo();
+  const gt=cGS('all');
   const disp=Math.max(0,saldo-gt);
   const tot=S.reservas.reduce((a,r)=>a+r.saldo,0);
-  const san=cCart('santander'),car=cCart('carrefour');
-  const pedro=cMor().ped+(san.div||0)/2+(car.div||0)/2+(san.ind||0)+(car.ind||0)+cRMPedro();
+  const cartTodos=cCartTodos();
+  const pedro=cMor().ped+(cartTodos.div||0)/2+(cartTodos.ind||0)+cRMPedro();
   const rec=cRec();
   const sv=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
   // Mensal card
-  sv('hnc-mes-val', st?fmt(saldo):'—');
-  sv('hnc-mes-rec', st?fmt(rec):'—');
-  sv('hnc-mes-comp', st?fmt(rec-saldo):'—');
+  sv('hnc-mes-val', fmt(saldo));
+  sv('hnc-mes-rec', fmt(rec));
+  sv('hnc-mes-comp', fmt(rec-saldo));
   // Semanal card
-  sv('hnc-sem-val', st?fmt(disp):'—');
-  sv('hnc-sem-orc', st?fmt(saldo):'—');
-  sv('hnc-sem-gasto', st?fmt(gt):'—');
+  sv('hnc-sem-val', fmt(disp));
+  sv('hnc-sem-orc', fmt(saldo));
+  sv('hnc-sem-gasto', fmt(gt));
   // Reservas card (always show — global)
   sv('hnc-res-val', fmt(tot));
   const rs=document.getElementById('hnc-res-sub');
   if(rs){rs.textContent=`${S.reservas.length} caixinhas`;rs.style.color='var(--ink3)';}
   // Pedro card
-  sv('hnc-ped-val', st?fmt(pedro):'—');
+  sv('hnc-ped-val', fmt(pedro));
 }
 
 function goHome(){
@@ -2300,9 +2366,9 @@ function renderSub(id){
   else if(id==='sub-cat-detalhe'){renderScd(curCatDet);}
   else if(id==='sub-reserva-det'){renderResSubpage();}
   else if(id==='sub-cartoes'){
-    const btn=document.getElementById('ct-ambos');
-    setCartTab('ambos',btn);
+    setCartTab('ambos',null);
   }
+  else if(id==='sub-config-cartoes'){renderConfigCartoes();}
 }
 
 // ── COLOR PICKER ──
@@ -2521,18 +2587,24 @@ function salvarShRm(){
   var divBtn = ['proprio','pedro_div','pedro_ind'].find(function(k){
     var b=document.getElementById('sh-rm-div-'+k); return b&&b.style.background!=='none'&&b.style.background!=='';
   })||'proprio';
-  if(!S.reservasmes)S.reservasmes=[];
   if(_shRmEditId){
-    var item = S.reservasmes.find(function(x){return x.id===_shRmEditId;});
-    if(item){item.nome=nome;item.desc=desc;item.parc=parc;item.valor=val;item.div=divBtn;item.caixinhaId=caixinhaId;item.cat=cat;}
+    var item = itemVivo('reservasmes', _shRmEditId);
+    if(item){
+      item.nome=nome; item.desc=desc; item.div=divBtn; item.caixinhaId=caixinhaId; item.cat=cat;
+      item.parcela = parc ? parseParc(parc, curKey()) : null;
+      gravarValorItemVivo(item, val, false);
+    }
   } else {
-    S.reservasmes.push({id:nxId(S.reservasmes),nome:nome,desc:desc,parc:parc,div:divBtn,valor:val,pago:false,caixinhaId:caixinhaId,cat:cat});
+    criarItemVivo('reservasmes', {nome:nome, desc:desc, div:divBtn, caixinhaId:caixinhaId, cat:cat, valor:val, parcTexto:parc});
   }
+  recomputarMesAtual();
   save();showToast('Aporte salvo ✓');closeSheet('sh-rm');renderRMSub();renderMesHome();
 }
 function deletarShRm(){
   if(!_shRmEditId)return;
-  S.reservasmes = S.reservasmes.filter(function(x){return x.id!==_shRmEditId;});
+  var item = itemVivo('reservasmes', _shRmEditId);
+  if(item) excluirItemVivoDesteMes(item);
+  recomputarMesAtual();
   save();showToast('Salvo ✓');closeSheet('sh-rm');renderRMSub();renderMesHome();
 }
 function openShRmCaixinhaPicker(){
@@ -2890,7 +2962,7 @@ function importLancFile(input){
   };
   reader.readAsDataURL(file);
 }
-const APP_VERSION = "v53";
+const APP_VERSION = "v63";
 
 function checkAppVersion(){
   showToast('Salvando dados…');
@@ -3087,8 +3159,18 @@ function cRMPedro(){
     return a;
   },0);
 }
-function cCart(b){const it=S.cartao[b];const p=it.filter(i=>i.div==='proprio').reduce((a,i)=>a+i.valor,0);const d=it.filter(i=>i.div==='pedro_div').reduce((a,i)=>a+i.valor,0);const n=it.filter(i=>i.div==='pedro_ind').reduce((a,i)=>a+i.valor,0);return{tot:p+d+n,div:d,ind:n,eu:p+d/2};}
-function cSaldo(){const san=cCart('santander'),car=cCart('carrefour');return cRec()-cMor().each-cPes()-cRMEu()-san.eu-car.eu;}
+function cCart(b){const it=S.cartao[b]||[];const p=it.filter(i=>i.div==='proprio').reduce((a,i)=>a+i.valor,0);const d=it.filter(i=>i.div==='pedro_div').reduce((a,i)=>a+i.valor,0);const n=it.filter(i=>i.div==='pedro_ind').reduce((a,i)=>a+i.valor,0);return{tot:p+d+n,div:d,ind:n,eu:p+d/2};}
+// Soma cCart() de TODOS os cartões (Santander, Carrefour, e qualquer cartão extra criado) —
+// usar sempre que precisar do total geral de cartões, em vez de somar só santander+carrefour.
+function cCartTodos(){
+  var tot=0,div=0,ind=0,eu=0;
+  todosCartoes().forEach(function(c){
+    var r=cCart(c.key);
+    tot+=r.tot; div+=r.div; ind+=r.ind; eu+=r.eu;
+  });
+  return {tot:tot,div:div,ind:ind,eu:eu};
+}
+function cSaldo(){const cart=cCartTodos();return cRec()-cMor().each-cPes()-cRMEu()-cart.eu;}
 const cGS=sem=>S.lancamentos.filter(l=>(l.mes||curKey())===curKey()&&(sem==='all'||l.sem===sem)).reduce((a,l)=>a+l.val,0);
 const cGC=(cat,sem)=>S.lancamentos.filter(l=>(l.mes||curKey())===curKey()&&l.cat===cat&&(sem==='all'||l.sem===sem)).reduce((a,l)=>a+l.val,0);
 
@@ -3120,13 +3202,12 @@ function renderTab(tab){
 function renderAll(){
   updateMlbl();
   renderTab(curHT);
-  renderCycleBtn();
 }
 
 // ── MES HOME ──
 function renderMesHome(){
   const rec=cRec(),mor=cMor(),pes=cPes(),rm=cRMEu();
-  const san=cCart('santander'),car=cCart('carrefour'),cartLiq=san.eu+car.eu,saldo=cSaldo();
+  const cartTodos=cCartTodos(),cartLiq=cartTodos.eu,saldo=cSaldo();
   const sv=id=>document.getElementById(id);
   const st=(id,v)=>{const e=sv(id);if(e)e.textContent=v;};
   st('h-saldo',fmt(saldo));st('h-rec',fmt(rec));st('h-comp',fmt(rec-saldo));
@@ -3158,12 +3239,17 @@ function renderMesHome(){
   const rma=document.getElementById('sc-rm-meta');if(rma)rma.textContent=`${rmPago} de ${rmTot} pagas`;
   st('sc-rm-val',fmt(rm));
   // cartão: total de itens (cartão não tem "pago", mostra contagem)
-  const cartTot=S.cartao.santander.length+S.cartao.carrefour.length;
-  const cma=document.getElementById('sc-cart-meta');if(cma){var _sPg=S.cartaoPago&&S.cartaoPago.santander;var _cPg=S.cartaoPago&&S.cartaoPago.carrefour;cma.textContent=(_sPg&&_cPg)?'San ✓ · Car ✓':(_sPg?'San ✓ · Car pendente':(_cPg?'San pendente · Car ✓':'San · Car pendentes'));}
+  const todosCart=todosCartoes();
+  const cartTot=todosCart.reduce((a,c)=>a+((S.cartao[c.key]||[]).length),0);
+  const cma=document.getElementById('sc-cart-meta');
+  if(cma){
+    const pagos=todosCart.filter(c=>S.cartaoPago&&S.cartaoPago[c.key]).length;
+    cma.textContent = todosCart.length ? `${pagos} de ${todosCart.length} pagos` : '—';
+  }
   st('sc-cart-val',fmt(cartLiq));
   const splitEl=document.getElementById('sc-cart-split');
   if(splitEl){
-    const pedCart=san.div/2+car.div/2+car.ind;
+    const pedCart=cartTodos.div/2+cartTodos.ind;
     splitEl.innerHTML=`<span style="color:var(--ink2)">Você</span> ${fmt(cartLiq)} &nbsp;·&nbsp; <span style="color:var(--ink2)">Pedro</span> ${fmt(pedCart)}`;
   }
   const pcl=document.getElementById('pie-center-lbl');if(pcl)pcl.textContent=MNS[S.month.m-1].slice(0,3).toLowerCase();
@@ -3241,6 +3327,10 @@ function renderRecSub(){
         <div>
           <label style="font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em;display:block;margin-bottom:4px">Valor (R$)</label>
           <input class="finput" type="number" inputmode="decimal" style="padding:10px 12px;font-size:14px" value="${r.valor}" oninput="recTmp(${r.id},'valor',this.value)">
+          <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink2);cursor:pointer;margin-top:8px">
+            <input type="checkbox" onchange="recTmp(${r.id},'soEsteMes',this.checked)" style="width:16px;height:16px;accent-color:var(--ink)">
+            Aplicar só neste mês (não muda os próximos)
+          </label>
         </div>
         <button onclick="confirmRec(${r.id})" style="width:100%;padding:11px;border-radius:var(--r-sm);background:var(--ink);color:white;border:none;font-family:'Outfit',sans-serif;font-size:14px;font-weight:600;cursor:pointer">Confirmar</button>
       </div>`;
@@ -3269,24 +3359,35 @@ function recTmp(id,f,v){
   _recDraft[id][f]=f==='valor'?parseFloat(v)||0:v;
 }
 function toggleRecEdit(id){
-  S.receita.forEach(r=>{if(r.id!==id)r._editing=false;});
+  S.receita.forEach(r=>{r._editing=false;});
   const r=S.receita.find(x=>x.id===id);
-  if(r){r._editing=!r._editing;_recDraft[id]={};}
-  save();renderRecSub();
+  if(r){r._editing=true;_recDraft[id]={};}
+  renderRecSub();
 }
 function confirmRec(id){
-  const r=S.receita.find(x=>x.id===id);
-  if(!r)return;
+  const item=itemVivo('receita',id);if(!item)return;
   const d=_recDraft[id]||{};
-  if(d.nome!==undefined)r.nome=d.nome;
-  if(d.desc!==undefined)r.desc=d.desc;
-  if(d.valor!==undefined)r.valor=d.valor;
-  r._editing=false;
+  if(d.nome!==undefined)item.nome=d.nome;
+  if(d.desc!==undefined)item.desc=d.desc;
+  if(d.valor!==undefined)gravarValorItemVivo(item,d.valor,!!d.soEsteMes);
   delete _recDraft[id];
+  recomputarMesAtual();
   save();renderRecSub();renderMesHome();
 }
-function delRec(id){S.receita=S.receita.filter(x=>x.id!==id);save();renderRecSub();renderMesHome();}
-function addRec(){S.receita.push({id:nxId(S.receita),nome:'Nova receita',valor:0,_editing:true});save();renderRecSub();}
+function delRec(id){
+  const item=itemVivo('receita',id);if(!item)return;
+  excluirItemVivoDesteMes(item);
+  recomputarMesAtual();
+  save();renderRecSub();renderMesHome();
+}
+function addRec(){
+  criarItemVivo('receita', {nome:'Nova receita', valor:0});
+  recomputarMesAtual();
+  save();
+  const novo=S.receita[S.receita.length-1];
+  if(novo)novo._editing=true;
+  renderRecSub();
+}
 
 function renderFixedSub(tipo,listId){
   const el=document.getElementById(listId);if(!el)return;
@@ -3471,6 +3572,10 @@ function renderMorSub(){
         <div>
           <label style="font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em;display:block;margin-bottom:4px">Valor (R$)</label>
           <input class="finput" type="number" inputmode="decimal" style="padding:10px 12px;font-size:14px" value="${item.valor}" oninput="morTmp(${item.id},'valor',this.value)">
+          <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink2);cursor:pointer;margin-top:8px">
+            <input type="checkbox" onchange="morTmp(${item.id},'soEsteMes',this.checked)" style="width:16px;height:16px;accent-color:var(--ink)">
+            Aplicar só neste mês (não muda os próximos)
+          </label>
         </div>
         ${renderDivChips(item.id, (_morDraft[item.id]&&_morDraft[item.id].div!==undefined)?_morDraft[item.id].div:(item.pedro?'pedro_div':'proprio'), 'mor')}
         <button onclick="confirmMor(${item.id})" style="width:100%;padding:11px;border-radius:var(--r-sm);background:var(--ink);color:white;border:none;font-family:Outfit,sans-serif;font-size:14px;font-weight:600;cursor:pointer">Confirmar</button>
@@ -3532,21 +3637,28 @@ function toggleMorEdit(id){
   }));
 }
 function confirmMor(id){
-  const item=S.moradia.find(x=>x.id===id);if(!item)return;
+  const item=itemVivo('moradia',id);if(!item)return;
   const d=_morDraft[id]||{};
   if(d.nome!==undefined)item.nome=d.nome;
   if(d.desc!==undefined)item.desc=d.desc;
-  if(d.valor!==undefined)item.valor=d.valor;
+  if(d.valor!==undefined)gravarValorItemVivo(item,d.valor,!!d.soEsteMes);
   if(d.div!==undefined){
     item.div=d.div;
     item.pedro=(d.div==='pedro_div'||d.div==='pedro_ind');
   }
   if(d.pedro!==undefined)item.pedro=!!d.pedro;
-  item._editing=false;
   delete _morDraft[id];
+  recomputarMesAtual();
+  const idx=S.moradia.findIndex(x=>x.id===id);
+  if(idx>=0)S.moradia[idx]._editing=false;
   save();renderMorSub();renderMesHome();
 }
-function delMor(id){S.moradia=S.moradia.filter(x=>x.id!==id);save();renderMorSub();renderMesHome();}
+function delMor(id){
+  const item=itemVivo('moradia',id);if(!item)return;
+  excluirItemVivoDesteMes(item);
+  recomputarMesAtual();
+  save();renderMorSub();renderMesHome();
+}
 
 // ── TOP-NEW INLINE FORM (Moradia / Pessoal / Reservas do mês) ──
 const _topNewDraft={};
@@ -3652,14 +3764,16 @@ function confirmTopNew(key){
   const d=_topNewDraft[key]||{};
   if(!d.nome||!d.nome.trim()){alert('Informe o nome do item');return;}
   if(key==='mor'){
-    S.moradia.push({id:nxId(S.moradia),nome:d.nome.trim(),desc:d.desc||'',valor:d.valor||0,pago:false,pedro:!!d.pedro});
+    criarItemVivo('moradia', {nome:d.nome.trim(), desc:d.desc||'', pedro:!!d.pedro, div: d.pedro?'pedro_div':'proprio', valor:d.valor||0});
+    recomputarMesAtual();
     save();renderMorSub();renderMesHome();
   } else if(key==='rm'){
-    if(!S.reservasmes)S.reservasmes=[];
-    S.reservasmes.push({id:nxId(S.reservasmes),nome:d.nome.trim(),desc:d.desc||'',parc:d.parc||'',div:d.div||'proprio',valor:d.valor||0,pago:false,caixinhaId:d.caixinhaId||null,cat:d.cat||'Aporte mensal'});
+    criarItemVivo('reservasmes', {nome:d.nome.trim(), desc:d.desc||'', div:d.div||'proprio', caixinhaId:d.caixinhaId||null, cat:d.cat||'Aporte mensal', valor:d.valor||0, parcTexto:d.parc||''});
+    recomputarMesAtual();
     save();renderRMSub();renderMesHome();
   } else if(key==='pes'){
-    S.pessoal.push({id:nxId(S.pessoal),nome:d.nome.trim(),desc:d.desc||'',valor:d.valor||0,pago:false});
+    criarItemVivo('pessoal', {nome:d.nome.trim(), desc:d.desc||'', valor:d.valor||0});
+    recomputarMesAtual();
     save();renderPesSub();renderMesHome();
   }
   const zone=document.getElementById(cfg.zoneId);
@@ -3766,6 +3880,10 @@ function renderPesSub(){
         <div>
           <label style="font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em;display:block;margin-bottom:4px">Valor (R$)</label>
           <input class="finput" type="number" inputmode="decimal" style="padding:10px 12px;font-size:14px" value="${item.valor}" oninput="pesTmp(${item.id},'valor',this.value)">
+          <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink2);cursor:pointer;margin-top:8px">
+            <input type="checkbox" onchange="pesTmp(${item.id},'soEsteMes',this.checked)" style="width:16px;height:16px;accent-color:var(--ink)">
+            Aplicar só neste mês (não muda os próximos)
+          </label>
         </div>
         ${renderDivChips(item.id, (_pesDraft[item.id]&&_pesDraft[item.id].div!==undefined)?_pesDraft[item.id].div:(item.div||'proprio'), 'pes')}
         <button onclick="confirmPes(${item.id})" style="width:100%;padding:11px;border-radius:var(--r-sm);background:var(--ink);color:white;border:none;font-family:'Outfit',sans-serif;font-size:14px;font-weight:600;cursor:pointer">Confirmar</button>
@@ -3812,39 +3930,53 @@ function togglePesEdit(id){
   }));
 }
 function confirmPes(id){
-  const item=S.pessoal.find(x=>x.id===id);if(!item)return;
+  const item=itemVivo('pessoal',id);if(!item)return;
   const d=_pesDraft[id]||{};
   if(d.nome!==undefined)item.nome=d.nome;
   if(d.desc!==undefined)item.desc=d.desc;
-  if(d.valor!==undefined)item.valor=d.valor;
+  if(d.valor!==undefined)gravarValorItemVivo(item,d.valor,!!d.soEsteMes);
   if(d.div!==undefined)item.div=d.div;
-  item._editing=false;
   delete _pesDraft[id];
+  recomputarMesAtual();
   save();renderPesSub();renderMesHome();
 }
-function delPes(id){S.pessoal=S.pessoal.filter(x=>x.id!==id);save();renderPesSub();renderMesHome();}
+function delPes(id){
+  const item=itemVivo('pessoal',id);if(!item)return;
+  excluirItemVivoDesteMes(item);
+  recomputarMesAtual();
+  save();renderPesSub();renderMesHome();
+}
 function addPes(){S.pessoal.push({id:nxId(S.pessoal),nome:'Novo item',valor:0,pago:false,_editing:true});renderPesSub();}
 function editF(tipo,id,f,v){const it=S[tipo].find(x=>x.id===id);if(!it)return;if(f==='valor')it.valor=parseFloat(v)||0;else it[f]=v;save();if(tipo==='moradia')renderMorSub();else if(tipo==='reservasmes')renderRMSub();else renderPesSub();}
 function togP(tipo,id){
-  const it=S[tipo].find(x=>x.id===id);
+  const it=itemVivo(tipo,id);
   if(!it)return;
-  it.pago=!it.pago;
-  // Se reservasmes e tem caixinha → refletir como entrada
-  if(tipo==='reservasmes' && it.caixinhaId){
-    const r=S.reservas.find(x=>x.id===it.caixinhaId);
-    if(r){
-      if(it.pago){
-        // marcar pago → entrada na caixinha
+  togglePagoItemVivo(it);
+  const kAgora=curKey();
+  const agoraPago=!!(it.pagoPorMes && it.pagoPorMes[kAgora]);
+  // Se reservasmes → refletir como entrada/saída na caixinha
+  if(tipo==='reservasmes'){
+    const rmId = it.id+'_'+kAgora;
+    if(agoraPago && it.caixinhaId){
+      const r=S.reservas.find(x=>x.id===it.caixinhaId);
+      if(r){
+        const valorAgora = (valorNoMes(it,kAgora)||{}).valor || 0;
         const mes=MNS[S.month.m-1].slice(0,3)+'/'+String(S.month.y).slice(2);
-        r.saldo+=it.valor;
-        r.movs.push({tipo:'entrada',val:it.valor,desc:it.nome,cat:it.cat||'Aporte mensal',div:it.div||'proprio',mes,_rmId:it.id});
-      } else {
-        // desmarcar → remover a movimentação correspondente
-        const idx=r.movs.findIndex(m=>m._rmId===it.id);
-        if(idx>=0){r.saldo-=it.valor;r.movs.splice(idx,1);}
+        r.saldo+=valorAgora;
+        r.movs.push({tipo:'entrada',val:valorAgora,desc:it.nome,cat:it.cat||'Aporte mensal',div:it.div||'proprio',mes,_rmId:rmId});
       }
+    } else if(!agoraPago){
+      // Busca em TODAS as caixinhas (não só na vinculada atualmente), pra achar e remover
+      // a movimentação de verdade — cobre o caso de a caixinha vinculada ter sido trocada
+      // depois que o item foi marcado como pago (senão a movimentação antiga fica presa
+      // na caixinha original, com um saldo "fantasma").
+      (S.reservas||[]).forEach(function(r){
+        const idx=r.movs.findIndex(m=>m._rmId===rmId);
+        if(idx>=0){r.saldo-=r.movs[idx].val;r.movs.splice(idx,1);}
+      });
     }
   }
+  recomputarMesAtual();
   save();
   if(tipo==='moradia')renderMorSub();
   else if(tipo==='reservasmes'){renderRMSub();renderResHome();}
@@ -3855,31 +3987,43 @@ function delF(tipo,id){if(!confirm('Remover?'))return;S[tipo]=S[tipo].filter(x=>
 function addFixed(tipo){S[tipo].push({id:nxId(S[tipo]),nome:'Novo item',valor:0,pago:false,pedro:false});save();if(tipo==='moradia')renderMorSub();else if(tipo==='reservasmes')renderRMSub();else renderPesSub();}
 
 // ── CARTÕES SUB ──
-let _cartFiltro={san:'all',car:'all'};
+let _cartFiltro={};
 
 function setCartFiltro(banco,filtro,btn){
   _cartFiltro[banco]=filtro;
-  const pillsId=banco==='san'?'san-div-pills':'car-div-pills';
-  document.querySelectorAll('#'+pillsId+' .cart-fpill').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('#cart-div-pills .cart-fpill').forEach(b=>b.classList.remove('on'));
   if(btn)btn.classList.add('on');
-  renderCartListInline(banco==='san'?'santander':'carrefour');
+  renderCartListInline(banco);
+}
+
+function renderCartTabsBar(){
+  const bar=document.getElementById('cart-tabs-bar');if(!bar)return;
+  const cartoes=todosCartoes();
+  let html=`<button class="itab${curCartTab==='ambos'?' on':''}" onclick="setCartTab('ambos',this)">Ambos</button>`;
+  cartoes.forEach(c=>{
+    html+=`<button class="itab${curCartTab===c.key?' on':''}" onclick="setCartTab('${c.key}',this)">${c.nome}</button>`;
+  });
+  bar.innerHTML=html;
 }
 
 function setCartTab(tab,btn){
   curCartTab=tab;
   // reset cat filter on tab switch
-  _cartCatFiltro={san:null,car:null,ambos:null};
-  ['ambos','san','car'].forEach(t=>{const e=document.getElementById('ct-view-'+t);if(e)e.style.display=t===tab?'block':'none';});
-  document.querySelectorAll('#sub-cartoes .itab').forEach(b=>b.classList.remove('on'));
-  if(btn)btn.classList.add('on');
+  _cartCatFiltro={ambos:null};
+  const ambosView=document.getElementById('ct-view-ambos');
+  const bancoView=document.getElementById('ct-view-banco');
+  if(ambosView)ambosView.style.display=tab==='ambos'?'block':'none';
+  if(bancoView)bancoView.style.display=tab==='ambos'?'none':'block';
+  renderCartTabsBar();
   renderCartoesSub();
 }
 function renderCartoesSub(){
-  const san=cCart('santander'),car=cCart('carrefour');
-  const eu=san.eu+car.eu,ped=san.div/2+car.div/2+car.ind;
+  const cartoes=todosCartoes();
+  const cartTodos=cCartTodos();
+  const eu=cartTodos.eu, ped=cartTodos.div/2+cartTodos.ind;
   const sv=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
-  const soEu=san.tot-san.div-san.ind+car.tot-car.div-car.ind;
-  const divTot=san.div+car.div;
+  const soEu=cartTodos.tot-cartTodos.div-cartTodos.ind;
+  const divTot=cartTodos.div;
   const divEach=divTot/2;
   const maisDiv=soEu+divEach;
   sv('cart-liq-eu',fmt(soEu));
@@ -3888,33 +4032,34 @@ function renderCartoesSub(){
   sv('cart-div-each',fmt(divEach));
   sv('cart-liq-net',fmt(maisDiv));
   sv('cart-liq-total',fmt(maisDiv));
-  sv('cart-san-total',fmt(san.tot));
-  sv('cart-car-total',fmt(car.tot));
-  sv('cart-san-tot-view',fmt(san.tot));
-  sv('cart-san-eu',fmt(san.eu));
-  sv('cart-san-pedro',fmt(san.div/2+san.ind));
-  sv('cart-car-tot-view',fmt(car.tot));
-  sv('cart-car-eu',fmt(car.eu));
-  sv('cart-car-pedro',fmt(car.div/2+car.ind));
-  // cart chip: paid status
-  const cartPago=Object.values(S.cartaoPago||{}).filter(Boolean).length;
-  const cartTotBancos=2;
-  renderSubChip('cart-chip-wrap',cartPago,cartTotBancos,'#BE185D');
-  // pago checks
-  if(!S.cartaoPago)S.cartaoPago={santander:false,carrefour:false};
-  ['santander','carrefour'].forEach(b=>{
-    const chk=document.getElementById('cart-chk-'+b);
-    if(!chk)return;
-    const pago=S.cartaoPago[b];
-    chk.style.background=pago?'var(--ok)':'none';
-    chk.style.borderColor=pago?'var(--ok)':'var(--bg3)';
-    chk.innerHTML=pago?'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>':'';
-  });
-  if(curCartTab==='ambos'){renderCartCatChartFor('ambos');renderAmbosList();}
-  else if(curCartTab==='san'){renderCartCatChartFor('san');renderCartListInline('santander');}
-  else{renderCartCatChartFor('car');renderCartListInline('carrefour');}
+  // grid "Ambos" com um bloco por cartão
+  const grid=document.getElementById('cart-ambos-grid');
+  if(grid){
+    if(!S.cartaoPago)S.cartaoPago={};
+    grid.innerHTML=cartoes.map(c=>{
+      const r=cCart(c.key);
+      const pago=!!S.cartaoPago[c.key];
+      return `<div style="background:var(--w);padding:14px 18px;display:flex;align-items:center;justify-content:space-between">
+        <div><div style="font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px">${c.nome}</div><div style="font-size:17px;font-weight:700;color:#111110">${fmt(r.tot)}</div></div>
+        <button class="chk ${pago?'done':''}" onclick="toggleCartPago('${c.key}')" style="flex-shrink:0">${pago?'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>':''}</button>
+      </div>`;
+    }).join('');
+  }
+  // chip: quantos cartões já foram marcados como pagos
+  const cartPago=cartoes.filter(c=>S.cartaoPago&&S.cartaoPago[c.key]).length;
+  renderSubChip('cart-chip-wrap',cartPago,cartoes.length,'#BE185D');
+  if(curCartTab==='ambos'){
+    renderCartCatChartFor('ambos');renderAmbosList();
+  } else {
+    const c=cartoes.find(x=>x.key===curCartTab);
+    const r=cCart(curCartTab);
+    sv('cart-banco-tot-view',fmt(r.tot));
+    sv('cart-banco-eu',fmt(r.eu));
+    sv('cart-banco-pedro',fmt(r.div/2+r.ind));
+    renderCartCatChartFor(curCartTab);renderCartListInline(curCartTab);
+  }
 }
-let _cartCatFiltro={san:null,car:null,ambos:null};
+let _cartCatFiltro={ambos:null};
 
 function setCartCatFiltro(banco,cat){
   if(banco==='ambos'){
@@ -3923,9 +4068,8 @@ function setCartCatFiltro(banco,cat){
     renderAmbosList();
     return;
   }
-  const key=banco==='santander'?'san':'car';
-  _cartCatFiltro[key]=_cartCatFiltro[key]===cat?null:cat;
-  renderCartCatChartFor(key);
+  _cartCatFiltro[banco]=_cartCatFiltro[banco]===cat?null:cat;
+  renderCartCatChartFor(banco);
   renderCartListInline(banco);
 }
 function renderAmbosList(){
@@ -3939,11 +4083,10 @@ function renderAmbosList(){
     el.style.cssText='border-top:1px solid var(--line)';
     chart.appendChild(el);
   }
-  const allSan=S.cartao.santander.map(i=>({...i,banco:'Santander'}));
-  const allCar=S.cartao.carrefour.map(i=>({...i,banco:'Carrefour'}));
-  const items=cat
-    ?[...allSan.filter(i=>i.cat===cat),...allCar.filter(i=>i.cat===cat)]
-    :[...allSan,...allCar];
+  const cartoes=todosCartoes();
+  let items=[];
+  cartoes.forEach(c=>{ items=items.concat((S.cartao[c.key]||[]).map(i=>({...i,banco:c.nome}))); });
+  if(cat) items=items.filter(i=>i.cat===cat);
   const dl={proprio:'só meu',pedro_div:'÷ Pedro',pedro_ind:'Pedro paga'};
   const dc={proprio:'var(--ink2)',pedro_div:'#0D9488',pedro_ind:'#7C3AED'};
   el.innerHTML=items.length?items.map(item=>{
@@ -3963,12 +4106,14 @@ function renderAmbosList(){
 
 function renderCartCatChartFor(tab){
   let items;
-  if(tab==='ambos')items=[...S.cartao.santander,...S.cartao.carrefour];
-  else if(tab==='san')items=S.cartao.santander;
-  else items=S.cartao.carrefour;
-  const banco=tab==='san'?'santander':tab==='car'?'carrefour':'ambos';
+  if(tab==='ambos'){
+    items=[];
+    todosCartoes().forEach(c=>{items=items.concat(S.cartao[c.key]||[]);});
+  } else {
+    items=S.cartao[tab]||[];
+  }
   const catFiltro=tab==='ambos'?_cartCatFiltro.ambos:_cartCatFiltro[tab];
-  const elId=tab==='ambos'?'cart-cat-ambos':tab==='san'?'cart-cat-san':'cart-cat-car';
+  const elId=tab==='ambos'?'cart-cat-ambos':'cart-cat-atual';
   const el=document.getElementById(elId);if(!el)return;
 
   // group by cat
@@ -3991,8 +4136,7 @@ function renderCartCatChartFor(tab){
     const col=cartCatColor(cat);
     const isActive=catFiltro===cat;
     const op=catFiltro&&!isActive?'0.3':'1';
-    const bancoCall=tab==='ambos'?'ambos':banco;
-    const onclick=`data-k="${bancoCall}" data-c="${cat}" onclick="setCartCatFiltro(this.dataset.k,this.dataset.c)" style="cursor:pointer;opacity:${op};transition:opacity .2s"`;
+    const onclick=`data-k="${tab}" data-c="${cat}" onclick="setCartCatFiltro(this.dataset.k,this.dataset.c)" style="cursor:pointer;opacity:${op};transition:opacity .2s"`;
     // midpoint angle for label line
     const midAng=ang+slice/2;
     paths+=`<path d="M${cx},${cy} L${x1.toFixed(1)},${y1.toFixed(1)} A${R},${R} 0 ${lg},1 ${x2.toFixed(1)},${y2.toFixed(1)} Z" fill="${col}" ${onclick}/>`;
@@ -4016,11 +4160,10 @@ function renderCartCatChartFor(tab){
   const legendRows=sliceData.map((s,idx)=>{
     const isAct=catFiltro===s.cat;
     const op=catFiltro&&!isAct?'0.35':'1';
-    const bancoCall=tab==='ambos'?'ambos':banco;
     const isLast=idx===sliceData.length-1;
     const border=isLast?'none':'1px solid var(--line)';
     const baseStyle=`opacity:${op};display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:${border};width:100%`;
-    const onclick=`data-k="${bancoCall}" data-c="${s.cat}" onclick="setCartCatFiltro(this.dataset.k,this.dataset.c)" style="${baseStyle};cursor:pointer"`;
+    const onclick=`data-k="${tab}" data-c="${s.cat}" onclick="setCartCatFiltro(this.dataset.k,this.dataset.c)" style="${baseStyle};cursor:pointer"`;
     return`<div ${onclick}>
       <div style="width:10px;height:10px;border-radius:3px;background:${s.col};flex-shrink:0"></div>
       <span style="font-size:13px;color:var(--ink2);flex:1;font-weight:${isAct?'700':'400'}">${s.cat}</span>
@@ -4044,12 +4187,11 @@ function renderCartByBanco(){
   el.innerHTML=`<div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--line)"><span style="font-size:14px;font-weight:600">Santander</span><span style="font-size:14px;font-weight:600">${fmt(san.tot)}</span></div><div style="display:flex;justify-content:space-between;padding:10px 0"><span style="font-size:14px;font-weight:600">Carrefour</span><span style="font-size:14px;font-weight:600">${fmt(car.tot)}</span></div>`;
 }
 function renderCartListInline(banco){
-  const listId=banco==='santander'?'list-san':'list-car';
-  const filtroKey=banco==='santander'?'san':'car';
-  const filtro=_cartFiltro[filtroKey]||'all';
-  const catFiltro=_cartCatFiltro[filtroKey]||null;
+  const listId='list-atual';
+  const filtro=_cartFiltro[banco]||'all';
+  const catFiltro=_cartCatFiltro[banco]||null;
   const el=document.getElementById(listId);if(!el)return;
-  let items=S.cartao[banco];
+  let items=S.cartao[banco]||[];
   if(filtro!=='all') items=items.filter(i=>i.div===filtro);
   if(catFiltro) items=items.filter(i=>i.cat===catFiltro);
   const dl={proprio:'só meu',pedro_div:'÷ Pedro',pedro_ind:'Pedro paga'};
@@ -4067,7 +4209,12 @@ function renderCartListInline(banco){
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
           <div><label style="font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em;display:block;margin-bottom:4px">Item</label><input class="finput" style="padding:9px 12px;font-size:14px" value="${item.item}" placeholder="Nome do item" oninput="cartTmp('${banco}',${item.id},'item',this.value)"></div>
-          <div><label style="font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em;display:block;margin-bottom:4px">Valor (R$)</label><input class="finput" type="number" style="padding:9px 12px;font-size:14px" value="${item.valor||''}" placeholder="0,00" oninput="cartTmp('${banco}',${item.id},'valor',this.value)"></div>
+          <div><label style="font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em;display:block;margin-bottom:4px">Valor (R$)</label><input class="finput" type="number" style="padding:9px 12px;font-size:14px" value="${item.valor||''}" placeholder="0,00" oninput="cartTmp('${banco}',${item.id},'valor',this.value)">
+            <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--ink2);cursor:pointer;margin-top:6px">
+              <input type="checkbox" onchange="cartTmp('${banco}',${item.id},'soEsteMes',this.checked)" style="width:14px;height:14px;accent-color:var(--ink)">
+              Só neste mês
+            </label>
+          </div>
           <div>
             <label style="font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em;display:block;margin-bottom:4px">Categoria</label>
             <button type="button" onclick="openCatSheet('${banco}',${item.id})" class="finput" style="padding:9px 12px;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;width:100%;text-align:left;font-family:'Outfit',sans-serif;box-sizing:border-box">
@@ -4280,13 +4427,13 @@ function cartSetDiv(banco,id,div){
   renderCartListInline(banco);
 }
 function toggleCartEdit(banco,id){
-  [...S.cartao.santander,...S.cartao.carrefour].forEach(i=>{i._editing=false;i._draftDiv=undefined;});
+  todosCartoes().forEach(c=>{(S.cartao[c.key]||[]).forEach(i=>{i._editing=false;i._draftDiv=undefined;});});
   const item=S.cartao[banco].find(x=>x.id===id);if(item){item._editing=true;item._draftDiv=item.div;}
   renderCartoesSub();
   // scroll o item expandido para ficar visível abaixo do header
   requestAnimationFrame(()=>{
     const sub=document.getElementById('sub-cartoes');
-    const listId=banco==='santander'?'list-san':'list-car';
+    const listId='list-atual';
     const list=document.getElementById(listId);
     if(!sub||!list)return;
     // o item editando é o primeiro filho com background #FAFAF8
@@ -4301,22 +4448,35 @@ function toggleCartEdit(banco,id){
   });
 }
 function confirmCart(banco,id){
-  const item=S.cartao[banco].find(x=>x.id===id);if(!item)return;
+  const item=itemVivoCartao(banco,id);if(!item)return;
   const d=_cartDraft[banco+id]||{};
-  if(d.item!==undefined)item.item=d.item;if(d.valor!==undefined)item.valor=d.valor;
-  if(d.cat!==undefined)item.cat=d.cat;if(d.parc!==undefined)item.parc=d.parc;if(d.div!==undefined)item.div=d.div;
-  if(item._draftCat)item.cat=item._draftCat;
-  item._editing=false;item._draftDiv=undefined;item._draftCat=undefined;delete _cartDraft[banco+id];
+  const draftItemEl=S.cartao[banco].find(x=>x.id===id);
+  if(d.item!==undefined)item.nome=d.item;
+  if(d.valor!==undefined)gravarValorItemVivo(item,d.valor,!!d.soEsteMes);
+  if(d.cat!==undefined)item.cat=d.cat;
+  else if(draftItemEl&&draftItemEl._draftCat)item.cat=draftItemEl._draftCat;
+  if(d.parc!==undefined)item.parcela=d.parc?parseParc(d.parc,curKey()):null;
+  if(d.div!==undefined)item.div=d.div;
+  delete _cartDraft[banco+id];
+  recomputarMesAtual();
   save();renderCartoesSub();renderMesHome();
 }
-function delCart(banco,id){S.cartao[banco]=S.cartao[banco].filter(x=>x.id!==id);save();renderCartoesSub();renderMesHome();}
+function delCart(banco,id){
+  const item=itemVivoCartao(banco,id);if(!item)return;
+  excluirItemVivoDesteMes(item);
+  recomputarMesAtual();
+  save();renderCartoesSub();renderMesHome();
+}
 function toggleCartPago(banco){
-  if(!S.cartaoPago)S.cartaoPago={santander:false,carrefour:false};
-  S.cartaoPago[banco]=!S.cartaoPago[banco];
+  var k=curKey();
+  if(!S.cartaoPagoPorMes)S.cartaoPagoPorMes={};
+  if(!S.cartaoPagoPorMes[k])S.cartaoPagoPorMes[k]={};
+  S.cartaoPagoPorMes[k][banco]=!S.cartaoPagoPorMes[k][banco];
+  S.cartaoPago=S.cartaoPagoPorMes[k];
   save();renderCartoesSub();renderMesHome();
 }
 function addCartItemTop(banco){
-  const zoneId='cart-top-new-'+(banco==='santander'?'san':'car');
+  const zoneId='cart-top-new-atual';
   const zone=document.getElementById(zoneId);
   if(!zone)return;
   // if already showing a new item, just scroll to it
@@ -4325,6 +4485,7 @@ function addCartItemTop(banco){
     if(sub&&zone){const hd=sub.querySelector('.sub-hd');const hdH=hd?hd.offsetHeight:66;const subRect=sub.getBoundingClientRect();const zoneRect=zone.getBoundingClientRect();const offset=(zoneRect.top-subRect.top)+sub.scrollTop-hdH-8;sub.scrollTo({top:Math.max(0,offset),behavior:'smooth'});}
     return;
   }
+  if(!S.cartao[banco])S.cartao[banco]=[];
   const newId=nxId(S.cartao[banco]);
   S.cartao[banco].unshift({id:newId,cat:'',item:'',local:'',parc:'',valor:0,div:'proprio',_editing:true,_draftDiv:'proprio',_isNew:true});
   // render only the edit form in the zone
@@ -4359,34 +4520,38 @@ function addCartItemTop(banco){
   }
 }
 function addCartItem(banco){
-  const b=banco||(curCartTab==='car'?'carrefour':'santander');
-  const tab=b==='santander'?'san':'car';
-  if(curCartTab!==tab)setCartTab(tab,document.getElementById('ct-'+tab));
+  const b=banco||curCartTab;
+  if(curCartTab!==b){
+    setCartTab(b, null);
+  }
   addCartItemTop(b);
 }
 function renderCartTopNew(banco){
-  const item=S.cartao[banco].find(x=>x._isNew&&x._editing);
+  const item=(S.cartao[banco]||[]).find(x=>x._isNew&&x._editing);
   if(!item)return;
   addCartItemTop(banco); // will detect existing and re-render
 }
 function cancelCartTop(banco){
-  S.cartao[banco]=S.cartao[banco].filter(x=>!x._isNew);
-  const zoneId='cart-top-new-'+(banco==='santander'?'san':'car');
+  S.cartao[banco]=(S.cartao[banco]||[]).filter(x=>!x._isNew);
+  const zoneId='cart-top-new-atual';
   const zone=document.getElementById(zoneId);
   if(zone)zone.innerHTML='';
 }
 function confirmCartTop(banco,id){
-  const item=S.cartao[banco].find(x=>x.id===id);if(!item)return;
+  const draftItemEl=(S.cartao[banco]||[]).find(x=>x.id===id);if(!draftItemEl)return;
   const d=_cartDraft[banco+id]||{};
-  if(d.item!==undefined)item.item=d.item;if(d.valor!==undefined)item.valor=d.valor;
-  if(d.cat!==undefined)item.cat=d.cat;if(d.parc!==undefined)item.parc=d.parc;if(d.div!==undefined)item.div=d.div;
-  if(item._draftCat)item.cat=item._draftCat;
-  item._editing=false;item._draftDiv=undefined;item._draftCat=undefined;item._isNew=false;
+  const nome=(d.item!==undefined?d.item:draftItemEl.item)||'';
+  const valor=d.valor!==undefined?d.valor:(draftItemEl.valor||0);
+  const cat=d.cat!==undefined?d.cat:(draftItemEl._draftCat||draftItemEl.cat||'');
+  const parcTexto=d.parc!==undefined?d.parc:(draftItemEl.parc||'');
+  const div=d.div!==undefined?d.div:(draftItemEl._draftDiv||'proprio');
+  criarItemVivoCartao(banco, {nome:nome, cat:cat, local:'', div:div, valor:valor, parcTexto:parcTexto});
   delete _cartDraft[banco+id];
   // clear top zone
-  const zoneId='cart-top-new-'+(banco==='santander'?'san':'car');
+  const zoneId='cart-top-new-atual';
   const zone=document.getElementById(zoneId);
   if(zone)zone.innerHTML='';
+  recomputarMesAtual();
   save();renderCartoesSub();renderMesHome();
 }
 
@@ -4403,17 +4568,6 @@ function setST(tab,btn){
   renderSemHome();
 }
 function renderSemHome(){
-  if(!getStatus()){
-    // month not started — show empty state
-    const dv=document.getElementById('sem-disp');if(dv)dv.textContent='—';
-    const ov=document.getElementById('sem-orc');if(ov)ov.textContent='—';
-    const gv=document.getElementById('sem-gasto');if(gv)gv.textContent='—';
-    const cc=document.getElementById('cat-cards');
-    if(cc)cc.innerHTML='<div class="empty"><div style="width:40px;height:40px;border-radius:50%;background:var(--bg2);display:flex;align-items:center;justify-content:center;margin:0 auto 12px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--ink3)" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><div class="empty-t">Inicie o mês para ver os gastos semanais</div></div>';
-    const ll=document.getElementById('lanc-list-main');
-    if(ll)ll.innerHTML='<div class="empty"><div class="empty-t">Nenhum lançamento</div></div>';
-    return;
-  }
   const saldo=cSaldo(),gt=cGS('all'),disp=Math.max(0,saldo-gt);
   const sv=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
   sv('sem-disp',fmt(disp));sv('sem-orc',fmt(saldo));sv('sem-gasto',fmt(gt));
@@ -5799,7 +5953,7 @@ function pedroGoTo(tipo,id,banco){
       var tab=banco||'santander';
       goSub('sub-cartoes');
       setTimeout(function(){
-        setCartTab(tab==='santander'?'san':'car');
+        setCartTab(tab,null);
         // scroll ao item
         setTimeout(function(){
           var el=document.querySelector('[data-edit-id="'+id+'"]');
@@ -5812,11 +5966,11 @@ function pedroGoTo(tipo,id,banco){
 
 // ── EXPORTAR PDF PEDRO ──
 function exportPedroPDF(){
-  var san=cCart('santander'),car=cCart('carrefour');
+  var cartTodos=cCartTodos();
   var morPed=cMor().ped;
   var rmPed=cRMPedro();
-  var indTotal=(san.ind||0)+(car.ind||0);
-  var divTotal=san.div/2+car.div/2;
+  var indTotal=cartTodos.ind||0;
+  var divTotal=(cartTodos.div||0)/2;
   var total=morPed+divTotal+indTotal+rmPed;
   var mes=MNS[S.month.m-1]+' '+S.month.y;
   var html='<html><head><meta charset="utf-8"><style>'+
@@ -5840,8 +5994,9 @@ function exportPedroPDF(){
   if(rmPed>0)html+='<div class="row"><span class="label">Reservas do mês</span><span class="value">'+fmt(rmPed)+'</span></div>';
   // Itens individuais
   var itens=[];
-  (S.cartao.santander||[]).filter(i=>i.div==='pedro_ind').forEach(i=>itens.push({nome:i.item,val:i.valor,origem:'San'}));
-  (S.cartao.carrefour||[]).filter(i=>i.div==='pedro_ind').forEach(i=>itens.push({nome:i.item,val:i.valor,origem:'Car'}));
+  todosCartoes().forEach(function(c){
+    (S.cartao[c.key]||[]).filter(function(i){return i.div==='pedro_ind';}).forEach(function(i){itens.push({nome:i.item,val:i.valor,origem:c.nome});});
+  });
   if(itens.length){
     html+='<div style="margin-top:16px;font-size:12px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.05em">Itens individuais do Pedro</div>';
     itens.forEach(function(it){html+='<div class="row" style="font-size:14px"><span class="label">'+it.nome+' ('+it.origem+')</span><span class="value">'+fmt(it.val)+'</span></div>';});
@@ -5857,30 +6012,29 @@ function renderPedroHome(){
   if(!S.moradia)S.moradia=[];
   if(!S.pessoal)S.pessoal=[];
   const sv=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
-  if(!getStatus()){
-    // mês não iniciado — zerar tudo e mostrar empty state
-    ['pedro-total','pedro-mor-val','pedro-mor2-val','pedro-cart-val',
-     'pedro-san-val','pedro-car-val','pedro-ind-val','pedro-mor-ped-val','pedro-rm-val'].forEach(id=>sv(id,'—'));
-    const lock='<div class="empty"><div style="width:40px;height:40px;border-radius:50%;background:var(--bg2);display:flex;align-items:center;justify-content:center;margin:0 auto 12px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--ink3)" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><div class="empty-t">Inicie o mês para ver os dados do Pedro</div></div>';
-    ['pedro-mor-list','pedro-san','pedro-car','pedro-ind'].forEach(id=>{
-      const el=document.getElementById(id);if(el)el.innerHTML=lock;
-    });
-    return;
-  }
-  const san=cCart('santander'),car=cCart('carrefour');
+  const cartTodos=cCartTodos();
   const morPed=cMor().ped;
   const rmPed=cRMPedro();
-  const indTotal=(san.ind||0)+(car.ind||0);
-  const total=morPed+san.div/2+car.div/2+indTotal+rmPed;
+  const indTotal=cartTodos.ind||0;
+  const total=morPed+(cartTodos.div||0)/2+indTotal+rmPed;
   sv('pedro-total',fmt(total));
   sv('pedro-rm-val',fmt(rmPed));
   sv('pedro-mor-val',fmt(morPed));
   sv('pedro-mor2-val',fmt(morPed));
-  sv('pedro-cart-val',fmt(san.div/2+car.div/2+indTotal));
-  sv('pedro-san-val',fmt(san.div/2));
-  sv('pedro-car-val',fmt(car.div/2));
+  sv('pedro-cart-val',fmt((cartTodos.div||0)/2+indTotal));
   sv('pedro-ind-val',fmt(indTotal));
   sv('pedro-mor-ped-val',fmt(morPed));
+  // um card "÷2" por cartão (dinâmico, inclui extras)
+  const grid=document.getElementById('pedro-cards-bancos');
+  if(grid){
+    grid.innerHTML=todosCartoes().map(c=>{
+      const r=cCart(c.key);
+      return `<div style="background:#E6FAF8;border-radius:var(--r-sm);padding:13px 15px;box-shadow:0 1px 3px rgba(0,0,0,.05)">
+        <div style="font-size:10px;font-weight:600;color:#0D9488;text-transform:uppercase;letter-spacing:.07em;margin-bottom:3px;opacity:.75">${c.nome} ÷2</div>
+        <div style="font-size:17px;font-weight:700;color:#111110">${fmt(r.div/2)}</div>
+      </div>`;
+    }).join('');
+  }
   renderPedroHome_morList();
   renderPedroHomeCards();
 }
@@ -5928,10 +6082,29 @@ function renderPedroHomeCards(){
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--ink3)" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
     </div>
   </div>`;
-  const rdr=(id,items,empty,fn)=>{const el=document.getElementById(id);if(!el)return;if(!items.length){el.innerHTML=`<div class="empty"><div class="empty-t">${empty}</div></div>`;return;}el.innerHTML=items.map(fn).join('');};
-  rdr('pedro-san', S.cartao.santander.filter(i=>i.div==='pedro_div'), 'Nenhum item', it=>cartRow(it,'Santander','santander'));
-  rdr('pedro-car', S.cartao.carrefour.filter(i=>i.div==='pedro_div'),  'Nenhum item', it=>cartRow(it,'Carrefour','carrefour'));
-  rdr('pedro-ind', [...S.cartao.santander.filter(i=>i.div==='pedro_ind').map(i=>({...i,_banco:'santander'})),...S.cartao.carrefour.filter(i=>i.div==='pedro_ind').map(i=>({...i,_banco:'carrefour'}))], 'Nenhum item', it=>cartRowInd(it,it._banco==='santander'?'Santander':'Carrefour',it._banco));
+  // uma seção "<Cartão> ÷ Pedro" por cartão que tiver item pedro_div
+  const cartoes=todosCartoes();
+  const wrap=document.getElementById('pedro-listas-cartoes');
+  if(wrap){
+    wrap.innerHTML=cartoes.map(c=>{
+      const itens=(S.cartao[c.key]||[]).filter(i=>i.div==='pedro_div');
+      if(!itens.length)return'';
+      const linhas=itens.map(it=>cartRow(it,c.nome,c.key)).join('');
+      return `<div style="font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--ink2);margin-bottom:10px">${c.nome} ÷ Pedro</div>
+      <div class="card" style="margin-bottom:16px">${linhas}</div>`;
+    }).join('');
+  }
+  // Individual Pedro: agregado de todos os cartões
+  let indItens=[];
+  cartoes.forEach(c=>{
+    (S.cartao[c.key]||[]).filter(i=>i.div==='pedro_ind').forEach(i=>indItens.push({...i,_banco:c.key,_nome:c.nome}));
+  });
+  const indEl=document.getElementById('pedro-ind');
+  if(indEl){
+    indEl.innerHTML = indItens.length
+      ? indItens.map(it=>cartRowInd(it,it._nome,it._banco)).join('')
+      : '<div class="empty"><div class="empty-t">Nenhum item</div></div>';
+  }
 }
 
 // ── LANÇAMENTO ──
@@ -6058,8 +6231,8 @@ function salvarLanc(){
       const cat=document.getElementById('lm-res-cat')?.value||'Aporte mensal';
       const divBtn=['proprio','pedro_div','pedro_ind'].find(k=>{const b=document.getElementById('lm-res-div-'+k);return b&&b.style.background!=='none'&&b.style.background!=='';});
       const div=divBtn||'proprio';
-      if(!S.reservasmes)S.reservasmes=[];
-      S.reservasmes.push({id:nxId(S.reservasmes),nome,desc,parc,div,valor:val,pago:false,caixinhaId,cat});
+      criarItemVivo('reservasmes', {nome:nome, desc:desc, div:div, caixinhaId:caixinhaId, cat:cat, valor:val, parcTexto:parc});
+      recomputarMesAtual();
     } else if(onde==='Cartão'){
       const banco=document.querySelector('#lm-banco .chip.on')?.textContent||'Santander';
       const item=document.getElementById('lm-cart-item').value.trim();
@@ -6068,7 +6241,8 @@ function salvarLanc(){
       const parc=document.getElementById('lm-cart-parc').value.trim()||'1x1';
       if(!item||!val){alert('Informe item e valor.');return;}
       const key=banco==='Santander'?'santander':'carrefour';
-      S.cartao[key].push({id:nxId(S.cartao[key]),cat,item,local:'',parc,valor:val,div:_lmDiv});
+      criarItemVivoCartao(key, {nome:item, cat:cat, local:'', div:_lmDiv, valor:val, parcTexto:parc});
+      recomputarMesAtual();
     }else{
       const desc=document.getElementById('lm-desc').value.trim();
       const val=parseFloat(document.getElementById('lm-val').value)||0;
@@ -6077,7 +6251,8 @@ function salvarLanc(){
       const pedro=div==='pedro_div';
       if(!desc||!val){alert('Informe nome e valor.');return;}
       const tipo=onde==='Moradia'?'moradia':onde==='Pessoal'?'pessoal':'reservasmes';
-      S[tipo].push({id:nxId(S[tipo]),nome:desc,valor:val,pago:false,pedro,div});
+      criarItemVivo(tipo, {nome:desc, valor:val, pedro:pedro, div:div});
+      recomputarMesAtual();
     }
   }
   save();
@@ -6279,21 +6454,6 @@ function addCatSem(){const inp=document.getElementById('cat-nova-sem');if(!inp||
 function rmCat(tipo,i){(tipo==='cartao'?S.cats.cartao:S.cats.reserva).splice(i,1);save();renderCatEdBody(tipo);}
 function setCatCor(i,cor){if(typeof S.cats.cartao[i]==='string')S.cats.cartao[i]={nome:S.cats.cartao[i],cor};else S.cats.cartao[i].cor=cor;save();}
 function addCatArr(tipo){const inp=document.getElementById('cat-nova-'+tipo);if(!inp||!inp.value.trim())return;if(tipo==='cartao')S.cats.cartao.push({nome:inp.value.trim(),cor:PALS[S.cats.cartao.length%PALS.length]});else S.cats.reserva.push(inp.value.trim());inp.value='';save();renderCatEdBody(tipo);}
-
-// ── FECHAR MÊS ──
-function fecharMes(){
-  var curK=curKey();
-  // 1. Marcar mês atual como fechado
-  setStatus('closed');
-  // 2. Salvar snapshot do mês atual
-  saveMonthData(curK);
-  // 3. Fechar sheet e re-renderizar (permanece no mês fechado)
-  closeSheet('sh-fechar');
-  save();
-  renderAll();
-  renderCycleBtn();
-  showToast('Mês encerrado ✓');
-}
 
 // ── VOICE ──
 let isRec=false,recog=null;
@@ -6500,11 +6660,9 @@ function confirmPdfImport(items){
 
 // ── HELPERS DE CLICK PARA DADOS SEGUROS ──
 function clearCartCatFiltroHere(){
-  // ler contexto do banco ativo
   if(typeof curCartTab !== 'undefined'){
-    if(curCartTab==='san'){_cartCatFiltro.san=null;renderCartoesSub();}
-    else if(curCartTab==='car'){_cartCatFiltro.car=null;renderCartoesSub();}
-    else{_cartCatFiltro.ambos=null;renderAmbosList();}
+    if(curCartTab==='ambos'){_cartCatFiltro.ambos=null;renderCartCatChartFor('ambos');renderAmbosList();}
+    else{_cartCatFiltro[curCartTab]=null;renderCartoesSub();}
   }
 }
 function clearCartCatFiltroLocal(){clearCartCatFiltroHere();}
@@ -6517,39 +6675,238 @@ function setNav(btn){document.querySelectorAll('.nb').forEach(b=>b.classList.rem
 function setNavById(id){const b=document.getElementById(id);setNav(b);}
 
 // ═══════════════════════════════════════════
-// DADOS POR MÊS — cada mês tem seus próprios dados isolados
+// MOTOR DE LISTA VIVA — Moradia, Pessoal, Reservas do mês, Receita e Cartão
+// existem como itens ÚNICOS e contínuos (não uma cópia por mês). Cada mês é
+// CALCULADO na hora que você olha pra ele, a partir desses itens. Sem
+// "iniciar/fechar mês" — todo mês é sempre navegável e editável.
 // ═══════════════════════════════════════════
-const MONTH_FIELDS = ['moradia','pessoal','cartao','cartaoPago','reservasmes','receita','lancamentos'];
-
-function saveMonthData(key){
-  // Salva snapshot dos dados mensais no monthData[key]
-  if(!S.monthData)S.monthData={};
-  var snap={};
-  MONTH_FIELDS.forEach(function(f){ if(S[f]!==undefined) snap[f]=JSON.parse(JSON.stringify(S[f])); });
-  S.monthData[key]=snap;
+function mKey(m,y){return `${y}-${String(m).padStart(2,'0')}`;}
+function curKey(){return mKey(S.month.m,S.month.y);}
+function diffMeses(mesA,mesB){
+  var pa=mesA.split('-').map(Number), pb=mesB.split('-').map(Number);
+  return (pb[0]-pa[0])*12 + (pb[1]-pa[1]);
 }
 
-function loadMonthData(key){
-  // Carrega dados do mês key para S, ou mantém os atuais se não tiver snap
-  if(!S.monthData||!S.monthData[key]) return false;
-  var snap=S.monthData[key];
-  MONTH_FIELDS.forEach(function(f){ if(snap[f]!==undefined) S[f]=JSON.parse(JSON.stringify(snap[f])); });
-  return true;
+// Retorna {valor,parc,pago,overriden} do item nesse mês, ou null se o item não existe nesse mês
+// (ainda não foi criado, já foi excluído, ou a parcela já acabou).
+function valorNoMes(item, mesAlvo){
+  if(mesAlvo < item.criadoEm) return null;
+  if(item.excluidoEm && mesAlvo >= item.excluidoEm) return null;
+  var parcelaAtual=null;
+  if(item.parcela){
+    var idx = diffMeses(item.parcela.inicioMes, mesAlvo) + 1;
+    if(idx<1 || idx>item.parcela.total) return null;
+    parcelaAtual = idx+'x'+item.parcela.total;
+  }
+  var pago = !!(item.pagoPorMes && item.pagoPorMes[mesAlvo]);
+  if(item.overridesPorMes && item.overridesPorMes[mesAlvo]!==undefined){
+    return {valor:item.overridesPorMes[mesAlvo], parc:parcelaAtual, pago:pago, overriden:true};
+  }
+  var vigente=null;
+  (item.historicoValor||[]).forEach(function(h){
+    if(h.desde<=mesAlvo && (!vigente || h.desde>vigente.desde)) vigente=h;
+  });
+  if(!vigente) return null;
+  return {valor:vigente.valor, parc:parcelaAtual, pago:pago, overriden:false};
 }
+
+// Materializa uma lista de itens vivos no formato "achatado" que o resto do app já entende
+function materializarLista(itens, mesAlvo, tipo){
+  return (itens||[]).map(function(item){
+    var r = valorNoMes(item, mesAlvo);
+    if(!r) return null;
+    var obj = { id:item.id, valor:r.valor, pago:r.pago, _overriden:r.overriden };
+    if(tipo==='cartao'){
+      obj.item=item.nome; obj.cat=item.cat; obj.local=item.local||''; obj.div=item.div; obj.parc=r.parc||'-';
+    } else {
+      obj.nome=item.nome;
+      if(item.desc!==undefined)obj.desc=item.desc;
+      if(item.pedro!==undefined)obj.pedro=item.pedro;
+      if(item.div!==undefined)obj.div=item.div;
+      if(item.caixinhaId!==undefined)obj.caixinhaId=item.caixinhaId;
+      if(item.cat!==undefined)obj.cat=item.cat;
+      if(r.parc)obj.parc=r.parc;
+    }
+    return obj;
+  }).filter(Boolean);
+}
+
+// Recalcula S.moradia/S.pessoal/S.reservasmes/S.receita/S.cartao pro mês atual (S.month),
+// a partir da lista viva em S.itensRecorrentes. Chamar sempre que S.month mudar.
+function recomputarMesAtual(){
+  if(!S.itensRecorrentes) return;
+  var k = curKey();
+  S.moradia = materializarLista(S.itensRecorrentes.moradia, k, 'moradia');
+  S.pessoal = materializarLista(S.itensRecorrentes.pessoal, k, 'pessoal');
+  S.reservasmes = materializarLista(S.itensRecorrentes.reservasmes, k, 'reservasmes');
+  S.receita = materializarLista(S.itensRecorrentes.receita, k, 'receita');
+  if(!S.cartaoPagoPorMes)S.cartaoPagoPorMes={};
+  if(!S.cartaoPagoPorMes[k])S.cartaoPagoPorMes[k]={};
+  S.cartao = {};
+  todosCartoes().forEach(function(c){
+    S.cartao[c.key] = materializarLista((S.itensRecorrentes.cartao||{})[c.key], k, 'cartao');
+    if(S.cartaoPagoPorMes[k][c.key]===undefined) S.cartaoPagoPorMes[k][c.key]=false;
+  });
+  S.cartaoPago = S.cartaoPagoPorMes[k];
+}
+
+// Acha o item vivo correspondente (por tipo + id). tipo: 'moradia'|'pessoal'|'reservasmes'|'receita'
+function itemVivo(tipo, id){
+  var lista = (S.itensRecorrentes||{})[tipo];
+  return lista ? lista.find(function(x){return x.id===id;}) : null;
+}
+function itemVivoCartao(banco, id){
+  var lista = (S.itensRecorrentes && S.itensRecorrentes.cartao || {})[banco];
+  return lista ? lista.find(function(x){return x.id===id;}) : null;
+}
+
+// Grava um novo valor no item vivo. soEsteMes=true -> vira um override isolado desse
+// mês (não cascateia); senão, entra no histórico e vale dali pra frente.
+function gravarValorItemVivo(item, valor, soEsteMes){
+  if(!item) return;
+  var k = curKey();
+  if(soEsteMes){
+    if(!item.overridesPorMes) item.overridesPorMes={};
+    item.overridesPorMes[k]=valor;
+  } else {
+    if(!item.historicoValor) item.historicoValor=[];
+    var existente = item.historicoValor.find(function(h){return h.desde===k;});
+    if(existente) existente.valor=valor;
+    else item.historicoValor.push({desde:k, valor:valor});
+  }
+}
+
+// "Excluir" = para de aparecer a partir do mês atual em diante — mantém o histórico
+// intacto nos meses anteriores (nunca apaga de verdade, é soft-delete).
+function excluirItemVivoDesteMes(item){
+  if(!item) return;
+  item.excluidoEm = curKey();
+}
+
+function togglePagoItemVivo(item){
+  if(!item) return;
+  var k=curKey();
+  if(!item.pagoPorMes) item.pagoPorMes={};
+  item.pagoPorMes[k] = !item.pagoPorMes[k];
+}
+
+// Cria um item vivo novo a partir dos campos usados nos formulários de "novo item"
+function criarItemVivo(tipo, campos){
+  if(!S.itensRecorrentes[tipo]) S.itensRecorrentes[tipo]=[];
+  var lista = S.itensRecorrentes[tipo];
+  var novoId = (lista.reduce(function(m,x){return Math.max(m,x.id||0);},0))+1;
+  var k = curKey();
+  var item = Object.assign({
+    id:novoId, criadoEm:k, excluidoEm:null,
+    historicoValor:[{desde:k, valor:campos.valor||0}],
+    overridesPorMes:{}, pagoPorMes:{}, parcela: campos.parcTexto ? parseParc(campos.parcTexto, k) : null
+  }, campos);
+  delete item.valor; delete item.parcTexto;
+  lista.push(item);
+  return item;
+}
+function criarItemVivoCartao(banco, campos){
+  if(!S.itensRecorrentes.cartao) S.itensRecorrentes.cartao={};
+  if(!S.itensRecorrentes.cartao[banco]) S.itensRecorrentes.cartao[banco]=[];
+  var lista = S.itensRecorrentes.cartao[banco];
+  var novoId = (lista.reduce(function(m,x){return Math.max(m,x.id||0);},0))+1;
+  var k = curKey();
+  var item = Object.assign({
+    id:novoId, criadoEm:k, excluidoEm:null,
+    historicoValor:[{desde:k, valor:campos.valor||0}],
+    overridesPorMes:{}, pagoPorMes:{}, parcela: campos.parcTexto ? parseParc(campos.parcTexto, k) : null
+  }, campos);
+  delete item.valor; delete item.parcTexto;
+  lista.push(item);
+  return item;
+}
+
+// ── MIGRAÇÃO (roda uma única vez): converte os arrays fixos por mês pra lista viva ──
+function parseParc(parcTexto, mesReferencia){
+  // "2x3" em mesReferencia -> {inicioMes: mesReferencia - 1 mês (a parcela 1 já teria sido lá), total:3}
+  if(!parcTexto || parcTexto==='-' || String(parcTexto).indexOf('x')<0) return null;
+  var partes=String(parcTexto).split('x');
+  var idxAtual=parseInt(partes[0]), total=parseInt(partes[1]);
+  if(isNaN(idxAtual)||isNaN(total)) return null;
+  var p=mesReferencia.split('-').map(Number);
+  var totalMesesAbs = p[0]*12+p[1] - (idxAtual-1);
+  var iy = Math.floor((totalMesesAbs-1)/12), im=((totalMesesAbs-1)%12)+1;
+  return {inicioMes: iy+'-'+String(im).padStart(2,'0'), total:total};
+}
+function migrarItemSimples(it, mesSemente){
+  return {
+    id: it.id, nome: it.nome, desc: it.desc,
+    pedro: it.pedro, div: it.div, caixinhaId: it.caixinhaId, cat: it.cat,
+    criadoEm: mesSemente, excluidoEm: null,
+    parcela: it.parc ? parseParc(it.parc, mesSemente) : null,
+    historicoValor: [{desde:mesSemente, valor:it.valor}],
+    overridesPorMes: {},
+    pagoPorMes: it.pago ? (function(){var o={};o[mesSemente]=true;return o;})() : {}
+  };
+}
+function migrarItemCartao(it, mesSemente){
+  return {
+    id: it.id, nome: it.item, cat: it.cat, local: it.local||'', div: it.div,
+    criadoEm: mesSemente, excluidoEm: null,
+    parcela: it.parc ? parseParc(it.parc, mesSemente) : null,
+    historicoValor: [{desde:mesSemente, valor:it.valor}],
+    overridesPorMes: {},
+    pagoPorMes: {}
+  };
+}
+function migrarParaListaViva(){
+  var mesSemente, fonte;
+  if(S.monthData && S.monthData['2026-08']){
+    // Existe um snapshot explícito de agosto salvo — fonte mais confiável.
+    mesSemente = '2026-08';
+    fonte = S.monthData['2026-08'];
+  } else {
+    // Sem snapshot salvo — só é seguro usar os dados "ao vivo" de S se S.month
+    // já corresponder a agosto/2026 ou depois. Se por algum motivo S.month
+    // ainda estiver preso num mês anterior (ex: um bug de navegação antigo),
+    // esses dados ao vivo NÃO representam agosto de verdade — nesse caso é
+    // mais seguro começar a lista viva vazia do que herdar dado errado.
+    var liveKey = S.month ? mKey(S.month.m, S.month.y) : null;
+    if(liveKey && liveKey >= '2026-08'){
+      mesSemente = liveKey;
+      fonte = { moradia:S.moradia, pessoal:S.pessoal, reservasmes:S.reservasmes, receita:S.receita, cartao:S.cartao };
+    } else {
+      console.log('Migração: S.month ('+liveKey+') não é agosto/2026 nem depois — começando lista viva vazia por segurança, em vez de herdar dado de mês incerto.');
+      mesSemente = '2026-08';
+      fonte = { moradia:[], pessoal:[], reservasmes:[], receita:(DEF.receita||[]), cartao:{santander:[],carrefour:[]} };
+    }
+  }
+  var itens = {
+    moradia: (fonte.moradia||[]).map(function(it){return migrarItemSimples(it,mesSemente);}),
+    pessoal: (fonte.pessoal||[]).map(function(it){return migrarItemSimples(it,mesSemente);}),
+    reservasmes: (fonte.reservasmes||[]).map(function(it){return migrarItemSimples(it,mesSemente);}),
+    receita: (fonte.receita||[]).map(function(it){return migrarItemSimples(it,mesSemente);}),
+    cartao: {}
+  };
+  var chavesCartao = fonte.cartao ? Object.keys(fonte.cartao) : ['santander','carrefour'];
+  chavesCartao.forEach(function(k){
+    itens.cartao[k] = (fonte.cartao[k]||[]).map(function(it){return migrarItemCartao(it,mesSemente);});
+  });
+  return itens;
+}
+
+if(!S.itensRecorrentes){
+  S.itensRecorrentes = migrarParaListaViva();
+  // Junho e julho saem da navegação — o modelo novo começa em agosto/2026.
+  // Os dados antigos não são apagados do armazenamento local, só não fazem
+  // mais parte do que o app mostra.
+  if(S.monthData){ delete S.monthData['2026-06']; delete S.monthData['2026-07']; }
+  if(S.monthStatus){ delete S.monthStatus['2026-06']; delete S.monthStatus['2026-07']; }
+  if(!S.month || S.month.y<2026 || (S.month.y===2026 && S.month.m<8)){
+    S.month = {m:8, y:2026};
+  }
+  save();
+}
+recomputarMesAtual();
 
 function switchMonth(newM, newY){
-  // 1. Salvar snapshot do mês atual antes de sair
-  var oldKey=curKey();
-  saveMonthData(oldKey);
-  // 2. Mudar mês
   S.month={m:newM,y:newY};
-  var newKey=mKey(newM,newY);
-  // 3. Carregar dados do novo mês se já existir
-  if(!loadMonthData(newKey)){
-    // Mês sem dados — mostrar com os dados do mês atual (sem modificar)
-    // O usuário vai clicar "Iniciar mês" para criar os dados
-    // NÃO modificar S aqui — deixar os dados do mês anterior visíveis
-  }
+  recomputarMesAtual();
   save();
   updateMlbl();
   renderAll();
@@ -6560,172 +6917,10 @@ function chMonth(dir){
   m+=dir;
   if(m>12){m=1;y++;}
   if(m<1){m=12;y--;}
-  if(y<2026||(y===2026&&m<6))return;
+  if(y<2026||(y===2026&&m<8))return; // mínimo: agosto/2026
   switchMonth(m,y);
 }
 function updateMlbl(){const el=document.getElementById('mlbl');if(el)el.textContent=`${MNS[S.month.m-1]} ${S.month.y}`;}
-
-// ════ MONTH CYCLE SYSTEM ════
-// monthKey: 'YYYY-MM' e.g. '2026-05'
-function mKey(m,y){return `${y}-${String(m).padStart(2,'0')}`;}
-function curKey(){return mKey(S.month.m,S.month.y);}
-
-// status: null=not started | 'open'=active | 'closed'=closed
-function getStatus(){return (S.monthStatus||{})[curKey()]||null;}
-
-function setStatus(st){
-  if(!S.monthStatus)S.monthStatus={};
-  S.monthStatus[curKey()]=st;
-  save();
-}
-
-function getPrevMonthKey(m,y){
-  var pm=m-1, py=y;
-  if(pm<1){pm=12;py--;}
-  return mKey(pm,py);
-}
-
-function iniciarMes(){
-  const {m,y}=S.month;
-  const curK=mKey(m,y);
-  if(!S.monthData)S.monthData={};
-
-  // Guard: não sobrescrever silenciosamente um mês que já foi iniciado/fechado antes
-  var curStatus=(S.monthStatus||{})[curK];
-  if(curStatus){
-    if(!confirm('Este mês ('+MNS[m-1]+' '+y+') já foi iniciado ou fechado antes. Iniciar novamente vai sobrescrever os dados atuais dele. Continuar?')){
-      return;
-    }
-  }
-
-  // Fonte dos dados: preferir o snapshot salvo do mês anterior (monthData),
-  // em vez de assumir que "S" ao vivo ainda representa esse mês anterior.
-  // Isso evita copiar dados errados quando o usuário navega vários meses
-  // sem iniciar cada um, ou quando o mês de destino já tinha dados salvos.
-  const prevKey=getPrevMonthKey(m,y);
-  let source;
-  if(S.monthData[prevKey]){
-    source=S.monthData[prevKey];
-  } else {
-    // Sem snapshot do mês anterior — fallback ao comportamento antigo,
-    // assumindo que os dados ao vivo em S ainda são desse mês anterior.
-    source={
-      moradia:S.moradia, pessoal:S.pessoal, cartao:S.cartao,
-      reservasmes:S.reservasmes, receita:S.receita, metas:S.metas
-    };
-  }
-
-  var moradia=JSON.parse(JSON.stringify(source.moradia||[]));
-  var pessoal=JSON.parse(JSON.stringify(source.pessoal||[]));
-  var cartao=JSON.parse(JSON.stringify(source.cartao||{santander:[],carrefour:[]}));
-  var reservasmes=JSON.parse(JSON.stringify(source.reservasmes||[]));
-  var receita=JSON.parse(JSON.stringify(source.receita||[]));
-  var metas=JSON.parse(JSON.stringify(source.metas||S.metas||{}));
-
-  // Aplicar no novo mês — pagamentos zerados
-  S.moradia=moradia.map(function(i){return Object.assign({},i,{pago:false});});
-  S.pessoal=pessoal.map(function(i){return Object.assign({},i,{pago:false});});
-  S.receita=receita;
-  S.metas=metas;
-  S.cartaoPago={santander:false,carrefour:false};
-  // Avançar parcelas do cartão
-  function avancParc(items){
-    return (items||[]).map(function(it){
-      if(!it.parc||!it.parc.includes('x'))return it;
-      var parts=it.parc.split('x');
-      var cur=parseInt(parts[0]),tot=parseInt(parts[1]);
-      if(isNaN(cur)||isNaN(tot))return it;
-      cur++;
-      if(cur>tot)return null;
-      return Object.assign({},it,{parc:cur+'x'+tot});
-    }).filter(Boolean);
-  }
-  S.cartao={
-    santander:avancParc(cartao&&cartao.santander),
-    carrefour:avancParc(cartao&&cartao.carrefour)
-  };
-  // Avançar parcelas reservasmes
-  S.reservasmes=(reservasmes||[]).map(function(i){
-    var it=Object.assign({},i,{pago:false});
-    if(it.parc&&it.parc.includes('x')){
-      var parts=it.parc.split('x');
-      var cur=parseInt(parts[0]),tot=parseInt(parts[1]);
-      if(!isNaN(cur)&&!isNaN(tot)){cur++;if(cur>tot)return null;it.parc=cur+'x'+tot;}
-    }
-    return it;
-  }).filter(Boolean);
-  // Backup ANTES de limpar lançamentos
-  saveBackup('pre_mes_'+MNS[m-1]+'_'+y);
-  // Limpar lançamentos semanais
-  S.lancamentos=[];
-  // Ativar novo mês
-  setStatus('open');
-  save();
-  renderAll();
-  showToast('Mês iniciado! Dados de '+MNS[m-1]+' salvos como backup.');
-}
-
-function handleCycleBtn(){
-  const st=getStatus();
-  if(!st){
-    iniciarMes();
-  } else if(st==='open'){
-    fecharMes();
-  } else {
-    // closed → reopen
-    setStatus('open');
-    renderAll();
-    renderCycleBtn();
-  }
-}
-
-function renderCycleBtn(){
-  const st=getStatus();
-  const btns=['cycle-btn-home','cycle-btn-mes','cycle-btn-sem','cycle-btn-res','cycle-btn-ped'];
-  btns.forEach(id=>{
-    const el=document.getElementById(id);
-    if(!el)return;
-    if(!st){
-      el.textContent='Iniciar mês';
-      el.style.cssText='padding:6px 14px;border-radius:99px;font-size:12px;font-weight:600;cursor:pointer;font-family:Outfit,sans-serif;transition:.15s;background:var(--ink);color:white;border:1.5px solid var(--ink)';
-    } else if(st==='open'){
-      el.textContent='Fechar mês';
-      el.style.cssText='padding:6px 14px;border-radius:99px;font-size:12px;font-weight:600;cursor:pointer;font-family:Outfit,sans-serif;transition:.15s;background:none;color:var(--ok);border:1.5px solid var(--ok)';
-    } else {
-      el.textContent='Encerrado';
-      el.style.cssText='padding:6px 14px;border-radius:99px;font-size:12px;font-weight:600;cursor:pointer;font-family:Outfit,sans-serif;transition:.15s;background:#6B7280;color:white;border:1.5px solid #6B7280';
-    }
-  });
-  // Home cards: disabled when not started
-  const hcc=document.getElementById('home-cards-container');
-  if(hcc){
-    if(!st){
-      hcc.style.opacity='0.45';
-      hcc.style.filter='grayscale(60%)';
-      hcc.style.pointerEvents='none';
-    } else {
-      hcc.style.opacity='1';
-      hcc.style.filter='none';
-      hcc.style.pointerEvents='auto';
-    }
-  }
-  // mes-main-content visual block
-  const mesContent=document.getElementById('mes-main-content');
-  if(mesContent){
-    var isClosed=st==='closed';
-    var notStarted=!st;
-    mesContent.style.opacity=(isClosed||notStarted)?'0.6':'1';
-    mesContent.style.pointerEvents=(isClosed||notStarted)?'none':'auto';
-    mesContent.style.filter=(isClosed||notStarted)?'grayscale(40%)':'none';
-  }
-  // Banner de mês fechado
-  var closedBanner=document.getElementById('mes-closed-banner');
-  if(closedBanner){
-    closedBanner.style.display=st==='closed'?'flex':'none';
-  }
-}
-
-// monthStatus initialized above during data migration
 
 // Month picker
 function openMonthPicker(){
@@ -6751,16 +6946,11 @@ function closeMonthPicker(){
 function applyMonthPicker(){
   const m=parseInt(document.getElementById('mp-month').value);
   const y=parseInt(document.getElementById('mp-year').value);
-  // enforce min: April 2026
-  if(y<2026||(y===2026&&m<4)){S.month={m:4,y:2026};}
+  // mínimo: agosto/2026. Sem limite máximo de ano.
+  if(y<2026||(y===2026&&m<8)){S.month={m:8,y:2026};}
   else{S.month={m,y};}
-  save();closeMonthPicker();renderAll();renderCycleBtn();
-}
-
-// chMonth já definida corretamente acima
-// Garantir mês mínimo = Junho 2026
-if(!S.month || S.month.y<2026 || (S.month.y===2026 && S.month.m<6)){
-  S.month={m:6,y:2026};
+  recomputarMesAtual();
+  save();closeMonthPicker();renderAll();
 }
 
 // ═══════════════════════════════════════════
@@ -6818,7 +7008,7 @@ document.addEventListener('keydown', function(e){
   // Cartão inline
   if(morRow && document.getElementById('sub-cartoes')?.classList.contains('open')){
     var cid = parseInt(morRow.dataset.editId);
-    var banco = document.querySelector('#ct-view-san:not([style*="none"])') ? 'santander' : 'carrefour';
+    var banco = (curCartTab && curCartTab!=='ambos') ? curCartTab : 'santander';
     if(!isNaN(cid)){e.preventDefault(); confirmCart(banco, cid); return;}
   }
 
@@ -6849,7 +7039,6 @@ document.addEventListener('keydown', function(e){
 
 
 renderAll();
-renderCycleBtn();
 setTimeout(initLanc,100);
 </script>
 
