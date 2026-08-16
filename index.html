@@ -404,12 +404,17 @@ body{font-family:"Outfit",sans-serif;color:var(--ink);font-size:15px;line-height
         <button class="icon-btn" onclick="goSub('sub-config')">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
         </button>
-        <span class="app-logo">catchup</span><span id="app-version" style="font-size:9px;font-weight:500;color:rgba(255,255,255,.35);margin-left:4px;letter-spacing:.05em">v64</span>
+        <span class="app-logo">catchup</span><span id="app-version" style="font-size:9px;font-weight:500;color:rgba(255,255,255,.35);margin-left:4px;letter-spacing:.05em">v65</span>
       </div>
-      <div class="month-nav">
-        <button onclick="chMonth(-1)">&#8249;</button>
-        <span class="month-lbl" id="mlbl" onclick="openMonthPicker()" style="cursor:pointer">Maio 2026</span>
-        <button onclick="chMonth(1)">&#8250;</button>
+      <div style="display:flex;align-items:center;gap:6px">
+        <div class="month-nav">
+          <button onclick="chMonth(-1)">&#8249;</button>
+          <span class="month-lbl" id="mlbl" onclick="openMonthPicker()" style="cursor:pointer">Maio 2026</span>
+          <button onclick="chMonth(1)">&#8250;</button>
+        </div>
+        <button class="icon-btn" id="btn-mes-padrao" onclick="toggleMesPadrao()" title="Definir como mês padrão">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+        </button>
       </div>
     </div>
   </div>
@@ -2962,7 +2967,7 @@ function importLancFile(input){
   };
   reader.readAsDataURL(file);
 }
-const APP_VERSION = "v64";
+const APP_VERSION = "v65";
 
 function checkAppVersion(){
   showToast('Salvando dados…');
@@ -6902,6 +6907,16 @@ if(!S.itensRecorrentes){
   }
   save();
 }
+// Se houver um "mês padrão" fixado, ele sempre vence ao abrir o app — não importa
+// pra qual mês o usuário tenha navegado na última sessão (checar mês futuro,
+// revisar um mês passado, etc). Só muda quando ela aperta o botão de novo.
+if(S.mesPadrao){
+  var partesPadrao = S.mesPadrao.split('-');
+  var yPadrao = parseInt(partesPadrao[0]), mPadrao = parseInt(partesPadrao[1]);
+  if(!isNaN(yPadrao) && !isNaN(mPadrao) && (yPadrao>2026 || (yPadrao===2026 && mPadrao>=8))){
+    S.month = {m:mPadrao, y:yPadrao};
+  }
+}
 recomputarMesAtual();
 
 function switchMonth(newM, newY){
@@ -6920,7 +6935,34 @@ function chMonth(dir){
   if(y<2026||(y===2026&&m<8))return; // mínimo: agosto/2026
   switchMonth(m,y);
 }
-function updateMlbl(){const el=document.getElementById('mlbl');if(el)el.textContent=`${MNS[S.month.m-1]} ${S.month.y}`;}
+function updateMlbl(){
+  const el=document.getElementById('mlbl');if(el)el.textContent=`${MNS[S.month.m-1]} ${S.month.y}`;
+  atualizarBotaoMesPadrao();
+}
+
+// ── MÊS PADRÃO — o mês que abre sozinho toda vez que o app é aberto,
+// independente de pra onde você navegou depois (não é "o último mês visto") ──
+function toggleMesPadrao(){
+  const k = curKey();
+  if(S.mesPadrao === k){
+    S.mesPadrao = null;
+    showToast('Mês padrão removido');
+  } else {
+    S.mesPadrao = k;
+    showToast(MNS[S.month.m-1]+' definido como mês padrão ✓');
+  }
+  save();
+  atualizarBotaoMesPadrao();
+}
+function atualizarBotaoMesPadrao(){
+  const btn=document.getElementById('btn-mes-padrao');if(!btn)return;
+  const ativo = S.mesPadrao === curKey();
+  btn.style.background = ativo ? 'rgba(255,255,255,.28)' : 'rgba(255,255,255,.1)';
+  btn.style.color = ativo ? '#FFFFFF' : 'rgba(255,255,255,.8)';
+  const svg = btn.querySelector('svg');
+  if(svg) svg.setAttribute('fill', ativo ? 'currentColor' : 'none');
+  btn.title = ativo ? 'Este é o mês padrão (toque pra remover)' : 'Definir como mês padrão';
+}
 
 // Month picker
 function openMonthPicker(){
