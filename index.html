@@ -404,7 +404,7 @@ body{font-family:"Outfit",sans-serif;color:var(--ink);font-size:15px;line-height
         <button class="icon-btn" onclick="goSub('sub-config')">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
         </button>
-        <span class="app-logo">catchup</span><span id="app-version" style="font-size:9px;font-weight:500;color:rgba(255,255,255,.35);margin-left:4px;letter-spacing:.05em">v69</span>
+        <span class="app-logo">catchup</span><span id="app-version" style="font-size:9px;font-weight:500;color:rgba(255,255,255,.35);margin-left:4px;letter-spacing:.05em">v70</span>
       </div>
       <div style="display:flex;align-items:center;gap:6px">
         <div class="month-nav">
@@ -445,6 +445,9 @@ body{font-family:"Outfit",sans-serif;color:var(--ink);font-size:15px;line-height
     <div class="content">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
         <div style="font-size:22px;font-weight:800;letter-spacing:-.5px;line-height:1.2">Home</div>
+        <button class="btn-anotacao-mes" onclick="abrirAnotacaoMes()" title="Anotações do mês" style="display:flex;align-items:center;gap:6px;padding:7px 13px;border-radius:99px;border:1.5px solid var(--bg3);background:var(--w);color:var(--ink2);font-family:'Outfit',sans-serif;font-size:12.5px;font-weight:600;cursor:pointer;flex-shrink:0">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg><span>Notas</span>
+        </button>
       </div>
 
       <div id="home-cards-container">
@@ -533,8 +536,8 @@ body{font-family:"Outfit",sans-serif;color:var(--ink);font-size:15px;line-height
       <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:18px">
         <button onclick="goPage('home');setNavById('nb-home')" style="display:flex;align-items:center;gap:3px;border:none;background:none;color:var(--ink3);font-size:13px;font-weight:500;cursor:pointer;font-family:'Outfit',sans-serif;padding:0;flex-shrink:0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg> Home</button>
         <div style="font-size:20px;font-weight:800;letter-spacing:-.4px;flex:1;text-align:center">Mensal</div>
-        <button class="icon-btn" id="btn-anotacao-mes" onclick="abrirAnotacaoMes()" title="Anotações do mês" style="width:30px;height:30px;background:var(--bg2);color:var(--ink2)">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        <button class="btn-anotacao-mes" onclick="abrirAnotacaoMes()" title="Anotações do mês" style="display:flex;align-items:center;gap:6px;padding:7px 13px;border-radius:99px;border:1.5px solid var(--bg3);background:var(--w);color:var(--ink2);font-family:'Outfit',sans-serif;font-size:12.5px;font-weight:600;cursor:pointer;flex-shrink:0">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg><span>Notas</span>
         </button>
       </div>
       <div id="mes-main-content" style="transition:opacity .3s,filter .3s">
@@ -2968,7 +2971,7 @@ function importarComprovante(input){
   };
   reader.readAsDataURL(file);
 }
-const APP_VERSION = "v69";
+const APP_VERSION = "v70";
 
 function checkAppVersion(){
   showToast('Salvando dados…');
@@ -5951,8 +5954,8 @@ function renderResSubpage(){
   if(_resDetFiltroDivisao==='proprio')movs=movs.filter(m=>!m.div||m.div==='proprio');
   else if(_resDetFiltroDivisao==='pedro_div')movs=movs.filter(m=>m.div==='pedro_div');
   else if(_resDetFiltroDivisao==='pedro_ind')movs=movs.filter(m=>m.div==='pedro_ind');
-  // por mês específico
-  if(_movMesFiltro)movs=movs.filter(m=>m.mes===_movMesFiltro);
+  // (o filtro de mês da tela principal de Reservas NÃO vale aqui dentro: cada caixinha
+  // tem os próprios filtros acima, e por padrão mostra todas as movimentações DELA)
   const ml=document.getElementById('res-det-movs');if(!ml)return;
   if(!movs.length){ml.innerHTML='<div class="empty" style="padding:20px"><div class="empty-t">Nenhuma movimentação</div></div>';return;}
   const movsOrdered=[...movs].reverse();
@@ -7009,10 +7012,14 @@ function fecharAnotacaoMes(){
   closeSheet('sh-anotacao');
 }
 function atualizarBotaoAnotacaoMes(){
-  const btn=document.getElementById('btn-anotacao-mes');if(!btn)return;
   const temAnotacao = !!(S.anotacoesPorMes && S.anotacoesPorMes[curKey()]);
-  btn.style.background = temAnotacao ? 'var(--accent-lt)' : 'var(--bg2)';
-  btn.style.color = temAnotacao ? 'var(--accent)' : 'var(--ink2)';
+  document.querySelectorAll('.btn-anotacao-mes').forEach(function(btn){
+    btn.style.background = temAnotacao ? '#FEF3E2' : 'var(--w)';
+    btn.style.borderColor = temAnotacao ? '#D97706' : 'var(--bg3)';
+    btn.style.color = temAnotacao ? '#92600A' : 'var(--ink2)';
+    const lbl = btn.querySelector('span');
+    if(lbl) lbl.textContent = temAnotacao ? 'Notas ●' : 'Notas';
+  });
 }
 
 function updateMlbl(){
