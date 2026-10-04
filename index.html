@@ -404,7 +404,7 @@ body{font-family:"Outfit",sans-serif;color:var(--ink);font-size:15px;line-height
         <button class="icon-btn" onclick="goSub('sub-config')">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
         </button>
-        <span class="app-logo">catchup</span><span id="app-version" style="font-size:9px;font-weight:500;color:rgba(255,255,255,.35);margin-left:4px;letter-spacing:.05em">v67</span>
+        <span class="app-logo">catchup</span><span id="app-version" style="font-size:9px;font-weight:500;color:rgba(255,255,255,.35);margin-left:4px;letter-spacing:.05em">v69</span>
       </div>
       <div style="display:flex;align-items:center;gap:6px">
         <div class="month-nav">
@@ -631,6 +631,7 @@ body{font-family:"Outfit",sans-serif;color:var(--ink);font-size:15px;line-height
           <div id="cat-cards"></div>
         </div>
         <div id="st-metas" style="display:none">
+          <div id="metas-total-resumo" style="margin:14px 20px 0;background:var(--bg2);border-radius:var(--r-sm);padding:14px 16px;display:grid;grid-template-columns:1fr 1fr;gap:10px"></div>
           <div style="padding:14px 20px 6px;font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em">Por categoria (mensal)</div>
           <div id="metas-cat-list"></div>
           <div id="metas-edit-row" style="padding:8px 20px 12px;border-top:1px solid var(--line);display:none"></div>
@@ -1150,14 +1151,14 @@ body{font-family:"Outfit",sans-serif;color:var(--ink);font-size:15px;line-height
     <div class="type-card" onclick="setLT('mes',this)"><div class="tc-icon"></div><div class="tc-name">Conta do mês</div><div class="tc-desc">Moradia, cartão…</div></div>
   </div>
 
-  <!-- voz + pdf -->
+  <!-- voz + foto do comprovante -->
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:16px 20px 0">
     <button class="btn btn-ghost" style="margin:0;display:flex;align-items:center;justify-content:center;gap:6px;font-size:13px;padding:10px" onclick="openSheet('sh-voz')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg> Por voz</button>
-    <button class="btn btn-ghost" style="margin:0;display:flex;align-items:center;justify-content:center;gap:6px;font-size:13px;padding:10px" onclick="document.getElementById('pdf-input').click()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Importar PDF</button>
+    <button class="btn btn-ghost" style="margin:0;display:flex;align-items:center;justify-content:center;gap:6px;font-size:13px;padding:10px" onclick="document.getElementById('comprovante-input').click()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Foto do comprovante</button>
   </div>
-  <input type="file" id="pdf-input" accept=".pdf,image/*" style="display:none" onchange="handlePdfUpload(this)">
-  <div id="pdf-status" style="padding:4px 20px 0;font-size:12px;color:var(--ink3);min-height:18px"></div>
-  <div id="pdf-result-zone" style="padding:0 20px 8px;display:none"></div>
+  <input type="file" id="comprovante-input" accept="image/*,.pdf" style="display:none" onchange="importarComprovante(this)">
+  <div id="comprovante-loading" style="display:none;text-align:center;padding:10px;font-size:13px;color:var(--ink3)"><span style="animation:spin 1s linear infinite;display:inline-block">⟳</span> Lendo comprovante…</div>
+  <div id="comprovante-preview" style="display:none;margin:0 20px 8px;padding:10px 12px;border-radius:var(--r-sm);background:#F0FDF4;border:1px solid #BBF7D0;font-size:13px;color:#15803D"></div>
 
   <!-- GASTO SEMANAL -->
   <div id="lf-sem">
@@ -1272,30 +1273,6 @@ body{font-family:"Outfit",sans-serif;color:var(--ink);font-size:15px;line-height
     </div>
   </div>
 
-  <div class="fg" id="lanc-attach-area">
-    <label class="flbl">Anexo <span style="font-weight:400;color:var(--ink3)">(imagem ou PDF)</span></label>
-    <div style="display:flex;gap:8px;align-items:center;margin-top:6px">
-      <button type="button" onclick="document.getElementById('lanc-file-input').click()" style="display:flex;align-items:center;gap:6px;padding:10px 14px;border-radius:var(--r-sm);border:1.5px dashed var(--bg3);background:none;font-family:Outfit,sans-serif;font-size:13px;color:var(--ink2);cursor:pointer"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg> Selecionar arquivo</button>
-      <span id="lanc-file-name" style="font-size:12px;color:var(--ink3);flex:1"></span>
-    </div>
-    <input type="file" id="lanc-file-input" accept="image/*,.pdf" style="display:none" onchange="lancAnexoSelected(this)">
-    <div id="lanc-preview" style="margin-top:8px;display:none">
-      <img id="lanc-preview-img" style="max-width:100%;max-height:120px;border-radius:8px;object-fit:contain" src="">
-    </div>
-  </div>
-  <!-- Import imagem/PDF -->
-  <div style="margin-bottom:12px">
-    <div style="font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px">Importar de imagem ou PDF</div>
-    <label style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;border-radius:var(--r-sm);border:1.5px dashed var(--bg3);background:var(--bg2);cursor:pointer;font-family:Outfit,sans-serif;font-size:13px;font-weight:600;color:var(--ink2);box-sizing:border-box">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
-      Selecionar imagem ou PDF
-      <input type="file" accept="image/*,application/pdf" style="display:none" onchange="importLancFile(this)">
-    </label>
-    <div id="import-lanc-preview" style="display:none;margin-top:8px;padding:10px 12px;border-radius:var(--r-sm);background:#F0FDF4;border:1px solid #BBF7D0;font-size:13px;color:#15803D"></div>
-    <div id="import-lanc-loading" style="display:none;text-align:center;padding:10px;font-size:13px;color:var(--ink3)">
-      <span style="animation:spin 1s linear infinite;display:inline-block">⟳</span> Analisando…
-    </div>
-  </div>
   <button class="btn btn-primary" onclick="salvarLanc()">Salvar</button>
   <button class="btn btn-ghost" onclick="closeSheet('sh-lanc')">Cancelar</button>
 </div></div>
@@ -2925,19 +2902,28 @@ function forceSyncNow(){
     showToast('Salvo localmente!');
   }
 }
-// ── IMPORT LANÇAMENTO POR IMAGEM/PDF ──
-function importLancFile(input){
+// ── FOTO DO COMPROVANTE — lê valor, descrição, categoria E subcategoria de uma
+// vez só, preenche o formulário (com o visual atualizado de verdade — antes só
+// preenchia o campo escondido e a tela continuava mostrando "Selecionar…"), e
+// já deixa a própria foto anexada ao lançamento. ──
+function importarComprovante(input){
   var file = input.files[0];
   if(!file) return;
-  var loading = document.getElementById('import-lanc-loading');
-  var preview = document.getElementById('import-lanc-preview');
+  var loading = document.getElementById('comprovante-loading');
+  var preview = document.getElementById('comprovante-preview');
   if(loading) loading.style.display='block';
   if(preview) preview.style.display='none';
   var reader = new FileReader();
   reader.onload = function(e){
     var base64 = e.target.result.split(',')[1];
     var mediaType = file.type;
-    // Chamar Claude API para extrair dados
+    // guarda a foto pra anexar ao lançamento independente do resultado da IA
+    _lancAnexo = {name:file.name, type:file.type, data:e.target.result};
+    var cats = Object.keys(S.cats.semana||{});
+    var catsComSubs = cats.map(function(k){
+      var subs=(S.cats.semana[k]||[]);
+      return k+(subs.length?' (subcategorias possíveis: '+subs.join(', ')+')':'');
+    }).join('; ');
     fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
@@ -2949,7 +2935,7 @@ function importLancFile(input){
           content:[
             {type: mediaType==='application/pdf'?'document':'image',
              source:{type:'base64',media_type:mediaType,data:base64}},
-            {type:'text',text:'Analise este comprovante/nota fiscal e extraia: valor total (número), descrição do gasto, categoria sugerida (Alimentação, Transporte, Variados, Farmácia, Casa, Pets, Pessoal, Saúde, Eletrônicos, Roupas). Responda APENAS em JSON: {"valor":0.00,"descricao":"...","categoria":"..."}'}
+            {type:'text',text:'Analise este comprovante/nota fiscal e extraia: valor total (número), descrição curta do gasto (2-4 palavras), categoria E subcategoria mais adequadas dentre as disponíveis. Categorias disponíveis: '+catsComSubs+'. Responda APENAS em JSON: {"valor":0.00,"descricao":"...","categoria":"...","subcategoria":"..."}. Se nenhuma subcategoria da categoria escolhida se encaixar bem, use "".'}
           ]
         }]
       })
@@ -2960,25 +2946,29 @@ function importLancFile(input){
       try{
         var clean = text.replace(/```json|```/g,'').trim();
         var parsed = JSON.parse(clean);
-        // Preencher o form
         if(parsed.valor){var vEl=document.getElementById('ls-val');if(vEl)vEl.value=parsed.valor;}
         if(parsed.descricao){var dEl=document.getElementById('ls-desc');if(dEl)dEl.value=parsed.descricao;}
-        if(parsed.categoria){var cEl=document.getElementById('ls-cat');if(cEl)cEl.value=parsed.categoria;}
+        if(parsed.categoria && cats.indexOf(parsed.categoria)>=0){
+          pickSemCat(parsed.categoria);
+          if(parsed.subcategoria && (S.cats.semana[parsed.categoria]||[]).indexOf(parsed.subcategoria)>=0){
+            pickSemSub(parsed.subcategoria);
+          }
+        }
         if(preview){
           preview.style.display='block';
-          preview.innerHTML='✓ Extraído: <strong>R$ '+(parsed.valor||'?')+'</strong> — '+(parsed.descricao||'')+(parsed.categoria?' ('+parsed.categoria+')':'');
+          preview.innerHTML='✓ Extraído: <strong>R$ '+(parsed.valor||'?')+'</strong> — '+(parsed.descricao||'')+(parsed.categoria?' ('+parsed.categoria+(parsed.subcategoria?' · '+parsed.subcategoria:'')+')':'')+'. Confira antes de salvar.';
         }
       }catch(ex){
-        if(preview){preview.style.display='block';preview.style.background='#FEF2F2';preview.style.borderColor='#FECACA';preview.style.color='#DC2626';preview.innerHTML='Não foi possível extrair os dados automaticamente. Preencha manualmente.';}
+        if(preview){preview.style.display='block';preview.style.background='#FEF2F2';preview.style.borderColor='#FECACA';preview.style.color='#DC2626';preview.innerHTML='Não foi possível extrair os dados automaticamente. Preencha manualmente (a foto já ficou anexada).';}
       }
     }).catch(function(){
       if(loading)loading.style.display='none';
-      if(preview){preview.style.display='block';preview.style.background='#FEF2F2';preview.style.borderColor='#FECACA';preview.style.color='#DC2626';preview.innerHTML='Erro ao analisar. Preencha manualmente.';}
+      if(preview){preview.style.display='block';preview.style.background='#FEF2F2';preview.style.borderColor='#FECACA';preview.style.color='#DC2626';preview.innerHTML='Erro ao analisar. Preencha manualmente (a foto já ficou anexada).';}
     });
   };
   reader.readAsDataURL(file);
 }
-const APP_VERSION = "v67";
+const APP_VERSION = "v69";
 
 function checkAppVersion(){
   showToast('Salvando dados…');
@@ -4802,6 +4792,29 @@ function renderMetas(){
   const semCats=Object.keys(S.cats.semana||{});
   const allMetaCats=Array.from(new Set([...semCats,...Object.keys(S.metas.cat||{})]));
 
+  // Resumo total: gasto real do mês vs soma das metas de categoria
+  const resumoEl=document.getElementById('metas-total-resumo');
+  if(resumoEl){
+    const totalGasto=cGS('all');
+    const totalMeta=allMetaCats.reduce((a,c)=>a+(S.metas.cat[c]||0),0);
+    const restante=totalMeta-totalGasto;
+    const corRestante=restante<0?'var(--danger)':'var(--ok)';
+    resumoEl.innerHTML=`
+      <div>
+        <div style="font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:3px">Gasto total</div>
+        <div style="font-size:18px;font-weight:700;color:var(--ink)">${fmt(totalGasto)}</div>
+      </div>
+      <div>
+        <div style="font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:3px">Meta total</div>
+        <div style="font-size:18px;font-weight:700;color:var(--ink)">${totalMeta?fmt(totalMeta):'—'}</div>
+      </div>
+      ${totalMeta?`<div style="grid-column:1/-1;padding-top:10px;border-top:1px solid var(--bg3);display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em">${restante<0?'Passou da meta em':'Ainda disponível'}</span>
+        <span style="font-size:14px;font-weight:700;color:${corRestante}">${fmt(Math.abs(restante))}</span>
+      </div>`:''}
+    `;
+  }
+
   const cl=document.getElementById('metas-cat-list');
   if(cl){
     if(_metasEditing){
@@ -5276,7 +5289,10 @@ function renderResHome(){
   if(!S.reservas)S.reservas=[];
   S.reservas.forEach(function(r){if(!r.movs)r.movs=[];});
   const mes=MNS[S.month.m-1].slice(0,3)+'/'+String(S.month.y).slice(2);
-  if(_movMesFiltro===null||_movMesFiltro===undefined)_movMesFiltro=mes;
+  // Reservas são contínuas, não por mês — o extrato abre mostrando TUDO por padrão.
+  // "Entradas/saídas do mês" acima continua calculado só pro mês atual (isso faz
+  // sentido, é um resumo do mês), mas a lista de movimentações não trava mais nele.
+  if(_movMesFiltro===null||_movMesFiltro===undefined)_movMesFiltro='all';
   const tot=S.reservas.reduce((a,r)=>a+r.saldo,0);
   const ent=S.reservas.flatMap(r=>r.movs.filter(m=>m.mes===mes&&m.tipo==='entrada')).reduce((a,m)=>a+m.val,0);
   const sai=S.reservas.flatMap(r=>r.movs.filter(m=>m.mes===mes&&m.tipo==='saida')).reduce((a,m)=>a+m.val,0);
@@ -5885,11 +5901,10 @@ function openResSubpage(id){
   _resDetDiv='proprio';
   _resDetEditMode=false;
   _resDetEditIdx=-1;
-  _resDetMesesSel=new Set(['mes']);
+  _resDetMesesSel=new Set(['todos']);
   const r=S.reservas.find(x=>x.id===id);if(!r)return;
   document.getElementById('res-det-title').textContent=(r.emoji||'💰')+' '+r.nome;
   document.getElementById('res-det-form').style.display='none';
-  setResDetFiltro('mes');
   renderResSubpage();
   goSub('sub-reserva-det');
 }
@@ -6541,6 +6556,7 @@ function toggleVoice(){
           const desc=parsed.descricao||t;
             _vozDraft={desc,cat,sub,sem,val};
           res.innerHTML=
+            '<div style="margin-bottom:10px;padding:10px 12px;background:var(--bg3);border-radius:var(--r-xs)"><div style="font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:3px">Você disse</div><div style="font-size:13px;color:var(--ink2);font-style:italic">"'+t+'"</div></div>'+
             '<div style="margin-bottom:10px;font-size:12px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em">Interpretado</div>'+
           '<div style="display:flex;flex-direction:column;gap:6px;margin-bottom:12px">'+
             '<div style="display:flex;justify-content:space-between"><span style="color:var(--ink3);font-size:13px">Descrição</span><span style="font-weight:600;font-size:13px">'+desc+'</span></div>'+
